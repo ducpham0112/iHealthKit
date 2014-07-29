@@ -10,8 +10,8 @@
 #import "SettingsViewController.h"
 #import "TrackingViewController.h"
 #import "View/MyPickerView.h"
-#import "UserInfo_LabelCell.h"
-#import "UserInfo_TextFieldCell.h"
+#import "CellWithAdditionalLabel.h"
+#import "CellWithTextField.h"
 #import "HistoryTableViewController.h"
 
 typedef enum {
@@ -268,7 +268,7 @@ typedef enum {
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     switch (indexPath.section) {
         case AddUserVCSections_Name:{
-            UserInfo_TextFieldCell* cell = [[UserInfo_TextFieldCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"TextFieldCell"];
+            CellWithTextField* cell = [[CellWithTextField alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"TextFieldCell"];
             if (indexPath.row == 0) {
                 cell.textLabel.text = @"First Name";
                 cell.textField.text = _firstName;
@@ -302,7 +302,7 @@ typedef enum {
         case AddUserVCSections_Info: {
             switch (indexPath.row) {
                 case RowInSectionInfo_email: {
-                    UserInfo_TextFieldCell* cell = [[UserInfo_TextFieldCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"TextFieldCell"];
+                    CellWithTextField* cell = [[CellWithTextField alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"TextFieldCell"];
                     cell.textLabel.text = @"E-Mail";
                     cell.textField.text = _email;
                     cell.textField.placeholder = @"Your email" ;
@@ -311,7 +311,7 @@ typedef enum {
                     break;
                 }
                 case RowInSectionInfo_birthDate: {
-                    UserInfo_LabelCell* cell = [[UserInfo_LabelCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"LabelCell"];
+                    CellWithAdditionalLabel* cell = [[CellWithAdditionalLabel alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"LabelCell"];
                     cell.textLabel.text = @"Birth Date";
                     if (_birthDate == nil) {
                         cell.label.text = @"Your Birth Date";
@@ -331,7 +331,7 @@ typedef enum {
                     break;
                 }
                 case RowInSectionInfo_height: {
-                    UserInfo_LabelCell* cell = [[UserInfo_LabelCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"LabelCell"];
+                    CellWithAdditionalLabel* cell = [[CellWithAdditionalLabel alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"LabelCell"];
                     cell.textLabel.text = @"Height";
                     if (_height == nil) {
                         cell.label.text = @"Your Height";
@@ -351,7 +351,7 @@ typedef enum {
                     break;
                 }
                 case RowInSectionInfo_weight: {
-                    UserInfo_LabelCell* cell = [[UserInfo_LabelCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"LabelCell"];
+                    CellWithAdditionalLabel* cell = [[CellWithAdditionalLabel alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"LabelCell"];
                     cell.textLabel.text = @"Weight";
                     if (_weight == nil) {
                         cell.label.text = @"Your Weight";
@@ -925,7 +925,7 @@ typedef enum {
     }
     else {
         TrackingViewController* trackingVC = [[TrackingViewController alloc] init];
-#warning alert here
+        [CommonFunctions showStatusBarAlert:[NSString stringWithFormat:@"User %@ %@ has been added.", _firstName, _lastName] duration:2.0f backgroundColor:[UIColor greenColor]];
         
         [self.navigationController pushViewController:trackingVC animated:YES];
     }

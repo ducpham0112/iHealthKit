@@ -76,7 +76,7 @@ typedef enum  {
     routeVC.averageSpeed = avgSpeed;
     routeVC.calories = calories;
     routeVC.locationDatatoStore = locationData;
-    routeVC.routePoints = routePoints;
+    routeVC.routePoints = [[NSMutableArray alloc] initWithArray:routePoints copyItems:YES];
 
     return routeVC;
 }
@@ -86,7 +86,6 @@ typedef enum  {
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    _unit = [[NSUserDefaults standardUserDefaults] integerForKey:@"DistanceUnit"];
     _duration = [CommonFunctions getDuration:_startTime endTime:_endTime];
     
     [_tableView setDelegate:self];
@@ -96,6 +95,8 @@ typedef enum  {
     
     [_mapView setDelegate:self];
     [_mapView showsUserLocation];
+    
+    [self drawRoute];
     
     if (!_canDelete) {
         self.navigationItem.hidesBackButton = YES;
@@ -114,7 +115,6 @@ typedef enum  {
         [self.navigationItem setRightBarButtonItem:deleteBtn];
         }
     
-    [self drawRoute];
     
 }
 
@@ -161,16 +161,9 @@ typedef enum  {
     if (indexPath.section == 0) {
         RouteHeaderTableViewCell* headerCell = (RouteHeaderTableViewCell*) cell;
         headerCell.lbCalories.text = [NSString stringWithFormat:@"%.0f", _calories];
-        headerCell.lbDistance.text = [NSString stringWithFormat:@"%.2f", _distance];
+        headerCell.lbDistance.text = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertDistance:_distance]];
         
-        NSString* unit;
-        if (_unit == 1) {
-            unit = @"mi";
-        }
-        else {
-            unit = @"km";
-        }
-        headerCell.lbDistanceUnit.text = [NSString stringWithFormat:@"Distance (%@)", unit];
+        headerCell.lbDistanceUnit.text = [NSString stringWithFormat:@"Distance (%@)", [CommonFunctions getDistanceUnitString]];
         headerCell.lbDistance.text = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertDistance:_distance]];
         headerCell.lbDuration.text = [CommonFunctions stringFromInterval:_duration];
     }
@@ -182,6 +175,7 @@ typedef enum  {
             case RowType_AvgPace: {
                 detailCell.lbDescription.text = @"Average Pace";
                 double pace = _duration / _distance;
+                
                 detailCell.lbDetail.text = [CommonFunctions stringFromInterval:pace];
                 [detailCell.imageView setImage:[UIImage imageNamed:@"LeftMenuIcon.png"]];
                 break;
@@ -266,7 +260,20 @@ typedef enum  {
         if (i == 0) {
             _northEastPoint = loc.coordinate;
             _southWestPoint = loc.coordinate;
-        } else {
+            MKPointAnnotation* startPoint = [[MKPointAnnotation alloc] init];
+            startPoint.coordinate = loc.coordinate;
+            startPoint.title = @"Start Point";
+            [_mapView addAnnotation:startPoint];
+        }
+        else {
+            if (i == _routePoints.count - 1) {
+                _northEastPoint = loc.coordinate;
+                _southWestPoint = loc.coordinate;
+                MKPointAnnotation* endPoint = [[MKPointAnnotation alloc] init];
+                endPoint.coordinate = loc.coordinate;
+                endPoint.title = @"End Point";
+                [_mapView addAnnotation:endPoint];
+            }
             if (loc.coordinate.latitude > _northEastPoint.latitude) {
                 _northEastPoint.latitude = loc.coordinate.latitude ;
             }
@@ -288,7 +295,6 @@ typedef enum  {
     _routeLine = [MKPolyline polylineWithPoints:mapPoints count:_routePoints.count];
     [_mapView addOverlay:_routeLine];
     
-    
     CLLocationDegrees latitudeDelta = _northEastPoint.latitude - _southWestPoint.latitude;
     CLLocationDegrees longitudeDelta = _northEastPoint.longitude - _southWestPoint.longitude;
     MKCoordinateSpan span;
@@ -301,6 +307,7 @@ typedef enum  {
     [_mapView setRegion:region animated:YES];
     
 }
+
 
 #pragma mark - route function
 - (void) saveRoutetoCoreData {

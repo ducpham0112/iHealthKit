@@ -1,24 +1,26 @@
 //
-//  Setting_UnitCell.m
+//  UserInfo_LabelCell.m
 //  iHealthKit
 //
 //  Created by admin on 7/27/14.
 //  Copyright (c) 2014 Duc Pham. All rights reserved.
 //
 
-#import "Setting_UnitCell.h"
+#import "CellWithAdditionalLabel.h"
 
-@implementation Setting_UnitCell
+@implementation CellWithAdditionalLabel
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
-        _segmentControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"", @"", nil]];
-        _segmentControl.frame = CGRectMake(self.frame.size.width - 115, (self.frame.size.height - 28) / 2, 115, 28);
-        [self setAccessoryView:_segmentControl];
-        self.selectionStyle = UITableViewCellSelectionStyleNone;
+        [self.textLabel setTextColor:[CommonFunctions grayColor]];
+        [self.textLabel setFont:[UIFont systemFontOfSize:15.0f]];
+        [self setSelectionStyle:UITableViewCellSelectionStyleNone];
+        _label = [[UILabel alloc] initWithFrame:CGRectMake(120, 0, self.frame.size.width - 120, self.frame.size.height)];
+        _label.userInteractionEnabled = YES;
+        [self addSubview:_label];
     }
     return self;
 }

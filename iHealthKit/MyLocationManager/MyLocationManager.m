@@ -42,6 +42,7 @@ static const CGFloat kSpeedNotSet = -1.0;
 @property (nonatomic) BOOL checkingSignalStrength;
 @property (nonatomic) BOOL allowMaximumAcceptableAccuracy;
 @property (nonatomic) CLLocation* oldLocation;
+@property (nonatomic) BOOL needUpdateSignalStrength;
 
 - (void)checkSustainedSignalStrength;
 - (void)requestNewLocation;
@@ -78,12 +79,16 @@ static const CGFloat kSpeedNotSet = -1.0;
     return self;
 }
 
+- (void) forceUpdateSignalStrength {
+    _needUpdateSignalStrength = YES;
+}
 
 - (void)setSignalStrength:(GPSSignalStrength)signalStrength {
-    BOOL needToUpdateDelegate = NO;
+    
     if (_signalStrength != signalStrength) {
-        needToUpdateDelegate = YES;
+        _needUpdateSignalStrength = YES;
     }
+    
     _signalStrength = signalStrength;
     
     if (_signalStrength == strong) {
@@ -92,9 +97,10 @@ static const CGFloat kSpeedNotSet = -1.0;
         [self checkSustainedSignalStrength];
     }
     
-    if (needToUpdateDelegate) {
+    if (_needUpdateSignalStrength) {
         if ([_delegate respondsToSelector:@selector(locationManager:signalStrengthChanged:)]) {
             [_delegate locationManager:self signalStrengthChanged:_signalStrength];
+            _needUpdateSignalStrength = NO;
         }
     }
 }
@@ -147,6 +153,7 @@ static const CGFloat kSpeedNotSet = -1.0;
         _currentSpeed = kSpeedNotSet;
         _readyToExposeDistanceAndSpeed = NO;
         _allowMaximumAcceptableAccuracy = NO;
+        _needUpdateSignalStrength = YES;
         
         _forceDistanceAndSpeedCalculation = YES;
         [_locationManager startUpdatingLocation];
@@ -348,10 +355,6 @@ static const CGFloat kSpeedNotSet = -1.0;
 }
 
 @end
-
-
-
-
 
 
 

@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Duc Pham. All rights reserved.
 //
 
-#import "UserInfo_TextFieldCell.h"
+#import "CellWithTextField.h"
 
-@implementation UserInfo_TextFieldCell
+@implementation CellWithTextField
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {

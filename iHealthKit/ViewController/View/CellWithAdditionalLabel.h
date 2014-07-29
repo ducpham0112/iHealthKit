@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UserInfo_LabelCell : UITableViewCell
+@interface CellWithAdditionalLabel : UITableViewCell
 
 @property (strong, nonatomic) UILabel* label;
 

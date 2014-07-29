@@ -26,7 +26,6 @@ typedef enum {
 
 }MenuRows;
 
-
 @interface LeftMenuTableViewController ()
 
 @property NSIndexPath* selectedRow;

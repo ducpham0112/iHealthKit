@@ -13,21 +13,45 @@
 #import "MMDrawerBarButtonItem.h"
 #import "RouteViewController.h"
 #import <QuartzCore/QuartzCore.h>
+#import "View/CellWithRightImage.h"
 
 typedef enum {
     InfoType_Duration,
     InfoType_Distance,
-    InfoType_Velocity,
     InfoType_AvgSpeed,
     InfoType_CurSpeed,
     InfoType_MaxSpeed,
     InfoType_AvgPace,
     InfoType_CurPace,
+    InfoType_MaxPace,
     InfoType_Calories,
     InfoType_Clock
 } InfoType;
 
 @interface TrackingViewController ()
+@property (weak, nonatomic) IBOutlet UILabel *lbGPS;
+@property (weak, nonatomic) IBOutlet UIButton *btnStartStop;
+@property (weak, nonatomic) IBOutlet UIButton *btnDone;
+
+@property (weak, nonatomic) IBOutlet MKMapView *mapView;
+
+@property (weak, nonatomic) IBOutlet UILabel *lbInfo0;
+@property (weak, nonatomic) IBOutlet UILabel *lbDescription0;
+
+@property (weak, nonatomic) IBOutlet UILabel *lbInfo1;
+@property (weak, nonatomic) IBOutlet UILabel *lbDescription1;
+
+@property (weak, nonatomic) IBOutlet UILabel *lbInfo2;
+@property (weak, nonatomic) IBOutlet UILabel *lbDescription2;
+
+@property (weak, nonatomic) IBOutlet UIButton *btnClose;
+
+- (IBAction)minimizeMapView:(id)sender;
+- (IBAction)btnClicked:(id)sender;
+- (IBAction)showUserLocation:(id)sender;
+- (IBAction)dismissTableView:(id)sender;
+
+@property (weak, nonatomic) IBOutlet UITableView *listInfoTableView;
 
 @property (nonatomic, strong) MKPolyline* routeLine;
 @property (nonatomic, strong) MKPolylineView* routeView;
@@ -56,7 +80,9 @@ typedef enum {
 
 @property (nonatomic) BOOL needUserLocation;
 
-@property (strong, nonatomic) NSArray* listInfoView;
+@property (strong, nonatomic) NSMutableArray* listInfoView;
+
+@property NSInteger selectedLabel;
 
 @end
 
@@ -73,12 +99,6 @@ typedef enum {
     return self;
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-    if ([CommonFunctions getTrackingStatus]) {
-        [self stopTracking];
-    }
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -87,7 +107,6 @@ typedef enum {
     [self setTitle:@"Activity"];
     
     _curUser_Weight = [[[CoreDataFuntions getCurUser] weight] floatValue];
-    
     
     [self setupLeftMenuButton];
     
@@ -114,48 +133,141 @@ typedef enum {
     _needUserLocation = YES;
     _locationDatatoStore = [[NSMutableArray alloc] init];
     
-    _listInfoView = [NSArray arrayWithObjects:InfoType_Duration, InfoType_Distance, InfoType_AvgSpeed, InfoType_Calories, nil];
+    _listInfoView = [[NSMutableArray alloc] init];
+    [_listInfoView addObject:[NSNumber numberWithInt:InfoType_Duration]];
+    [_listInfoView addObject:[NSNumber numberWithInt:InfoType_Distance]];
+    [_listInfoView addObject:[NSNumber numberWithInt:InfoType_AvgSpeed]];
     
-    [self resetData];
+    _listInfoTableView.frame = [self tableHiddenFrame];
+    _listInfoTableView.hidden = YES;
+    _listInfoTableView.delegate = self;
+    _listInfoTableView.dataSource = self;
+    _btnDone.hidden = YES;
+    
+    _btnClose.hidden = YES;
+    
+    UILongPressGestureRecognizer* holdGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(changeViewSettings)];
+    [_lbInfo0 addGestureRecognizer:holdGesture];
+    [_lbInfo0 setUserInteractionEnabled:YES];
+    //[self resetData];
     [self displayInfoViews];
 }
 
 - (void) displayInfoViews {
-    NSUserDefaults* preference = [NSUserDefaults standardUserDefaults];
-    NSInteger distanceType = [preference integerForKey:@"DistanceType"];
-    NSInteger velocityUnit = [preference integerForKey:@"VelocityUnit"];
-    NSInteger distanceUnit = [preference integerForKey:@"DistanceUnit"];
-    
-    
-    if (distanceType == 0) {
-        //metric system
-        if (velocityUnit == 0) {
-            _lbDescription2.text = [NSString stringWithFormat:@"Avg.Speed (km/h)"];
-        } else if (velocityUnit == 1) {
-            _lbDescription2.text = [NSString stringWithFormat:@"Avg.Speed (m/s)"];
-        }
-        
-        if (distanceUnit == 0) {
-            _lbDescription1.text = [NSString stringWithFormat:@"Distance (km)"];
-        }
-        else if (distanceUnit == 1) {
-            _lbDescription1.text = [NSString stringWithFormat:@"Distance (m)"];
+    [self displayInfo:[[_listInfoView objectAtIndex:0] integerValue] withLbDescription:_lbDescription0 withLbValue:_lbInfo0];
+    [self displayInfo:[[_listInfoView objectAtIndex:1] integerValue] withLbDescription:_lbDescription1 withLbValue:_lbInfo1];
+    [self displayInfo:[[_listInfoView objectAtIndex:2] integerValue] withLbDescription:_lbDescription2 withLbValue:_lbInfo2];
+}
 
-        }
-    }
-    else if (distanceType == 1) {
-        if (velocityUnit == 0) {
-            _lbDescription2.text = [NSString stringWithFormat:@"Avg.Speed (mph)"];
-        }
-        else if (velocityUnit == 1) {
-            _lbDescription2.text = [NSString stringWithFormat:@"Avg.Speed (fps)"];
-        }
-    }
+- (void) changeViewSettings {
+    _listInfoTableView.frame = [self tableHiddenFrame];
+    _listInfoTableView.hidden = NO;
+    [UIView animateWithDuration:1.0f
+                          delay:0.0f
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         _listInfoTableView.frame = [self tableFrame];
+                     }completion:nil];
     
-    _lbDescription0.text = @"Duration";    
+    [UIView animateWithDuration:0.5f
+                          delay:1.0f
+                        options:UIViewAnimationOptionShowHideTransitionViews
+                     animations:^{
+                         _btnDone.hidden = NO;
+                         _btnStartStop.hidden = YES;
+                         _mapView.hidden = YES;
+                     }completion:nil];
     
-    _lbInfo1.text = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertDistance:_distance]];
-    _lbInfo2.text = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertSpeed:_averageSpeed]];
+    [CommonFunctions showStatusBarAlert:@"Timer stated" duration:2.5f backgroundColor:[UIColor blackColor]];
+    [UIView animateWithDuration:1.5
+                          delay:0.5
+                        options:UIViewAnimationOptionRepeat | UIViewAnimationOptionAutoreverse
+                     animations:^{
+                         _lbInfo0.alpha = 0.2f;
+                     } completion:nil];
+    
+}
+
+- (IBAction)dismissTableView:(id)sender {
+    _btnStartStop.hidden = NO;
+    _mapView.hidden = NO;
+    [_timer invalidate];
+    
+    [UIView animateWithDuration:2.0f
+                          delay:0.0f
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{                         _listInfoTableView.frame = [self tableFrame];
+                         _btnDone.hidden = NO;
+                         _btnStartStop.hidden = YES;
+                         _mapView.hidden = YES;
+                     }completion:^(BOOL finished){
+                         _listInfoTableView.hidden = NO;
+                     }];
+    
+}
+
+- (void) animateBlink {
+    
+}
+
+- (void) displayInfo: (NSInteger) type withLbDescription:(UILabel*) description withLbValue: (UILabel*) value {
+    description.text = [self lbDescriptionStr:type];
+    value.text = [self lbValueStr:type];
+    
+}
+
+- (CGRect) tableFrame {
+    return CGRectMake(0, 307, 320, 220);
+}
+- (CGRect) tableHiddenFrame {
+    return CGRectMake(0, 700, 320, 220);
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    if ([CommonFunctions getTrackingStatus]) {
+        [self stopTracking];
+    }
+}
+
+- (void) maximizeMapView {
+    CGRect mapViewFrame = self.view.frame;
+    
+    [UIView animateWithDuration:2.0f
+                          delay:0.0f
+                        options:UIViewAnimationOptionShowHideTransitionViews
+                     animations:^{
+                         _btnClose.hidden = NO;
+                         _lbDescription0.hidden = YES;
+                         _lbDescription1.hidden = YES;
+                         _lbDescription2.hidden = YES;
+                         _lbInfo0.hidden = YES;
+                         _lbInfo1.hidden = YES;
+                         _lbInfo2.hidden = YES;
+                         _mapView.frame = mapViewFrame;
+                     } completion:nil];
+}
+
+- (IBAction)minimizeMapView:(id)sender {
+    CGRect mapViewFrame = [self tableFrame];
+    [UIView animateWithDuration:2.0f
+                          delay:0.0f
+                        options:UIViewAnimationOptionShowHideTransitionViews
+                     animations:^{
+                         _mapView.frame = mapViewFrame;
+                     } completion:^(BOOL finished){
+                         [UIView animateWithDuration:0.5f
+                                               delay:0.0f
+                                             options:UIViewAnimationOptionShowHideTransitionViews
+                                          animations:^{
+                                              _btnClose.hidden = YES;
+                                              _lbDescription0.hidden = NO;
+                                              _lbDescription1.hidden = NO;
+                                              _lbDescription2.hidden = NO;
+                                              _lbInfo0.hidden = NO;
+                                              _lbInfo1.hidden = NO;
+                                              _lbInfo2.hidden = NO;
+                                          }completion:nil];
+                     }];
 }
 
 -(void)setupLeftMenuButton{
@@ -210,10 +322,14 @@ typedef enum {
     [[MyLocationManager shareLocationManager] startLocationUpdates];
     _calories = 0;
     
+    UILongPressGestureRecognizer* holdGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(maximizeMapView)];
+    [_mapView addGestureRecognizer:holdGesture];
+    
     [_btnStartStop setTitle:@"Stop" forState:UIControlStateNormal];
     [_btnStartStop setBackgroundColor:[UIColor colorWithRed:212.0/255 green:61.0/255 blue:79.0/255 alpha:1.0]];
     [CommonFunctions setTrackingStatus:YES];
 }
+
 
 - (void) stopTracking {
     [[MyLocationManager shareLocationManager] stopLocationUpdates];
@@ -226,6 +342,11 @@ typedef enum {
     [_mapView removeOverlays:overlays];
     
     [CommonFunctions setTrackingStatus:NO];
+    
+    NSArray* listGesture = [_mapView gestureRecognizers];
+    for (UIGestureRecognizer* gesture in listGesture) {
+        [_mapView removeGestureRecognizer:gesture];
+    }
     
     RouteViewController* routeVC = [[RouteViewController alloc] initNewRoute:_startTime endtime:_endTime distance:_distance maxSpeed:_maxSpeed averageSpeed:_averageSpeed trainingType:_trainingType calories:_calories locationData:_locationDatatoStore routePoints:_routePoints];
     
@@ -299,20 +420,6 @@ typedef enum {
 	return overlayView;
 }
 
-/*
-[_MET_VALUE setValue:[NSNumber numberWithFloat:6.0f] forKey:@"Run4mph"];
-[_MET_VALUE setValue:[NSNumber numberWithFloat:8.3f] forKey:@"Run5mph"];
-[_MET_VALUE setValue:[NSNumber numberWithFloat:9.8f] forKey:@"Run6mph"];
-[_MET_VALUE setValue:[NSNumber numberWithFloat:11.0f] forKey:@"Run7mph"];
-[_MET_VALUE setValue:[NSNumber numberWithFloat:11.8f] forKey:@"Run8mph"];
-[_MET_VALUE setValue:[NSNumber numberWithFloat:12.8f] forKey:@"Run9mph"];
-[_MET_VALUE setValue:[NSNumber numberWithFloat:14.5f] forKey:@"Run10mph"];
-[_MET_VALUE setValue:[NSNumber numberWithFloat:16.0f] forKey:@"Run11mph"];
-[_MET_VALUE setValue:[NSNumber numberWithFloat:19.0f] forKey:@"Run12mph"];
-[_MET_VALUE setValue:[NSNumber numberWithFloat:19.8f] forKey:@"Run13mph"];
-[_MET_VALUE setValue:[NSNumber numberWithFloat:23.0f] forKey:@"Run14mph"];
-*/
-
 -(void) calculateCalories:(CLLocation*) newLocation withSpeed: (float) speed {
     CLLocation* oldLocation = [_routePoints lastObject];
     NSTimeInterval curTime = [newLocation.timestamp timeIntervalSinceNow] - [oldLocation.timestamp timeIntervalSinceNow];
@@ -378,7 +485,7 @@ typedef enum {
         return;
     }
     MKCoordinateSpan span;
-#warning change delta later
+    
     span.latitudeDelta = 0.005;
     span.longitudeDelta = 0.005;
     MKCoordinateRegion region;
@@ -427,6 +534,142 @@ typedef enum {
 
 - (IBAction)showUserLocation:(id)sender {
     _needUserLocation = YES;
+}
+
+
+#pragma mark - table view data source
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView  {
+    return 1;
+}
+
+- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 10;
+}
+
+- (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString* CellIdentifier = @"cell";
+    
+    CellWithRightImage* cell = [self.listInfoTableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    
+    if (cell == nil) {
+        cell = [[CellWithRightImage alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    }
+    
+    cell.textLabel.text = [self lbDescriptionStr:indexPath.row];
+    
+    if (indexPath.row == [[_listInfoView objectAtIndex:_selectedLabel] integerValue]) {
+        [cell.rightImage setImage:[UIImage imageNamed:@"check_icon.png"]];
+        //[self.listInfoTableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionTop];
+    }
+    else {
+        [cell.rightImage setImage:[UIImage imageNamed:@"uncheck_icon.png"]];
+    }
+    
+    return  cell;
+}
+
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [_listInfoView replaceObjectAtIndex:_selectedLabel withObject:[NSNumber numberWithInt:indexPath.row]];
+    [self displayInfoViews];
+}
+
+- (NSString*) lbDescriptionStr: (NSInteger) type {
+    NSString* descriptionStr = @"";
+    switch (type) {
+        case InfoType_AvgPace: {
+            descriptionStr = [NSString stringWithFormat:@"Average Pace (%@)", [CommonFunctions getPaceUnitString]];
+            break;
+        }
+        case InfoType_AvgSpeed: {
+           descriptionStr = [NSString stringWithFormat:@"Average Speed (%@)", [CommonFunctions getVelocityUnitString]];
+            break;
+        }
+        case InfoType_Calories: {
+         descriptionStr = @"Calories";
+            break;
+        }
+        case InfoType_Clock: {
+         descriptionStr = @"Clock";
+            break;
+        }
+        case InfoType_CurPace: {
+          descriptionStr = @"Current Pace";
+            break;
+        }
+        case InfoType_CurSpeed: {
+         descriptionStr =  [NSString stringWithFormat:@"Current Speed (%@)", [CommonFunctions getVelocityUnitString]];
+            break;
+        }
+        case InfoType_Distance: {
+          descriptionStr = [NSString stringWithFormat:@"Distance (%@)", [CommonFunctions getDistanceUnitString]];
+            break;
+        }
+        case InfoType_Duration: {
+            descriptionStr = @"Duration";
+            break;
+        }
+        case InfoType_MaxSpeed: {
+          descriptionStr = [NSString stringWithFormat:@"Maximum Speed (%@)", [CommonFunctions getVelocityUnitString]];
+            break;
+        }
+        case InfoType_MaxPace: {
+       descriptionStr = @"Maximum Pace";
+            break;
+        }
+        default:
+            break;
+    }
+    return descriptionStr;
+}
+
+- (NSString*) lbValueStr: (NSInteger) type {
+    NSString* valueStr = @"";
+    switch (type) {
+        case InfoType_AvgPace: {
+            valueStr = [CommonFunctions convertPace:_averageSpeed];
+            break;
+        }
+        case InfoType_AvgSpeed: {
+            valueStr = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertSpeed:_averageSpeed]];
+            break;
+        }
+        case InfoType_Calories: {
+            valueStr = [NSString stringWithFormat:@"%.2f", _calories];
+            break;
+        }
+        case InfoType_Clock: {
+            valueStr = @"00:00";
+            break;
+        }
+        case InfoType_CurPace: {
+            valueStr = [CommonFunctions convertPace:_curSpeed];
+            break;
+        }
+        case InfoType_CurSpeed: {
+            valueStr =  [NSString stringWithFormat:@"%.2f", [CommonFunctions convertSpeed:_curSpeed]];
+            break;
+        }
+        case InfoType_Distance: {
+            valueStr = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertDistance:_distance]];
+            break;
+        }
+        case InfoType_Duration: {
+            valueStr = @"00:00:00";
+            break;
+        }
+        case InfoType_MaxSpeed: {
+            valueStr = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertSpeed:_maxSpeed]];
+            break;
+        }
+        case InfoType_MaxPace: {
+            valueStr = [CommonFunctions convertPace:_maxSpeed];
+            break;
+        }
+        default:
+            break;
+    }
+    return valueStr;
 }
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "DistanceTypeChooserTableViewController.h"
+#import "View/CellWithRightImage.h"
 
 @interface DistanceTypeChooserTableViewController ()
 @property NSInteger distanceType;
@@ -65,33 +66,19 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString* CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    CellWithRightImage *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
-        [cell setSelectionStyle:UITableViewCellSelectionStyleBlue];
-    }
-
-    switch (indexPath.row) {
-        case 0:
-            cell.textLabel.text = @"Metric";
-            cell.detailTextLabel.text = @"Kilometers, meters";
-            break;
-        case 1:
-            cell.textLabel.text = @"Imperial";
-            cell.detailTextLabel.text = @"Miles, feet";
-            break;
-        default:
-            break;
+        cell = [[CellWithRightImage alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        //[cell setSelectionStyle:UITableViewCellSelectionStyleBlue];
     }
     
-    UIImageView* checkMark = [[UIImageView alloc] initWithFrame:CGRectMake(cell.frame.size.width - cell.frame.size.height - 10, 3, cell.frame.size.height - 6, cell.frame.size.height - 6)];
-   
     if (_distanceType == indexPath.row) {
-        [checkMark setImage:[UIImage imageNamed:@"check_icon.png"]];
+        [cell.rightImage setImage:[UIImage imageNamed:@"check_icon.png"]];
+        [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionTop];
     }
-    else
-        [checkMark setImage:[UIImage imageNamed:@"uncheck_icon.png"]];
-    [cell addSubview:checkMark];
+    else {
+        [cell.rightImage setImage:[UIImage imageNamed:@"uncheck_icon.png"]];
+    }
     return cell;
 }
 

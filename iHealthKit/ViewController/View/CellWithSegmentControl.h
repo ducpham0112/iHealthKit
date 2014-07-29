@@ -1,5 +1,5 @@
 //
-//  UserInfo_TextFieldCell.h
+//  Setting_UnitCell.h
 //  iHealthKit
 //
 //  Created by admin on 7/27/14.
@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UserInfo_TextFieldCell : UITableViewCell
+@interface CellWithSegmentControl : UITableViewCell
 
-@property (strong, nonatomic) UITextField* textField;
+@property (strong, nonatomic) UISegmentedControl* segmentControl;
 
 @end

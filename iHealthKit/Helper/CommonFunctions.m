@@ -77,7 +77,7 @@
 #undef HOURS_PER_DAY
 }
 
-+ (NSString*) stringAvgPace: (double) time {
++ (NSString*) stringAvgPace: (NSTimeInterval) time {
 #define SECONDS_PER_MINUTE (60)
 #define MINUTES_PER_HOUR (60)
 #define SECONDS_PER_HOUR (SECONDS_PER_MINUTE * MINUTES_PER_HOUR)
@@ -256,6 +256,26 @@
     return distanceInMeter * factor;
 }
 
++ (NSString*) convertPace:(float)speedInMeterPerSec{
+    int distanceType = [[NSUserDefaults standardUserDefaults] integerForKey:@"DistanceType"];
+    NSString* paceStr;
+    float pace;
+    switch (distanceType) {
+        case 0:
+            //metric min/km
+            pace = speedInMeterPerSec * 1000 / 60;
+            paceStr = [self stringAvgPace:pace];
+            break;
+        case 1:
+            //us system min/mile
+            pace = speedInMeterPerSec / 0.000621371 / 60;
+            paceStr = [self stringAvgPace:pace];
+        default:
+            break;
+    }
+    return paceStr;
+}
+
 + (void) setTrackingStatus:(BOOL)status {
     AppDelegate* delegate = [[UIApplication sharedApplication] delegate];
     delegate.isTracking = status;
@@ -282,6 +302,90 @@
     return timeInSecond / 3600;
 }
 
+
++ (NSString*) getDistanceUnitString {
+    NSString* distanceUnit = @"";
+    
+    switch ([[NSUserDefaults standardUserDefaults] integerForKey:@"DistanceType"]) {
+        case 0: {
+            switch ([[NSUserDefaults standardUserDefaults] integerForKey:@"DitanceUnit"]) {
+                case 0:
+                    distanceUnit = @"km";
+                    break;
+                case 1:
+                    distanceUnit = @"m";
+                    break;
+                default:
+                    break;
+            }
+            break;
+        }
+        case 1: {
+            switch ([[NSUserDefaults standardUserDefaults] integerForKey:@"DistanceUnit"]) {
+                case 0:
+                    distanceUnit = @"mi";
+                    break;
+                case 1:
+                    distanceUnit = @"ft";
+                default:
+                    break;
+            }
+            break;
+        }
+        default:
+            break;
+    }
+    return distanceUnit;
+}
+
++ (NSString*) getPaceUnitString {
+    NSString* paceStr = @"";
+    switch ([[NSUserDefaults standardUserDefaults] integerForKey:@"DistanceType"])  {
+        case 0:
+            paceStr =  @"min/km";
+            break;
+        case 1:
+            paceStr = @"min/mile";
+        default:
+            break;
+    }
+    return paceStr;
+}
+
++ (NSString*) getVelocityUnitString {
+    NSString* velocityUnit = @"";
+    
+    switch ([[NSUserDefaults standardUserDefaults] integerForKey:@"DistanceType"]) {
+        case 0: {
+            switch ([[NSUserDefaults standardUserDefaults] integerForKey:@"VelocityUnit"]) {
+                case 0:
+                    velocityUnit = @"km/h";
+                    break;
+                case 1:
+                    velocityUnit = @"m/s";
+                    break;
+                default:
+                    break;
+            }
+            break;
+        }
+        case 1: {
+            switch ([[NSUserDefaults standardUserDefaults] integerForKey:@"DistanceUnit"]) {
+                case 0:
+                    velocityUnit = @"mph";
+                    break;
+                case 1:
+                    velocityUnit = @"fps";
+                default:
+                    break;
+            }
+            break;
+        }
+        default:
+            break;
+    }
+    return velocityUnit;
+}
 
 
 @end

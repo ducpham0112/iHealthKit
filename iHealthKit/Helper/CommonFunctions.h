@@ -32,6 +32,10 @@
 + (void) setTrackingStatus:(BOOL)status;
 + (BOOL) getTrackingStatus;
 
++ (NSString*) getPaceUnitString ;
++ (NSString*) getDistanceUnitString;
++ (NSString*) getVelocityUnitString;
+
 + (float) convertMPStoMiPH: (float) speedInMetersPerSec;
 + (float) convertMiPHtoMPS: (float) speedInMilePerHour;
 
@@ -45,6 +49,7 @@
 + (float) convertDistance: (float) distanceInMeter;
 + (float) convertSpeed: (float) speedInMeterPerSec;
 + (float) convertHeight: (float) heightInCm;
++ (NSString*) convertPace: (float) speedInMeterPerSec;
 
 + (float) convertDistanceToKm: (float) distanceInMeter;
 + (float) convertDistanceToMile: (float) distanceInMeter;

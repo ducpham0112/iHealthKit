@@ -12,7 +12,7 @@
 #import "DistanceTypeChooserTableViewController.h"
 #import "Settings_VoiceCoaching_OnOffCell.h"
 #import "Setting_DistanceTypeCell.h"
-#import "Setting_UnitCell.h"
+#import "CellWithSegmentControl.h"
 
 typedef enum {
     SettingsVCSection_VoiceCoaching = 0,
@@ -212,9 +212,9 @@ typedef enum {
         case SettingsVCSection_WeightUnit: {
             switch (indexPath.row) {
                 case 0: {
-                    Setting_UnitCell* cell = [self.tableView dequeueReusableCellWithIdentifier:@"UnitCell"];
+                    CellWithSegmentControl* cell = [self.tableView dequeueReusableCellWithIdentifier:@"UnitCell"];
                     if (cell == nil) {
-                        cell = [[Setting_UnitCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UnitCell"];
+                        cell = [[CellWithSegmentControl alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UnitCell"];
                     }
                     
                     cell.textLabel.text = @"Weight";
@@ -246,9 +246,9 @@ typedef enum {
                 }
                 case RowInUnitSection_distanceUnit:
                 case RowInUnitSection_velocityUnit:{
-                    Setting_UnitCell* cell = [self.tableView dequeueReusableCellWithIdentifier:@"UnitCell"];
+                    CellWithSegmentControl* cell = [self.tableView dequeueReusableCellWithIdentifier:@"UnitCell"];
                     if (cell == nil) {
-                        cell = [[Setting_UnitCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UnitCell"];
+                        cell = [[CellWithSegmentControl alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UnitCell"];
                     }
                     
                     if (indexPath.row == RowInUnitSection_distanceUnit) {
