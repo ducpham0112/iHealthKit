@@ -1,0 +1,29 @@
+//
+//  Prefix header
+//
+//  The contents of this file are implicitly included at the beginning of every source file.
+//
+
+#import <Availability.h>
+
+#ifndef __IPHONE_3_0
+#warning "This project uses features only available in iOS SDK 3.0 and later."
+#endif
+
+#ifdef __OBJC__
+    #import <UIKit/UIKit.h>
+    #import <Foundation/Foundation.h>
+    #import <CoreData/CoreData.h>
+#import "CommonFunctions.h"
+#import "CoreDataFuntions.h"
+#import "MyUser.h"
+#import "MyRoute.h"
+#import "AppDelegate.h"
+#import "MMDrawerBarButtonItem.h"
+#import "UIViewController+MMDrawerController.h"
+#endif
+
+
+static BOOL OSVersionIsAtLeastiOS7() {
+    return (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1);
+}
