@@ -165,7 +165,7 @@ typedef enum  {
         
         headerCell.lbDistanceUnit.text = [NSString stringWithFormat:@"Distance (%@)", [CommonFunctions getDistanceUnitString]];
         headerCell.lbDistance.text = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertDistance:_distance]];
-        headerCell.lbDuration.text = [CommonFunctions stringFromInterval:_duration];
+        headerCell.lbDuration.text = [CommonFunctions stringSecondFromInterval:_duration];
     }
     
     else {
@@ -176,7 +176,7 @@ typedef enum  {
                 detailCell.lbDescription.text = @"Average Pace";
                 double pace = _duration / _distance;
                 
-                detailCell.lbDetail.text = [CommonFunctions stringFromInterval:pace];
+                detailCell.lbDetail.text = [CommonFunctions stringSecondFromInterval:pace];
                 [detailCell.imageView setImage:[UIImage imageNamed:@"LeftMenuIcon.png"]];
                 break;
             }
@@ -324,7 +324,6 @@ typedef enum  {
     [CoreDataFuntions saveNewRoute:_startTime endTime:_endTime calories:_calories maxSpeed:_maxSpeed avgSpeed:avgSpeed distance:_distance locations:jsonData mood:0];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"EditUser" object:self];
     
-#warning alert message here
     [CommonFunctions showStatusBarAlert:@"New route has been added to your history." duration:3.0f backgroundColor: [UIColor greenColor]];
     TrackingViewController* trackVC = [[TrackingViewController alloc] init];
     [self.navigationController pushViewController:trackVC animated:YES];

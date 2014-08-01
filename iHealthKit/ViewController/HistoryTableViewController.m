@@ -118,7 +118,7 @@
     routeCell.lbDate.text = [NSDateFormatter localizedStringFromDate:route.startTime dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterNoStyle];
     routeCell.lbTime.text = [NSString stringWithFormat:@"Run on %@",[NSDateFormatter localizedStringFromDate:route.startTime dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle]];
     routeCell.lbDistance.text = [NSString stringWithFormat:@"%.2f m", [route.distance floatValue]];
-    routeCell.lbDuration.text = [CommonFunctions stringFromInterval:[CommonFunctions getDuration:route.startTime endTime:route.endTime]];
+    routeCell.lbDuration.text = [CommonFunctions stringSecondFromInterval:[CommonFunctions getDuration:route.startTime endTime:route.endTime]];
     routeCell.lbSpeed.text = [NSString stringWithFormat:@"%.2f m/s", [route.avgSpeed floatValue]];
     [routeCell.imageView setImage:[UIImage imageNamed:@"LeftMenuIcon.png"]];
     

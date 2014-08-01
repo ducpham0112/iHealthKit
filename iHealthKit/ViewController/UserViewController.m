@@ -972,7 +972,7 @@ typedef enum {
     _curUser.height = _height;
     _curUser.weight = _weight;
     [CoreDataFuntions saveContent];
-#warning alert
+    
     [CommonFunctions showStatusBarAlert:@"User Infomation has been updated." duration:2.0f backgroundColor:[UIColor greenColor]];
     
 }

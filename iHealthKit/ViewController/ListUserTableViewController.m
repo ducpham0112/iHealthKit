@@ -130,7 +130,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-#warning add login mode
+    
     UserViewController* userInforVC = [[UserViewController alloc] initLogIn:[_listUser objectAtIndex:indexPath.row]];
     [self.navigationController pushViewController:userInforVC animated:YES];
 }

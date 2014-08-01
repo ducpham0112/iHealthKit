@@ -129,7 +129,7 @@ typedef enum {
     [CommonFunctions setupDrawer];
 }
 
-#warning Implement later
+#warning Implement voice coaching
 - (void)voiceCoachingChanged: (id) sender {
     UISwitch* voiceCoaching = (UISwitch*) sender;
     _voiceCoaching = voiceCoaching.isOn;

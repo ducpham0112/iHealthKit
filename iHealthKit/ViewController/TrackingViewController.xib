@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="btnClose" destination="xgG-Md-q3w" id="5pO-Il-hTh"/>
                 <outlet property="btnDone" destination="MPt-JW-ZlH" id="B1R-E2-cnM"/>
+                <outlet property="btnShowLocation" destination="NHo-Ir-NOI" id="FCY-iy-Wcn"/>
                 <outlet property="btnStartStop" destination="Gtn-Qm-Rwt" id="qI7-gi-4tK"/>
                 <outlet property="lbDescription0" destination="bG4-KR-eVW" id="dbN-UC-C66"/>
                 <outlet property="lbDescription1" destination="SZL-kr-h1G" id="iN2-tN-Icp"/>

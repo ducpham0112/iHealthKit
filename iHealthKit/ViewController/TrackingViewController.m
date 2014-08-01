@@ -52,6 +52,7 @@ typedef enum {
 - (IBAction)dismissTableView:(id)sender;
 
 @property (weak, nonatomic) IBOutlet UITableView *listInfoTableView;
+@property (weak, nonatomic) IBOutlet UIButton *btnShowLocation;
 
 @property (nonatomic, strong) MKPolyline* routeLine;
 @property (nonatomic, strong) MKPolylineView* routeView;
@@ -72,8 +73,6 @@ typedef enum {
 @property (nonatomic) NSDate* startTime;
 @property (nonatomic) NSDate* endTime;
 
-@property (nonatomic) NSTimer* timer;
-
 @property (nonatomic, readonly) NSMutableDictionary* MET_VALUE;
 
 @property (nonatomic, strong) CLLocationManager* locationManager;
@@ -82,7 +81,14 @@ typedef enum {
 
 @property (strong, nonatomic) NSMutableArray* listInfoView;
 
-@property NSInteger selectedLabel;
+@property BOOL isTableShowed;
+@property NSInteger selectedIndex;
+@property UILabel* selectedLabel;
+
+@property UILabel* durationLabel;
+@property UILabel* clockLabel;
+@property NSTimer* durationTimer;
+@property NSTimer* clockTimer;
 
 @end
 
@@ -134,87 +140,154 @@ typedef enum {
     _locationDatatoStore = [[NSMutableArray alloc] init];
     
     _listInfoView = [[NSMutableArray alloc] init];
-    [_listInfoView addObject:[NSNumber numberWithInt:InfoType_Duration]];
     [_listInfoView addObject:[NSNumber numberWithInt:InfoType_Distance]];
+    [_listInfoView addObject:[NSNumber numberWithInt:InfoType_Calories]];
     [_listInfoView addObject:[NSNumber numberWithInt:InfoType_AvgSpeed]];
+    _durationLabel = nil;
+    _clockLabel = nil;
     
     _listInfoTableView.frame = [self tableHiddenFrame];
     _listInfoTableView.hidden = YES;
     _listInfoTableView.delegate = self;
     _listInfoTableView.dataSource = self;
-    _btnDone.hidden = YES;
+    [[_btnDone layer] setOpacity:0.0f];
     
     _btnClose.hidden = YES;
     
-    UILongPressGestureRecognizer* holdGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(changeViewSettings)];
-    [_lbInfo0 addGestureRecognizer:holdGesture];
-    [_lbInfo0 setUserInteractionEnabled:YES];
+    _isTableShowed = NO;
+    
+    [self addHoldGesture:_lbInfo0];
+    [self addHoldGesture:_lbInfo1];
+    [self addHoldGesture:_lbInfo2];
+    
+    [self addTapGesture:_lbInfo0];
+    [self addTapGesture:_lbInfo1];
+    [self addTapGesture:_lbInfo2];
+
     //[self resetData];
-    [self displayInfoViews];
+    [self updateValue];
+    [self updateDescription];
 }
 
-- (void) displayInfoViews {
-    [self displayInfo:[[_listInfoView objectAtIndex:0] integerValue] withLbDescription:_lbDescription0 withLbValue:_lbInfo0];
-    [self displayInfo:[[_listInfoView objectAtIndex:1] integerValue] withLbDescription:_lbDescription1 withLbValue:_lbInfo1];
-    [self displayInfo:[[_listInfoView objectAtIndex:2] integerValue] withLbDescription:_lbDescription2 withLbValue:_lbInfo2];
+- (void) addHoldGesture: (UIView*) view {
+    UILongPressGestureRecognizer* holdGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(displayListViewTable:)];
+    [view addGestureRecognizer:holdGesture];
+}
+- (void) addTapGesture: (UIView*) view {
+    UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changeSelectedView:)];
+    [view addGestureRecognizer:tapGesture];
 }
 
-- (void) changeViewSettings {
+- (void) updateValue {
+    NSInteger type = [[_listInfoView objectAtIndex:0] integerValue];
+    if (type != InfoType_Duration && type != InfoType_Clock) {
+        _lbInfo0.text = [self lbValueStr:[[_listInfoView objectAtIndex:0] integerValue]];
+    }
+    
+    type = [[_listInfoView objectAtIndex:1] integerValue];
+    if (type != InfoType_Duration && type != InfoType_Clock) {
+        _lbInfo1.text = [self lbValueStr:[[_listInfoView objectAtIndex:1] integerValue]];
+    }
+    
+    type = [[_listInfoView objectAtIndex:2] integerValue];
+    if (type != InfoType_Duration && type != InfoType_Clock) {
+        _lbInfo2.text = [self lbValueStr:[[_listInfoView objectAtIndex:2] integerValue]];
+    }
+}
+
+- (void) updateDescription {
+    _lbDescription0.text = [self lbDescriptionStr:[[_listInfoView objectAtIndex:0] integerValue]];
+    _lbDescription1.text = [self lbDescriptionStr:[[_listInfoView objectAtIndex:1] integerValue]];
+    _lbDescription2.text = [self lbDescriptionStr:[[_listInfoView objectAtIndex:2] integerValue]];
+}
+
+- (void) displayListViewTable: (id) sender{
+    if (_isTableShowed) {
+        return;
+    }
     _listInfoTableView.frame = [self tableHiddenFrame];
     _listInfoTableView.hidden = NO;
-    [UIView animateWithDuration:1.0f
+
+    [UIView animateWithDuration:1.5f
                           delay:0.0f
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                         _listInfoTableView.frame = [self tableFrame];
-                     }completion:nil];
-    
-    [UIView animateWithDuration:0.5f
-                          delay:1.0f
                         options:UIViewAnimationOptionShowHideTransitionViews
                      animations:^{
-                         _btnDone.hidden = NO;
-                         _btnStartStop.hidden = YES;
-                         _mapView.hidden = YES;
+                         _listInfoTableView.frame = [self tableFrame];
+                         [[_btnStartStop layer] setOpacity:0.0f];
+                         [[_mapView layer] setOpacity:0.0f];
+                         [[_btnShowLocation layer] setOpacity:0.0f];
+                         [[_btnDone layer] setOpacity:1.0f];
                      }completion:nil];
     
     [CommonFunctions showStatusBarAlert:@"Timer stated" duration:2.5f backgroundColor:[UIColor blackColor]];
-    [UIView animateWithDuration:1.5
-                          delay:0.5
-                        options:UIViewAnimationOptionRepeat | UIViewAnimationOptionAutoreverse
-                     animations:^{
-                         _lbInfo0.alpha = 0.2f;
-                     } completion:nil];
+
+    _selectedLabel = (UILabel*)[(UIGestureRecognizer*)sender view];
+    _selectedIndex = [self getSelectedIndex:_selectedLabel];
+    [self blinkAnimation:_selectedLabel];
     
+    _isTableShowed = YES;
+}
+
+- (void) changeSelectedView: (id) sender {
+    if (!_isTableShowed || [(UIGestureRecognizer*)sender view] == _selectedLabel) {
+        return;
+    }
+    
+    [[_selectedLabel layer] removeAllAnimations];
+    _selectedLabel = (UILabel*)[(UIGestureRecognizer*) sender view];
+    _selectedIndex = [self getSelectedIndex:_selectedLabel];
+    [self blinkAnimation:_selectedLabel];
+    [_listInfoTableView reloadData];
+}
+
+- (NSInteger) getSelectedIndex: (UILabel*) label {
+    NSInteger index = -1;
+    if (label == _lbInfo0) {
+        index = 0;
+    }
+    if (label == _lbInfo1) {
+        index = 1;
+    }
+    if (label == _lbInfo2) {
+        index = 2;
+    }
+    return index;
 }
 
 - (IBAction)dismissTableView:(id)sender {
-    _btnStartStop.hidden = NO;
-    _mapView.hidden = NO;
-    [_timer invalidate];
-    
-    [UIView animateWithDuration:2.0f
+    //[[_btnStartStop layer] setOpacity:0.0f];
+
+    [UIView animateWithDuration:1.5f
                           delay:0.0f
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{                         _listInfoTableView.frame = [self tableFrame];
-                         _btnDone.hidden = NO;
-                         _btnStartStop.hidden = YES;
-                         _mapView.hidden = YES;
+                        options:UIViewAnimationOptionShowHideTransitionViews
+                     animations:^{
+                         _listInfoTableView.frame = [self tableHiddenFrame];
+                         [[_btnStartStop layer] setOpacity:1.0f];
+                         [[_mapView layer] setOpacity:1.0f];
+                         [[_btnShowLocation layer] setOpacity:1.0f];
+                         [[_btnDone layer] setOpacity:0.0f];
+                         [[_selectedLabel layer] removeAllAnimations];
                      }completion:^(BOOL finished){
-                         _listInfoTableView.hidden = NO;
+                         _listInfoTableView.hidden = YES;
+                         
                      }];
-    
+    _isTableShowed = NO;
+    _selectedLabel = nil;
+    _selectedIndex = -1;
 }
 
-- (void) animateBlink {
-    
+- (void) blinkAnimation: (UIView*) view {
+    CABasicAnimation *blinkAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
+    [blinkAnimation setFromValue:[NSNumber numberWithFloat:1.0]];
+    [blinkAnimation setToValue:[NSNumber numberWithFloat:0.2]];
+    [blinkAnimation setDuration:1.5f];
+    [blinkAnimation setTimingFunction:[CAMediaTimingFunction
+                                       functionWithName:kCAMediaTimingFunctionLinear]];
+    [blinkAnimation setAutoreverses:YES];
+    [blinkAnimation setRepeatCount:500000];
+    [[view layer] addAnimation:blinkAnimation forKey:@"opacity"];
 }
 
-- (void) displayInfo: (NSInteger) type withLbDescription:(UILabel*) description withLbValue: (UILabel*) value {
-    description.text = [self lbDescriptionStr:type];
-    value.text = [self lbValueStr:type];
-    
-}
 
 - (CGRect) tableFrame {
     return CGRectMake(0, 307, 320, 220);
@@ -303,6 +376,9 @@ typedef enum {
     }
     else {
         //start
+        [_lbInfo0 setUserInteractionEnabled:YES];
+        [_lbInfo1 setUserInteractionEnabled:YES];
+        [_lbInfo2 setUserInteractionEnabled:YES];
         [self startTracking];
     }
 }
@@ -311,6 +387,9 @@ typedef enum {
     switch (buttonIndex) {
         case 0:
             [self stopTracking];
+            [_lbInfo0 setUserInteractionEnabled:NO];
+            [_lbInfo1 setUserInteractionEnabled:NO];
+            [_lbInfo2 setUserInteractionEnabled:NO];
             break;
         default:
             break;
@@ -351,8 +430,8 @@ typedef enum {
     RouteViewController* routeVC = [[RouteViewController alloc] initNewRoute:_startTime endtime:_endTime distance:_distance maxSpeed:_maxSpeed averageSpeed:_averageSpeed trainingType:_trainingType calories:_calories locationData:_locationDatatoStore routePoints:_routePoints];
     
     [self.navigationController pushViewController:routeVC animated:YES];
-    [_timer invalidate];
     [self resetData];
+    
 }
 
 - (void) resetData {
@@ -476,7 +555,7 @@ typedef enum {
     
     _averageSpeed = _distance / [CommonFunctions getDuration:_startTime endTime:_endTime];
     
-    [self displayInfoViews];
+    [self updateValue];
     
 }
 
@@ -497,11 +576,7 @@ typedef enum {
 
 - (void)locationManager:(MyLocationManager *)locationManager startTimeStamp:(NSDate *)startTimeStamp {
     _startTime = startTimeStamp;
-    _timer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(updateDuration:) userInfo:nil repeats:YES];
-}
-
-- (void) updateDuration: (NSTimer*) theTimer {
-    _lbInfo0.text = [CommonFunctions stringFromInterval:[CommonFunctions getDuration:_startTime endTime:[NSDate date]]];
+    
 }
 
 - (void)locationManager:(MyLocationManager *)locationManager signalStrengthChanged:(GPSSignalStrength)signalStrength {
@@ -558,7 +633,7 @@ typedef enum {
     
     cell.textLabel.text = [self lbDescriptionStr:indexPath.row];
     
-    if (indexPath.row == [[_listInfoView objectAtIndex:_selectedLabel] integerValue]) {
+    if (indexPath.row == [[_listInfoView objectAtIndex:_selectedIndex] integerValue]) {
         [cell.rightImage setImage:[UIImage imageNamed:@"check_icon.png"]];
         //[self.listInfoTableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionTop];
     }
@@ -570,8 +645,58 @@ typedef enum {
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [_listInfoView replaceObjectAtIndex:_selectedLabel withObject:[NSNumber numberWithInt:indexPath.row]];
-    [self displayInfoViews];
+    
+    if ([[_listInfoView objectAtIndex:_selectedIndex] integerValue] == InfoType_Clock) {
+        _clockLabel = nil;
+    }
+    if ([[_listInfoView objectAtIndex:_selectedIndex] integerValue] == InfoType_Duration) {
+        _durationLabel = nil;
+    }
+    if (_durationLabel == nil || _clockLabel == nil) {
+        [_clockTimer invalidate];
+    }
+    
+    [_listInfoView replaceObjectAtIndex:_selectedIndex withObject:[NSNumber numberWithInt:indexPath.row]];
+    [_listInfoTableView reloadData];
+    
+    [self updateDescription];
+    [self updateValue];
+    
+    if (indexPath.row == InfoType_Duration) {
+        _durationLabel = _selectedLabel;
+        _clockTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(updateClock) userInfo:nil repeats:YES];
+        
+    }
+    if (indexPath.row == InfoType_Clock) {
+        _clockLabel = _selectedLabel;
+        _clockTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(updateClock) userInfo:nil repeats:YES];
+        
+    }
+}
+
+- (void) updateClock {
+    if (_clockLabel) {
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        if (_clockLabel == _lbInfo0) {
+            
+            [dateFormatter setDateFormat:@"HH:mm:ss"];
+        }
+        else {
+            
+            [dateFormatter setDateFormat:@"HH:mm"];
+        }
+        _clockLabel.text = [dateFormatter stringFromDate:[NSDate date]];
+    }
+    if (_durationLabel) {
+        if (_durationLabel == _lbInfo0) {
+            _durationLabel.text = [CommonFunctions stringSecondFromInterval:[CommonFunctions getDuration:_startTime endTime:[NSDate date]]];
+
+        }
+        else {
+            _durationLabel.text = [CommonFunctions stringMinuteFromInterval:[CommonFunctions getDuration:_startTime endTime:[NSDate date]]];
+
+        }
+    }
 }
 
 - (NSString*) lbDescriptionStr: (NSInteger) type {
@@ -639,7 +764,7 @@ typedef enum {
             break;
         }
         case InfoType_Clock: {
-            valueStr = @"00:00";
+            //valueStr = @"00:00";
             break;
         }
         case InfoType_CurPace: {
@@ -655,7 +780,7 @@ typedef enum {
             break;
         }
         case InfoType_Duration: {
-            valueStr = @"00:00:00";
+            //valueStr = @"00:00:00";
             break;
         }
         case InfoType_MaxSpeed: {

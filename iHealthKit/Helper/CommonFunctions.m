@@ -59,7 +59,7 @@
     [statusNotification displayNotificationWithMessage:message forDuration:duration];
 }
 
-+ (NSString*)stringFromInterval: (NSTimeInterval) timeInterval
++ (NSString*)stringSecondFromInterval: (NSTimeInterval) timeInterval
 {
 #define SECONDS_PER_MINUTE (60)
 #define MINUTES_PER_HOUR (60)
@@ -77,7 +77,7 @@
 #undef HOURS_PER_DAY
 }
 
-+ (NSString*) stringAvgPace: (NSTimeInterval) time {
++ (NSString*) stringMinuteFromInterval: (NSTimeInterval) time {
 #define SECONDS_PER_MINUTE (60)
 #define MINUTES_PER_HOUR (60)
 #define SECONDS_PER_HOUR (SECONDS_PER_MINUTE * MINUTES_PER_HOUR)
@@ -127,6 +127,8 @@
     
     return [dateFormat dateFromString:dateString];
 }
+
+
 
 
 + (float) convertMPStoMiPH: (float) speedInMetersPerSec {
@@ -181,7 +183,7 @@
 + (float) convertSpeed: (float) speedInMeterPerSec {
     int velocityUnit = [[NSUserDefaults standardUserDefaults] integerForKey:@"VelocityUnit"];
     int distanceType = [[NSUserDefaults standardUserDefaults] integerForKey:@"DistanceType"];
-#warning add Speed Unit to user default
+    
     float factor = 1;
     switch (distanceType) {
         case 0:{
@@ -264,12 +266,12 @@
         case 0:
             //metric min/km
             pace = speedInMeterPerSec * 1000 / 60;
-            paceStr = [self stringAvgPace:pace];
+            paceStr = [self stringMinuteFromInterval:pace];
             break;
         case 1:
             //us system min/mile
             pace = speedInMeterPerSec / 0.000621371 / 60;
-            paceStr = [self stringAvgPace:pace];
+            paceStr = [self stringMinuteFromInterval:pace];
         default:
             break;
     }

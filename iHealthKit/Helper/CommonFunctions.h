@@ -15,8 +15,8 @@
 
 + (void) showStatusBarAlert: (NSString*) message duration: (float) duration backgroundColor: (UIColor*) bgColor;
 
-+ (NSString*)stringFromInterval: (NSTimeInterval) timeInterval;
-+ (NSString*) stringAvgPace: (double) time ;
++ (NSString*)stringSecondFromInterval: (NSTimeInterval) timeInterval;
++ (NSString*) stringMinuteFromInterval: (double) time ;
 
 + (NSTimeInterval) getDuration: (NSDate*) startTime endTime: (NSDate*) endTime;
 
