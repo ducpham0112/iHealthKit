@@ -169,6 +169,13 @@ typedef enum {
     [self updateDescription];
 }
 
+- (void) viewDidDisappear:(BOOL)animated {
+    [self stopTracking];
+    [_lbInfo0 setUserInteractionEnabled:NO];
+    [_lbInfo1 setUserInteractionEnabled:NO];
+    [_lbInfo2 setUserInteractionEnabled:NO];
+}
+
 - (void) addHoldGesture: (UIView*) view {
     UILongPressGestureRecognizer* holdGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(displayListViewTable:)];
     [view addGestureRecognizer:holdGesture];
@@ -399,7 +406,6 @@ typedef enum {
 - (void) startTracking {
     [self resetData];
     [[MyLocationManager shareLocationManager] startLocationUpdates];
-    _calories = 0;
     
     UILongPressGestureRecognizer* holdGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(maximizeMapView)];
     [_mapView addGestureRecognizer:holdGesture];
@@ -437,12 +443,12 @@ typedef enum {
 - (void) resetData {
     _startTime = nil;
     _endTime = nil;
-    _distance = 0;
-    _maxSpeed = 0;
-    _curSpeed = 0;
-    _averageSpeed = 0;
+    _distance = 0.0f;
+    _maxSpeed = 0.0f;
+    _curSpeed = 0.0f;
+    _averageSpeed = 0.0f;
     _trainingType = 0;
-    _calories = 0;
+    _calories = 0.0f;
     
     _needUserLocation = YES;
     [_locationDatatoStore removeAllObjects];
@@ -760,7 +766,12 @@ typedef enum {
             break;
         }
         case InfoType_Calories: {
-            valueStr = [NSString stringWithFormat:@"%.2f", _calories];
+            if (_calories != 0.0f) {
+                valueStr = [NSString stringWithFormat:@"%.2f", _calories];
+            }
+            else {
+                valueStr = @"0.00";
+            }
             break;
         }
         case InfoType_Clock: {

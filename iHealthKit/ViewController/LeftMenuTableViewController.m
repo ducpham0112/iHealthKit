@@ -99,6 +99,8 @@ typedef enum {
         [cell setSelectionStyle:UITableViewCellSelectionStyleBlue];
     }
     
+    
+    
     switch (indexPath.row) {
         case MenuRows_UserInfo:
             cell.lbDescription.text = @"User Information";

@@ -75,7 +75,7 @@ typedef enum  {
     routeVC.trainingType = trainingType;
     routeVC.averageSpeed = avgSpeed;
     routeVC.calories = calories;
-    routeVC.locationDatatoStore = locationData;
+    routeVC.locationDatatoStore = [[NSMutableArray alloc] initWithArray:locationData copyItems:YES];
     routeVC.routePoints = [[NSMutableArray alloc] initWithArray:routePoints copyItems:YES];
 
     return routeVC;
@@ -330,6 +330,7 @@ typedef enum  {
 }
 
 - (void) deleteRoute {
+#warning alert
     [CoreDataFuntions deleteRoute:_route];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"HistoryChanged" object:self];
     HistoryTableViewController* historyVC = [[HistoryTableViewController alloc]  init];
