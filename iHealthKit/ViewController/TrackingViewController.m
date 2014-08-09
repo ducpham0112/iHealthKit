@@ -508,7 +508,6 @@ typedef enum {
     return dictionary;
 }
 
-
 - (void) drawRouteLine: (CLLocationCoordinate2D) lastLocationCoordinate toCurrentLocation: (CLLocationCoordinate2D) curLocationCoordinate {
     
     MKMapPoint* mapPoints = malloc(sizeof(CLLocationCoordinate2D) * 2);
@@ -548,7 +547,6 @@ typedef enum {
         return;
     }
     NSTimeInterval curTime = [newLocation.timestamp timeIntervalSinceNow] - [oldLocation.timestamp timeIntervalSinceNow];
-#warning change MET value later
     float METValue;
     float speedInMPH = [CommonFunctions convertMPStoMiPH:speed];
     if (speedInMPH < 3.5) {
