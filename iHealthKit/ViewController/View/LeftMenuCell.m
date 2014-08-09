@@ -14,7 +14,7 @@
 {
     // Initialization code
     [self setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
-    [self setSelectionStyle:UITableViewCellSelectionStyleBlue];
+    [self setSelectionStyle:UITableViewCellSelectionStyleNone];
     self.imgView.layer.cornerRadius = self.imgView.frame.size.width/2;
     self.imgView.clipsToBounds = YES;
 }

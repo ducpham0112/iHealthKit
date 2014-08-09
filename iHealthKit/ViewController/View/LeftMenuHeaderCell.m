@@ -21,7 +21,7 @@
 
     // Configure the view for the selected state
     [self setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
-    [self setSelectionStyle:UITableViewCellSelectionStyleBlue];
+    [self setSelectionStyle:UITableViewCellSelectionStyleNone];
     self.imgAvatar.layer.cornerRadius = self.imgAvatar.frame.size.width/2;
     self.imgAvatar.clipsToBounds = YES;
 }

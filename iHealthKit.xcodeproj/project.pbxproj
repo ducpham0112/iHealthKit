@@ -26,7 +26,6 @@
 		8417C18A197AA32300007269 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8417C189197AA32300007269 /* main.m */; };
 		8417C18E197AA32300007269 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8417C18D197AA32300007269 /* AppDelegate.m */; };
 		8417C191197AA32300007269 /* iHealthKit.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8417C18F197AA32300007269 /* iHealthKit.xcdatamodeld */; };
-		8417C193197AA32300007269 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8417C192197AA32300007269 /* Images.xcassets */; };
 		8417C19A197AA32300007269 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8417C199197AA32300007269 /* XCTest.framework */; };
 		8417C19B197AA32300007269 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8417C17B197AA32300007269 /* Foundation.framework */; };
 		8417C19C197AA32400007269 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8417C17F197AA32300007269 /* UIKit.framework */; };
@@ -153,7 +152,6 @@
 		8417C18C197AA32300007269 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		8417C18D197AA32300007269 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		8417C190197AA32300007269 /* iHealthKit.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = iHealthKit.xcdatamodel; sourceTree = "<group>"; };
-		8417C192197AA32300007269 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		8417C198197AA32300007269 /* iHealthKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iHealthKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8417C199197AA32300007269 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		8417C1A2197AA32400007269 /* iHealthKitTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "iHealthKitTests-Info.plist"; sourceTree = "<group>"; };
@@ -391,7 +389,6 @@
 				8417C1EC197AA43200007269 /* VisuaStateManager */,
 				8417C18C197AA32300007269 /* AppDelegate.h */,
 				8417C18D197AA32300007269 /* AppDelegate.m */,
-				8417C192197AA32300007269 /* Images.xcassets */,
 				8417C18F197AA32300007269 /* iHealthKit.xcdatamodeld */,
 				8417C184197AA32300007269 /* Supporting Files */,
 			);
@@ -752,7 +749,6 @@
 				8418A1151994BC2500742EEB /* icon_speedMax.png in Resources */,
 				8418A1081994BC2500742EEB /* annotation_finished20.png in Resources */,
 				8418A10B1994BC2500742EEB /* check_icon.png in Resources */,
-				8417C193197AA32300007269 /* Images.xcassets in Resources */,
 				8418A11E1994BC2500742EEB /* uncheck_icon.png in Resources */,
 				842BC1BE199625BB00B235F1 /* LeftMenuHeaderCell.xib in Resources */,
 				8417C21D197AACD500007269 /* RouteViewController.xib in Resources */,

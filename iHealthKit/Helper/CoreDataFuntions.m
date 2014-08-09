@@ -131,6 +131,7 @@
     AppDelegate* delegate = [[UIApplication sharedApplication] delegate];
     NSError* error;
     [delegate.managedObjectContext save:&error];
+    delegate.fetchedResultsController = nil;
     if (error == nil) {
         return YES;
     }

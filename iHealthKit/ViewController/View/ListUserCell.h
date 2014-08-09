@@ -12,5 +12,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *lbName;
 @property (weak, nonatomic) IBOutlet UILabel *lbBirthDay;
 @property (weak, nonatomic) IBOutlet UILabel *lbActivity;
+@property (weak, nonatomic) IBOutlet UIImageView *imgAvatar;
 
 @end

@@ -164,6 +164,7 @@ typedef enum {
     [CoreDataFuntions switchUser:_curUser];
     HistoryViewController* historyVC = [[HistoryViewController alloc] init];
     [self.navigationController pushViewController:historyVC animated:YES];
+    [[NSNotificationCenter defaultCenter]  postNotificationName:@"UserInfoChanged" object:self];
 }
 
 
@@ -854,7 +855,9 @@ typedef enum {
     }
     
     [CoreDataFuntions saveNewUser:_firstName lastName:_lastName height:_height weight:_weight birthDate:_birthDate email:_email gender:_gender];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"ListUserChanged" object:self];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"UserInfoChanged" object:self];
+    
     if (_isFirstLaunch) {
         SettingsViewController* settingVC = [[SettingsViewController alloc] initNormal];
         AppDelegate* del = [[UIApplication sharedApplication] delegate];
@@ -867,6 +870,8 @@ typedef enum {
         
         [self.navigationController pushViewController:trackingVC animated:YES];
     }
+    
+    
 }
 
 - (NSString*) getHeightString {

@@ -12,7 +12,7 @@
 
 @interface ListUserViewController ()
 
-@property (nonatomic, strong) NSArray* listUser;
+@property (nonatomic, strong) NSMutableArray* listUser;
 
 @end
 
@@ -39,8 +39,8 @@
     [self setTitle:@"List Users"];
     
     [self.tableView registerNib:[UINib nibWithNibName:@"ListUserCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"userCell"];
-    _listUser = [CoreDataFuntions getListUser];
     
+    [self loadData];
     
     [self setupBarButton];
     
@@ -54,6 +54,15 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void) loadData {
+    _listUser = [NSMutableArray arrayWithArray:[CoreDataFuntions getListUser]];
+    for (MyUser* user in _listUser) {
+        if ([user.isCurrentUser boolValue]) {
+            [_listUser removeObject:user];
+            return;
+        }
+    }
+}
 
 - (void) addUser {
     UserViewController* addUserVC = [[UserViewController alloc] initAdd];
@@ -61,9 +70,10 @@
 }
 
 - (void) listUserChanged {
-    _listUser = [CoreDataFuntions getListUser];
+    [self loadData];
     [self.tableView reloadData];
 }
+
 
 
 #pragma mark - setup bar button
@@ -114,10 +124,16 @@
     
     userCell.lbBirthDay.text = [NSDateFormatter localizedStringFromDate:user.birthday dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterNoStyle];
     userCell.lbActivity.text = [NSString stringWithFormat:@"Activities: %d",[[user.routeHistory allObjects] count]];
+    
+    if ([user.isMale integerValue] == 0) {
+        userCell.imgAvatar.image = [UIImage imageNamed:@"avatar_male.jpg"];
+    } else {
+        userCell.imgAvatar.image = [UIImage imageNamed:@"avatar_female.jpg"];
+    }
 }
 
 - (float) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 55;
+    return 60;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

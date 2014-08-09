@@ -10,7 +10,7 @@
 #import "View/HistoryCell.h"
 #import "RouteViewController.h"
 
-#define PAGE_NUMBER 3
+#define PAGE_NUMBER 4
 
 @interface HistoryViewController ()
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
@@ -184,20 +184,24 @@
         [page addSubview:lbDescription];
         
         switch (i) {
-            case 0: {
+            case 1: {
                 lbDescription.text = [NSString stringWithFormat:@"Total Distance (%@)", [CommonFunctions getDistanceUnitString]];
                 lbValue.text = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertDistance:_totalDistance]];
                 break;
             }
-            case 1: {
+            case 2: {
                 lbDescription.text = @"Total Duration";
                 lbValue.text = [CommonFunctions stringSecondFromInterval:_totalTime];
                 break;
             }
-            case 2: {
+            case 3: {
                 lbDescription.text = @"Total Calories";
                 lbValue.text = [NSString stringWithFormat:@"%.2f", _totalCalories];
-                break;
+               break;
+            }
+            case 0: {
+                lbDescription.text = @"Total Avtivities";
+                lbValue.text = [NSString stringWithFormat:@"%d", [_listRoute count]];
             }
             default:
                 break;
