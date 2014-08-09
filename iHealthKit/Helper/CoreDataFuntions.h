@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
+#import "MyUser.h"
 
 @interface CoreDataFuntions : NSObject
 + (MyUser*) getCurUser;

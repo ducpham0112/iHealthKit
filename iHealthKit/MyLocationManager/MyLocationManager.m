@@ -16,6 +16,7 @@ static const NSUInteger kNumSpeedHistoriesToAverage = 5; // the number of speeds
 static const NSUInteger kPrioritizeFasterSpeeds = 1; // if > 0, the currentSpeed and complete speed history will automatically be set to to the new speed if the new speed is faster than the averaged speed
 static const NSUInteger kMinLocationsNeededToUpdateDistanceAndSpeed = 3; // the number of locations needed in history before we will even update the current distance and speed
 static const CGFloat kRequiredHorizontalAccuracy = 20.0; // the required accuracy in meters for a location.  if we receive anything above this number, the delegate will be informed that the signal is weak
+static const CGFloat kMediumHorizontalAccuracy = 40.0;
 static const CGFloat kMaximumAcceptableHorizontalAccuracy = 70.0; // the maximum acceptable accuracy in meters for a location.  anything above this number will be completely ignored
 static const NSUInteger kGPSRefinementInterval = 15; // the number of seconds at which we will attempt to achieve kRequiredHorizontalAccuracy before giving up and accepting kMaximumAcceptableHorizontalAccuracy
 
@@ -93,6 +94,8 @@ static const CGFloat kSpeedNotSet = -1.0;
     
     if (_signalStrength == strong) {
         _allowMaximumAcceptableAccuracy = NO;
+    } else if (_signalStrength == medium){
+        _allowMaximumAcceptableAccuracy = YES;
     } else {
         [self checkSustainedSignalStrength];
     }
@@ -124,12 +127,11 @@ static const CGFloat kSpeedNotSet = -1.0;
     
     if (!_checkingSignalStrength) {
         _checkingSignalStrength = YES;
-        
-                double delayInSeconds = kGPSRefinementInterval;
+        double delayInSeconds = kGPSRefinementInterval;
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
             _checkingSignalStrength = NO;
-            if (_signalStrength == weak) {
+            if (_signalStrength == weak || _signalStrength == medium) {
                 _allowMaximumAcceptableAccuracy = YES;
                 if ([_delegate respondsToSelector:@selector(locationManagerSignalConsistentlyWeak:)]) {
                     [_delegate locationManagerSignalConsistentlyWeak:self];
@@ -218,6 +220,8 @@ static const CGFloat kSpeedNotSet = -1.0;
     
     if (newLocation.horizontalAccuracy <= kRequiredHorizontalAccuracy) {
         [self setSignalStrength:strong];
+    } else if (newLocation.horizontalAccuracy <= kMediumHorizontalAccuracy){
+        [self setSignalStrength:medium];
     } else {
         [self setSignalStrength:weak];
     }
@@ -230,7 +234,6 @@ static const CGFloat kSpeedNotSet = -1.0;
         
         return;
     }
-    
     
     double horizontalAccuracy;
     if (_allowMaximumAcceptableAccuracy) {

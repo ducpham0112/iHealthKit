@@ -14,6 +14,7 @@
 typedef enum {
     invalid = 0,
     weak,
+    medium,
     strong
 } GPSSignalStrength;
 

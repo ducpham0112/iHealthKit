@@ -7,8 +7,7 @@
 //
 
 #import "MyNavigationViewController.h"
-#import "MMDrawerBarButtonItem.h"
-#import "UIViewController+MMDrawerController.h"
+
 
 @interface MyNavigationViewController ()
 @property UIStatusBarStyle statusBarStyle;

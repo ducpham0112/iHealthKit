@@ -7,7 +7,6 @@
 //
 
 #import "AppDelegate.h"
-#import "LeftMenuTableViewController.h"
 #import "TrackingViewController.h"
 #import "MyVisualStateManager.h"
 #import "ViewController/UserViewController.h"

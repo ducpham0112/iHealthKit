@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "MMDrawerController.h"
-#import "MyUser.h"
-#import "MyFetchedResultsController.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 

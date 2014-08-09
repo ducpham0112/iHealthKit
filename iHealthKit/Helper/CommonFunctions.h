@@ -7,8 +7,17 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MyUser.h"
 #import "CWStatusBarNotification.h"
+
+typedef enum {
+    DatePartType_year,
+    DatePartType_month,
+    DatePartType_day,
+    DatePartType_hour,
+    DatePartType_minute,
+    DatePartType_second
+} DatePartType;
+
 
 @interface CommonFunctions : NSObject
 + (void) setupDrawer ;
@@ -17,7 +26,7 @@
 
 + (NSString*)stringSecondFromInterval: (NSTimeInterval) timeInterval;
 + (NSString*) stringMinuteFromInterval: (double) time ;
-
++ (int) timePart: (NSTimeInterval) time withPart:(DatePartType) part;
 + (NSTimeInterval) getDuration: (NSDate*) startTime endTime: (NSDate*) endTime;
 
 + (UIColor*) leftMenuBackgroundColor;
@@ -26,8 +35,12 @@
 
 + (UIColor*) grayColor;
 + (UIColor*) lightGrayColor;
++ (UIColor*) greenColor;
++ (UIColor*) redColor;
++ (UIColor*) yellowColor;
 
 + (NSDate*) dateFromString:(NSString *)dateString withFormat: (NSString*) format;
++ (int)datePart:(NSDate *)date withPart:(DatePartType) part;
 
 + (void) setTrackingStatus:(BOOL)status;
 + (BOOL) getTrackingStatus;
@@ -49,7 +62,7 @@
 + (float) convertDistance: (float) distanceInMeter;
 + (float) convertSpeed: (float) speedInMeterPerSec;
 + (float) convertHeight: (float) heightInCm;
-+ (NSString*) convertPace: (float) speedInMeterPerSec;
++ (NSString*) paceStrFromSpeed: (float) speedInMeterPerSec;
 
 + (float) convertDistanceToKm: (float) distanceInMeter;
 + (float) convertDistanceToMile: (float) distanceInMeter;

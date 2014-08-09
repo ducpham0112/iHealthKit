@@ -11,13 +11,14 @@
                 <outlet property="btnDone" destination="MPt-JW-ZlH" id="B1R-E2-cnM"/>
                 <outlet property="btnShowLocation" destination="NHo-Ir-NOI" id="FCY-iy-Wcn"/>
                 <outlet property="btnStartStop" destination="Gtn-Qm-Rwt" id="qI7-gi-4tK"/>
+                <outlet property="imgGPSSignal" destination="TEN-ty-48C" id="Wwb-G9-Mh5"/>
                 <outlet property="lbDescription0" destination="bG4-KR-eVW" id="dbN-UC-C66"/>
                 <outlet property="lbDescription1" destination="SZL-kr-h1G" id="iN2-tN-Icp"/>
                 <outlet property="lbDescription2" destination="vQt-og-xdd" id="U3Q-6D-NC0"/>
                 <outlet property="lbGPS" destination="Ub2-Wo-H4P" id="uSW-xx-WGn"/>
-                <outlet property="lbInfo0" destination="h1S-hd-Ruy" id="Bsa-Tt-JEL"/>
-                <outlet property="lbInfo1" destination="0m1-n1-zds" id="UnZ-13-kk9"/>
-                <outlet property="lbInfo2" destination="QDx-ZE-fJM" id="1bY-lj-RFS"/>
+                <outlet property="lbValue0" destination="h1S-hd-Ruy" id="H4T-8a-BB3"/>
+                <outlet property="lbValue1" destination="0m1-n1-zds" id="pwE-1K-T2S"/>
+                <outlet property="lbValue2" destination="QDx-ZE-fJM" id="yAp-xk-4An"/>
                 <outlet property="listInfoTableView" destination="q2o-6O-fRJ" id="nR3-Ld-2wU"/>
                 <outlet property="mapView" destination="BV2-9F-4pM" id="oVh-bM-Nz8"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -77,7 +78,7 @@
                     <rect key="frame" x="0.0" y="247" width="161" height="35"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" name="GeezaPro" family="Geeza Pro" pointSize="38"/>
-                    <color key="textColor" red="0.27450980392156865" green="0.27450980392156865" blue="0.27450980392156865" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="textColor" red="0.3529411764705882" green="0.3529411764705882" blue="0.3529411764705882" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Distance" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SZL-kr-h1G">
@@ -91,7 +92,7 @@
                     <rect key="frame" x="160" y="247" width="160" height="35"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" name="GeezaPro" family="Geeza Pro" pointSize="38"/>
-                    <color key="textColor" red="0.27450980390000002" green="0.27450980390000002" blue="0.27450980390000002" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="textColor" red="0.3529411764705882" green="0.3529411764705882" blue="0.3529411764705882" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Avg.Speed" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vQt-og-xdd">
@@ -105,7 +106,7 @@
                     <rect key="frame" x="7" y="111" width="307" height="81"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" name="GeezaPro" family="Geeza Pro" pointSize="66"/>
-                    <color key="textColor" red="0.27450980392156865" green="0.27450980392156865" blue="0.27450980392156865" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="textColor" red="0.3529411764705882" green="0.3529411764705882" blue="0.3529411764705882" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Duration" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="307" translatesAutoresizingMaskIntoConstraints="NO" id="bG4-KR-eVW">
@@ -116,9 +117,9 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="GPS" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ub2-Wo-H4P">
-                    <rect key="frame" x="281" y="69" width="39" height="25"/>
+                    <rect key="frame" x="255" y="70" width="29" height="24"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" name="TeluguSangamMN" family="Telugu Sangam MN" pointSize="17"/>
+                    <fontDescription key="fontDescription" name="TeluguSangamMN-Bold" family="Telugu Sangam MN" pointSize="14"/>
                     <color key="textColor" red="0.49019607840000001" green="0.49019607840000001" blue="0.49019607840000001" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
@@ -144,6 +145,10 @@
                         <action selector="minimizeMapView:" destination="-1" eventType="touchUpInside" id="9vG-2n-LGf"/>
                     </connections>
                 </button>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="icon_signal_invalid.png" translatesAutoresizingMaskIntoConstraints="NO" id="TEN-ty-48C">
+                    <rect key="frame" x="285" y="70" width="24" height="16"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </imageView>
             </subviews>
             <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="calibratedRGB"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
@@ -152,6 +157,7 @@
         </view>
     </objects>
     <resources>
+        <image name="icon_signal_invalid.png" width="115" height="77"/>
         <image name="show_location.png" width="88" height="88"/>
     </resources>
 </document>

@@ -8,10 +8,9 @@
 
 #import "SettingsViewController.h"
 #import "TrackingViewController.h"
-#import "AppDelegate.h"
-#import "DistanceTypeChooserTableViewController.h"
+#import "DistanceTypeChooserViewController.h"
 #import "Settings_VoiceCoaching_OnOffCell.h"
-#import "Setting_DistanceTypeCell.h"
+#import "View/DistanceTypeCell.h"
 #import "CellWithSegmentControl.h"
 
 typedef enum {
@@ -34,6 +33,7 @@ typedef enum {
 @property NSInteger weightUnit;
 @property NSInteger veclocityUnit;
 @property NSInteger distanceType;
+@property BOOL isRightDrawer;
 @end
 
 
@@ -48,6 +48,18 @@ typedef enum {
     return self;
 }
 
+- (id) initRightDrawer {
+    SettingsViewController* settingVC = [[SettingsViewController alloc] init];
+    settingVC.isRightDrawer = YES;
+    return settingVC;
+}
+
+- (id) initNormal {
+    SettingsViewController* settingVC = [[SettingsViewController alloc] init];
+    settingVC.isRightDrawer = NO;
+    return settingVC;
+}
+
 - (void)viewWillDisappear:(BOOL)animated {
     [self saveSettings];
 }
@@ -59,10 +71,42 @@ typedef enum {
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height-64) style:UITableViewStyleGrouped];
     [_tableView setDelegate:self];
     [_tableView setDataSource:self];
+    [_tableView setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
+    [_tableView registerNib:[UINib nibWithNibName:@"DistanceTypeCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"DistanceTypeCell"];
     [self.view addSubview:_tableView];
+    
+    [self loadPreference];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(distanceTypeUpdated:) name:@"DistanceTypeUpdated" object:nil];
     
+    [self setupBarButton];
+    
+    [self setTitle:@"Settings"];
+    
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+- (void) saveSettings {
+    NSUserDefaults* preference = [NSUserDefaults standardUserDefaults];
+    
+    [preference setBool:_voiceCoaching forKey:@"VoiceCoaching"];
+    [preference setInteger:_distanceUnit forKey:@"DistanceUnit"];
+    [preference setInteger:_distanceUnit forKey:@"WeightUnit"];
+    [preference setInteger:_veclocityUnit forKey:@"VelocityUnit"];
+}
+
+- (void) firstTimeSetup {
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"FirstLaunchComplete"];
+    
+    [CommonFunctions setupDrawer];
+}
+
+- (void) loadPreference {
     NSUserDefaults* preference = [NSUserDefaults standardUserDefaults];
     
     if ([NSNumber numberWithInteger:[preference integerForKey:@"DistanceUnit"]] != nil) {
@@ -92,41 +136,6 @@ typedef enum {
     } else {
         _voiceCoaching = NO;
     }
-    
-    [self setupLeftMenuButton];
-    
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"FirstLaunchComplete"]) {
-        [self saveSettings];
-        UIBarButtonItem* rightBarBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(firstTimeSetup)];
-        
-        [self.navigationItem setRightBarButtonItem:rightBarBtn animated:YES];
-    }
-    else {
-        self.navigationItem.hidesBackButton = YES;
-    }
-    [self setTitle:@"Settings"];
-    
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (void) saveSettings {
-    NSUserDefaults* preference = [NSUserDefaults standardUserDefaults];
-    
-    [preference setBool:_voiceCoaching forKey:@"VoiceCoaching"];
-    [preference setInteger:_distanceUnit forKey:@"DistanceUnit"];
-    [preference setInteger:_distanceUnit forKey:@"WeightUnit"];
-    [preference setInteger:_veclocityUnit forKey:@"VelocityUnit"];
-}
-
-- (void) firstTimeSetup {
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"FirstLaunchComplete"];
-    
-    [CommonFunctions setupDrawer];
 }
 
 #warning Implement voice coaching
@@ -134,16 +143,19 @@ typedef enum {
     UISwitch* voiceCoaching = (UISwitch*) sender;
     _voiceCoaching = voiceCoaching.isOn;
     [[NSUserDefaults standardUserDefaults] setBool:_voiceCoaching forKey:@"VoiceCoaching"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SettingChanged" object:nil];
 }
 
 - (void) distanceTypeUpdated: (id) sender {
     _distanceType = [[NSUserDefaults standardUserDefaults] integerForKey:@"DistanceType"];
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:SettingsVCSection_DistanceUnit] withRowAnimation:UITableViewRowAnimationFade];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SettingChanged" object:nil];
 }
 
 - (void) distanceTypeSelected{
-    DistanceTypeChooserTableViewController* distaceTypeChooserVC = [[DistanceTypeChooserTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    DistanceTypeChooserViewController* distaceTypeChooserVC = [[DistanceTypeChooserViewController alloc] initWithStyle:UITableViewStyleGrouped];
     [self.navigationController pushViewController:distaceTypeChooserVC animated:YES];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SettingChanged" object:nil];
 }
 
 - (void) distanceUnitChanged: (id) sender{
@@ -151,18 +163,21 @@ typedef enum {
     _distanceUnit = distance.selectedSegmentIndex;
     [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:1 inSection:SettingsVCSection_DistanceUnit]] withRowAnimation:UITableViewRowAnimationFade];
     [[NSUserDefaults standardUserDefaults] setInteger:_distanceUnit forKey:@"DistanceUnit"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SettingChanged" object:nil];
 }
 
 - (void)weightUnitChanged:(id)sender {
     UISegmentedControl* weight = (UISegmentedControl*) sender;
     _weightUnit = weight.selectedSegmentIndex;
     [[NSUserDefaults standardUserDefaults] setInteger:_weightUnit forKey:@"WeightUnit"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SettingChanged" object:nil];
 }
 
 - (void)velocityUnitChanged:(id) sender {
     UISegmentedControl* velocity = (UISegmentedControl*) sender;
     _veclocityUnit = velocity.selectedSegmentIndex;
     [[NSUserDefaults standardUserDefaults] setInteger:_veclocityUnit forKey:@"VelocityUnit"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SettingChanged" object:nil];
 }
 
 
@@ -235,12 +250,12 @@ typedef enum {
         case SettingsVCSection_DistanceUnit: {
             switch (indexPath.row) {
                 case RowInUnitSection_distanceType: {
-                    Setting_DistanceTypeCell* cell = [self.tableView dequeueReusableCellWithIdentifier:@"DistanceTypeCell"];
+                    DistanceTypeCell* cell = [self.tableView dequeueReusableCellWithIdentifier:@"DistanceTypeCell"];
                     if (cell == nil) {
-                        cell = [[Setting_DistanceTypeCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"DistanceTypeCell"];
+                        cell = [[DistanceTypeCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"DistanceTypeCell"];
                     }
-                    cell.textLabel.text = @"Unit System";
-                    cell.lbDistanceType.text = (_distanceType == 1) ? @"US/Imperial" : @"Metric";
+                    
+                    cell.lbUnitSystem.text = (_distanceType == 1) ? @"US/Imperial" : @"Metric";
                     return  cell;
                     break;
                 }
@@ -317,25 +332,27 @@ typedef enum {
 }
 
 #pragma mark - setup bar button
--(void)setupLeftMenuButton{
-    MMDrawerBarButtonItem * leftDrawerButton = [[MMDrawerBarButtonItem alloc] initWithTarget:self action:@selector(leftDrawerButtonPress:)];
-    [self.navigationItem setLeftBarButtonItem:leftDrawerButton animated:YES];
-}
+- (void) setupBarButton {
+    if (_isRightDrawer) {
+        return;
+    }
+    MMDrawerBarButtonItem* leftDrawerButton = [[MMDrawerBarButtonItem alloc] initWithTarget:self action:@selector(leftDrawerButtonPress:)];
+    [self.navigationItem setLeftBarButtonItem:leftDrawerButton];
+    
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"FirstLaunchComplete"]) {
+        [self saveSettings];
+        UIBarButtonItem* rightBarBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(firstTimeSetup)];
+        
+        [self.navigationItem setRightBarButtonItem:rightBarBtn animated:YES];
+    }
+    else {
+        self.navigationItem.hidesBackButton = YES;
+    }
 
--(void)setupRightMenuButton{
-    MMDrawerBarButtonItem * rightDrawerButton = [[MMDrawerBarButtonItem alloc] initWithTarget:self action:@selector(rightDrawerButtonPress:)];
-    [self.navigationItem setRightBarButtonItem:rightDrawerButton animated:YES];
 }
 
 -(void)leftDrawerButtonPress:(id)sender{
     [self.mm_drawerController toggleDrawerSide:MMDrawerSideLeft animated:YES completion:nil];
 }
-
--(void)rightDrawerButtonPress:(id)sender{
-    [self.mm_drawerController toggleDrawerSide:MMDrawerSideRight animated:YES completion:nil];
-}
-
-
-
 
 @end

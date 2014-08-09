@@ -12,7 +12,7 @@
 #import "View/MyPickerView.h"
 #import "CellWithAdditionalLabel.h"
 #import "CellWithTextField.h"
-#import "HistoryTableViewController.h"
+#import "HistoryViewController.h"
 
 typedef enum {
     AddUserVCSections_Name = 0,
@@ -143,56 +143,12 @@ typedef enum {
     self.tableView.dataSource = self;
     [self.view addSubview:self.tableView];
     
-    _frameHeight = self.view.frame.size.height;
-    _pickerHeight = 180;
-    _tableHeight = self.tableView.frame.size.height;
-    
-    _pickerFrame = CGRectMake(0, self.view.frame.size.height - 180, self.view.frame.size.width, 180);
-    _pickerHideFrame = CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width, 180);
-    
-    _pickerView = [[MyPickerView alloc] initWithFrame:_pickerHideFrame];
-    _pickerView.delegate = self;
-    _pickerView.dataSource = self;
-    _pickerView.hidden = YES;
-    [_pickerView setBackgroundColor:[UIColor whiteColor]];
-    [self.view addSubview:_pickerView];
-    
-    _birthDatePicker = [[UIDatePicker alloc] initWithFrame:_pickerHideFrame];
-    [_birthDatePicker setDatePickerMode:UIDatePickerModeDate];
-    [_birthDatePicker setMinimumDate:[CommonFunctions dateFromString:@"01/01/1900" withFormat:nil]];
-    [_birthDatePicker setMaximumDate:[CommonFunctions dateFromString:@"31/12/2010" withFormat:nil]];
-    
-    [_birthDatePicker setBackgroundColor:[UIColor whiteColor]];
-    _birthDatePicker.hidden = YES;
-    [self.view addSubview:_birthDatePicker];
+    [self initPickers];
+    [self setupBarButton];
     
     UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapBackground)];
     [self.tableView addGestureRecognizer:tapGesture];
     self.tableView.userInteractionEnabled = YES;
-    
-    if (_viewMode == ViewMode_ViewInfo) {
-        [self setTitle:[NSString stringWithFormat:@"%@ ", [CoreDataFuntions getFullnameUser:_curUser]]];
-        [_birthDatePicker addTarget:self action:@selector(updateBirthDate:) forControlEvents:UIControlEventValueChanged];
-        [self setupLeftMenuButton];
-    }
-    else if (_viewMode == ViewMode_LogIn) {
-        UIBarButtonItem* loginBtn = [[UIBarButtonItem alloc] initWithTitle:@"Login" style:UIBarButtonItemStylePlain target:self action:@selector(login)];
-        UIBarButtonItem* deleteBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(deleteUser)];
-        
-        [self.navigationItem setRightBarButtonItems:[NSArray arrayWithObjects:loginBtn, deleteBtn, nil]];
-    }
-    else {
-        [self setTitle:@"New User"];
-        UIBarButtonItem* rightBarBtn;
-        [_birthDatePicker addTarget:self action:@selector(updateBirthDate:) forControlEvents:UIControlEventValueChanged];
-        if (_isFirstLaunch) {
-            rightBarBtn = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(addNewUser)];
-        }
-        else {
-            rightBarBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(addNewUser)];
-        }
-        [self.navigationItem setRightBarButtonItem:rightBarBtn];
-    }
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -206,30 +162,15 @@ typedef enum {
 
 - (void) login {
     [CoreDataFuntions switchUser:_curUser];
-    HistoryTableViewController* historyVC = [[HistoryTableViewController alloc] init];
+    HistoryViewController* historyVC = [[HistoryViewController alloc] init];
     [self.navigationController pushViewController:historyVC animated:YES];
 }
 
 
 #pragma mark - setup bar button
--(void)setupLeftMenuButton{
-    MMDrawerBarButtonItem * leftDrawerButton = [[MMDrawerBarButtonItem alloc] initWithTarget:self action:@selector(leftDrawerButtonPress:)];
-    [self.navigationItem setLeftBarButtonItem:leftDrawerButton animated:YES];
-}
-
--(void)setupRightMenuButton{
-    MMDrawerBarButtonItem * rightDrawerButton = [[MMDrawerBarButtonItem alloc] initWithTarget:self action:@selector(rightDrawerButtonPress:)];
-    [self.navigationItem setRightBarButtonItem:rightDrawerButton animated:YES];
-}
-
 -(void)leftDrawerButtonPress:(id)sender{
     [self.mm_drawerController toggleDrawerSide:MMDrawerSideLeft animated:YES completion:nil];
 }
-
--(void)rightDrawerButtonPress:(id)sender{
-    [self.mm_drawerController toggleDrawerSide:MMDrawerSideRight animated:YES completion:nil];
-}
-
 
 - (void) setRightBarButton {
     if (_viewMode == ViewMode_ViewInfo) {
@@ -506,8 +447,6 @@ typedef enum {
     
 }
 
-
-
 - (NSArray*) getPickerHeightData {
     NSString* unit = ([[NSUserDefaults standardUserDefaults] integerForKey:@"DistanceType"] == 1) ? @"ft" : @"cm";
     NSMutableArray* data = [NSMutableArray arrayWithObjects:[NSNumber numberWithInt:3],[NSNumber numberWithInt:10],[NSNumber numberWithInt:10],[NSNumber numberWithInt:1],[NSNumber numberWithInt:10], [NSArray arrayWithObjects:unit, nil], nil];
@@ -614,7 +553,6 @@ typedef enum {
         }
     }
 }
-
 
 - (void) setSelectedBirthDateInPickerView {
     if (_birthDate == nil) {
@@ -730,8 +668,6 @@ typedef enum {
     [self setRightBarButton];
 }
 
-
-
 - (float) getNumberFromPicker {
     float height = [_pickerView selectedRowInComponent:0];
     height = height * 10 + [_pickerView selectedRowInComponent:1];
@@ -811,7 +747,9 @@ typedef enum {
                          animations:^{
                              tableView.frame = tableFrame;
                          }
-                         completion:^(BOOL finished){ [self tableAnimationEnded:nil finished:nil contextInfo:nil]; }];
+                         completion:^(BOOL finished){
+                             [self tableAnimationEnded];
+                         }];
     }
 }
 
@@ -858,14 +796,14 @@ typedef enum {
                      completion:nil];
 }
 
-- (void) tableAnimationEnded:(NSString*)animationID finished:(NSNumber *)finished contextInfo:(void *)context
+- (void) tableAnimationEnded
 {
     // Scroll to the active cell
     NSIndexPath* activeCellIndexPath = [[self.tableView indexPathsForSelectedRows] lastObject];
     if(activeCellIndexPath)
     {
         [self.tableView scrollToRowAtIndexPath:activeCellIndexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
-        [self.tableView selectRowAtIndexPath:activeCellIndexPath animated:NO scrollPosition:UITableViewScrollPositionTop];
+        //[self.tableView selectRowAtIndexPath:activeCellIndexPath animated:NO scrollPosition:UITableViewScrollPositionTop];
     }
 }
 
@@ -918,14 +856,14 @@ typedef enum {
     [CoreDataFuntions saveNewUser:_firstName lastName:_lastName height:_height weight:_weight birthDate:_birthDate email:_email gender:_gender];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"ListUserChanged" object:self];
     if (_isFirstLaunch) {
-        SettingsViewController* settingVC = [[SettingsViewController alloc] init];
+        SettingsViewController* settingVC = [[SettingsViewController alloc] initNormal];
         AppDelegate* del = [[UIApplication sharedApplication] delegate];
         del.fetchedResultsController = nil;
         [self.navigationController pushViewController:settingVC animated: YES];
     }
     else {
         TrackingViewController* trackingVC = [[TrackingViewController alloc] init];
-        [CommonFunctions showStatusBarAlert:[NSString stringWithFormat:@"User %@ %@ has been added.", _firstName, _lastName] duration:2.0f backgroundColor:[UIColor greenColor]];
+        [CommonFunctions showStatusBarAlert:[NSString stringWithFormat:@"User %@ %@ has been added.", _firstName, _lastName] duration:2.0f backgroundColor:[CommonFunctions greenColor]];
         
         [self.navigationController pushViewController:trackingVC animated:YES];
     }
@@ -973,7 +911,65 @@ typedef enum {
     _curUser.weight = _weight;
     [CoreDataFuntions saveContent];
     
-    [CommonFunctions showStatusBarAlert:@"User Infomation has been updated." duration:2.0f backgroundColor:[UIColor greenColor]];
+    [CommonFunctions showStatusBarAlert:@"User Infomation has been updated." duration:2.0f backgroundColor:[CommonFunctions greenColor]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"UserInfoChanged" object:self];
+    [self.navigationItem setRightBarButtonItem:nil];
+    
+}
+
+- (void) initPickers {
+    
+    _frameHeight = self.view.frame.size.height;
+    _pickerHeight = 180;
+    _tableHeight = self.tableView.frame.size.height;
+    
+    _pickerFrame = CGRectMake(0, self.view.frame.size.height - 180, self.view.frame.size.width, 180);
+    _pickerHideFrame = CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width, 180);
+    
+    _pickerView = [[MyPickerView alloc] initWithFrame:_pickerHideFrame];
+    _pickerView.delegate = self;
+    _pickerView.dataSource = self;
+    _pickerView.hidden = YES;
+    [_pickerView setBackgroundColor:[UIColor whiteColor]];
+    [self.view addSubview:_pickerView];
+    
+    _birthDatePicker = [[UIDatePicker alloc] initWithFrame:_pickerHideFrame];
+    [_birthDatePicker setDatePickerMode:UIDatePickerModeDate];
+    [_birthDatePicker setMinimumDate:[CommonFunctions dateFromString:@"01/01/1900" withFormat:nil]];
+    [_birthDatePicker setMaximumDate:[CommonFunctions dateFromString:@"31/12/2010" withFormat:nil]];
+    
+    [_birthDatePicker setBackgroundColor:[UIColor whiteColor]];
+    _birthDatePicker.hidden = YES;
+    [self.view addSubview:_birthDatePicker];
+}
+
+- (void) setupBarButton {
+    
+    if (_viewMode == ViewMode_ViewInfo) {
+        [self setTitle:[NSString stringWithFormat:@"%@ ", [CoreDataFuntions getFullnameUser:_curUser]]];
+        [_birthDatePicker addTarget:self action:@selector(updateBirthDate:) forControlEvents:UIControlEventValueChanged];
+        
+        MMDrawerBarButtonItem * leftDrawerButton = [[MMDrawerBarButtonItem alloc] initWithTarget:self action:@selector(leftDrawerButtonPress:)];
+        [self.navigationItem setLeftBarButtonItem:leftDrawerButton animated:YES];
+    }
+    else if (_viewMode == ViewMode_LogIn) {
+        UIBarButtonItem* loginBtn = [[UIBarButtonItem alloc] initWithTitle:@"Login" style:UIBarButtonItemStylePlain target:self action:@selector(login)];
+        UIBarButtonItem* deleteBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(deleteUser)];
+        
+        [self.navigationItem setRightBarButtonItems:[NSArray arrayWithObjects:loginBtn, deleteBtn, nil]];
+    }
+    else {
+        [self setTitle:@"New User"];
+        UIBarButtonItem* rightBarBtn;
+        [_birthDatePicker addTarget:self action:@selector(updateBirthDate:) forControlEvents:UIControlEventValueChanged];
+        if (_isFirstLaunch) {
+            rightBarBtn = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(addNewUser)];
+        }
+        else {
+            rightBarBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(addNewUser)];
+        }
+        [self.navigationItem setRightBarButtonItem:rightBarBtn];
+    }
     
 }
 
