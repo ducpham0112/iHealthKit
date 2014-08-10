@@ -13,6 +13,7 @@
 #import "CellWithAdditionalLabel.h"
 #import "CellWithTextField.h"
 #import "HistoryViewController.h"
+#import "View/UserNameCell.h"
 
 typedef enum {
     AddUserVCSections_Name = 0,
@@ -60,6 +61,7 @@ typedef enum {
 @property NSDate* birthDate;
 @property NSNumber* height;
 @property NSNumber* weight;
+@property UIImage* avatar;
 
 @property MyUser* curUser;
 
@@ -142,6 +144,7 @@ typedef enum {
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.view addSubview:self.tableView];
+    [self.tableView registerNib:[UINib nibWithNibName:@"UserNameCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"userNameCell"];
     
     [self initPickers];
     [self setupBarButton];
@@ -194,7 +197,7 @@ typedef enum {
 {
     switch (section) {
         case AddUserVCSections_Name:
-            return 2;
+            return 1;
             break;
         case AddUserVCSections_Gender:
             return 1;
@@ -207,10 +210,41 @@ typedef enum {
             break;
     }
 }
+
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 0) {
+        return 86;
+    }
+    else {
+        return 44;
+    }
+}
+
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     switch (indexPath.section) {
         case AddUserVCSections_Name:{
-            CellWithTextField* cell = [[CellWithTextField alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"TextFieldCell"];
+            UserNameCell* cell = [self.tableView dequeueReusableCellWithIdentifier:@"userNameCell"];
+            if (cell == nil) {
+                cell = [[UserNameCell alloc] init];
+            }
+            cell.tfFirstName.text = _firstName;
+            cell.tfLastName.text = _lastName;
+            
+            [cell.tfFirstName addTarget:self action:@selector(updateFirstName:) forControlEvents:UIControlEventEditingDidEnd];
+            [cell.tfLastName addTarget:self action:@selector(updateLastName:) forControlEvents:UIControlEventEditingDidEnd];
+            
+            if (_avatar == nil) {
+                if ([_curUser.isMale integerValue] == 0) {
+                    cell.imgAvatar.image = [UIImage imageNamed:@"avatar_male.jpg"];
+                } else {
+                    cell.imgAvatar.image = [UIImage imageNamed:@"avatar_female.jpg"];
+                }
+            } else {
+                cell.imgAvatar.image = _avatar;
+            }
+            UITapGestureRecognizer* tapAvatarGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(updateAvatar:)];
+            [cell.imgAvatar addGestureRecognizer:tapAvatarGesture];
+            /*CellWithTextField* cell = [[CellWithTextField alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"TextFieldCell"];
             if (indexPath.row == 0) {
                 cell.textLabel.text = @"First Name";
                 cell.textField.text = _firstName;
@@ -222,7 +256,7 @@ typedef enum {
                 cell.textField.text = _lastName;
                 cell.textField.placeholder = @"Last Name";
                 [cell.textField addTarget:self action:@selector(updateLastName:) forControlEvents:UIControlEventEditingDidEnd];
-            }
+            }*/
             return  cell;
             break;
         }
@@ -648,6 +682,10 @@ typedef enum {
     [self setRightBarButton];
 }
 
+- (void) updateAvatar: (id) sender {
+    
+}
+
 - (void) updateFirstName: (id) sender {
     UITextField* textField = (UITextField*) sender;
     _firstName = textField.text;
@@ -870,8 +908,6 @@ typedef enum {
         
         [self.navigationController pushViewController:trackingVC animated:YES];
     }
-    
-    
 }
 
 - (NSString*) getHeightString {
@@ -917,6 +953,9 @@ typedef enum {
     [CoreDataFuntions saveContent];
     
     [CommonFunctions showStatusBarAlert:@"User Infomation has been updated." duration:2.0f backgroundColor:[CommonFunctions greenColor]];
+    
+    self.title = [CoreDataFuntions getFullnameUser:_curUser];
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:@"UserInfoChanged" object:self];
     [self.navigationItem setRightBarButtonItem:nil];
     

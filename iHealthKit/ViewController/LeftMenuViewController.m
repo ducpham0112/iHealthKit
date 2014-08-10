@@ -58,6 +58,8 @@ typedef enum {
     [self.tableView registerNib:[UINib nibWithNibName:@"LeftMenuHeaderCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"leftMenuHeaderCell"];
     
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
+    [self.tableView setSeparatorColor:[CommonFunctions lightGrayColor]];
+    [self.tableView setBounces:NO];
     [self.view setBackgroundColor:[UIColor whiteColor]];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userInfoUpdate) name:@"UserInfoChanged" object:nil];

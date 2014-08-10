@@ -31,10 +31,7 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     [self.window setTintColor:[UIColor whiteColor]];
-    
-    //self.fetchedResultsControllerDelegate = [[MyFetchedResultsController alloc] initNew];
-    //[self.fetchedResultsController setDelegate:self.fetchedResultsControllerDelegate];
-    
+
     
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"FirstLaunchComplete"] || [self.fetchedResultsController.fetchedObjects count] == 0) {
         [self firstTimeSetup];

@@ -138,12 +138,11 @@ typedef enum {
     }
 }
 
-#warning Implement voice coaching
 - (void)voiceCoachingChanged: (id) sender {
     UISwitch* voiceCoaching = (UISwitch*) sender;
     _voiceCoaching = voiceCoaching.isOn;
     [[NSUserDefaults standardUserDefaults] setBool:_voiceCoaching forKey:@"VoiceCoaching"];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SettingChanged" object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"VoiceCoachingChanged" object:nil];
 }
 
 - (void) distanceTypeUpdated: (id) sender {
@@ -329,6 +328,10 @@ typedef enum {
     if (indexPath.row == RowInUnitSection_distanceType && indexPath.section == SettingsVCSection_DistanceUnit) {
         [self distanceTypeSelected];
     }
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 34;
 }
 
 #pragma mark - setup bar button

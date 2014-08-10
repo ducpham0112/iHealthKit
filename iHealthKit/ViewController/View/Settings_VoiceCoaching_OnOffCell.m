@@ -15,7 +15,10 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
-        _voiceSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
+        self.textLabel.font = [UIFont fontWithName:@"American Typewriter" size:14.0];
+        
+        _voiceSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(self.frame.size.width - 50, (self.frame.size.height - 16) / 2, 50, 15)];
+        
         self.accessoryView = _voiceSwitch;
         self.selectionStyle = UITableViewCellSelectionStyleNone;
     }

@@ -27,6 +27,5 @@
 @property (nonatomic) BOOL isTracking;
 
 @property (nonatomic,strong) MMDrawerController * drawerController;
-//@property (nonatomic, strong) MyFetchedResultsController* fetchedResultsControllerDelegate;
 
 @end

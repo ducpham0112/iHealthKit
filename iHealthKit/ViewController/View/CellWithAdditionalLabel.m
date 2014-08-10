@@ -16,10 +16,11 @@
     if (self) {
         // Initialization code
         [self.textLabel setTextColor:[CommonFunctions grayColor]];
-        [self.textLabel setFont:[UIFont systemFontOfSize:15.0f]];
+        self.textLabel.font = [UIFont fontWithName:@"Bradley Hand" size:18.0];
         [self setSelectionStyle:UITableViewCellSelectionStyleNone];
         _label = [[UILabel alloc] initWithFrame:CGRectMake(120, 0, self.frame.size.width - 120, self.frame.size.height)];
         _label.userInteractionEnabled = YES;
+        _label.font = [UIFont fontWithName:@"American Typewriter" size:14.0];
         [self addSubview:_label];
     }
     return self;

@@ -16,9 +16,11 @@
     if (self) {
         // Initialization code
         _segmentControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"", @"", nil]];
-        _segmentControl.frame = CGRectMake(self.frame.size.width - 115, (self.frame.size.height - 28) / 2, 115, 28);
+        _segmentControl.frame = CGRectMake(self.frame.size.width - 115, (self.frame.size.height - 22) / 2, 115, 22);
         [self setAccessoryView:_segmentControl];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+        self.textLabel.font = [UIFont fontWithName:@"American Typewriter" size:14.0];
     }
     return self;
 }

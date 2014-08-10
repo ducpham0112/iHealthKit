@@ -387,13 +387,20 @@ typedef enum {
 
 -(void)setupBarButton{
     MMDrawerBarButtonItem * leftDrawerButton = [[MMDrawerBarButtonItem alloc] initWithTarget:self action:@selector(leftDrawerButtonPress:)];
-    [self.navigationItem setLeftBarButtonItem:leftDrawerButton animated:YES];
+    [self.navigationItem setLeftBarButtonItem:leftDrawerButton animated:NO];
+    
+    MMDrawerBarButtonItem* rightDrawerButton = [[MMDrawerBarButtonItem alloc] initWithTarget:self action:@selector(rightDrawerButtonPress:)];
+    [self.navigationItem setRightBarButtonItem:rightDrawerButton animated:NO];
     
     self.navigationItem.hidesBackButton = YES;
 }
 
 -(void)leftDrawerButtonPress:(id)sender{
     [self.mm_drawerController toggleDrawerSide:MMDrawerSideLeft animated:YES completion:nil];
+}
+
+-(void)rightDrawerButtonPress:(id) sender {
+    [self.mm_drawerController toggleDrawerSide:MMDrawerSideRight animated:YES completion:nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -653,7 +660,7 @@ typedef enum {
 - (void)locationManagerSignalConsistentlyWeak:(MyLocationManager *)locationManager {
     //UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Warning!" message:@"Your GPS signal strength is consistantly weak." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
     //[alert show];
-    [CommonFunctions showStatusBarAlert:@"Your GPS signal strength is consistanctly weak" duration:2.0f backgroundColor:[CommonFunctions redColor]];
+    [CommonFunctions showStatusBarAlert:@"Your GPS signal strength is consistanctly weak" duration:2.0f backgroundColor:[CommonFunctions yellowColor]];
 }
 
 - (void)locationManagerSignalInvalid:(MyLocationManager *)locationManager {
@@ -787,7 +794,7 @@ typedef enum {
             break;
         }
         case InfoType_CurPace: {
-          descriptionStr = @"Current Pace";
+          descriptionStr = [NSString stringWithFormat:@"Current Pace (%@)", [CommonFunctions getPaceUnitString]];
             break;
         }
         case InfoType_CurSpeed: {
@@ -807,7 +814,7 @@ typedef enum {
             break;
         }
         case InfoType_MaxPace: {
-       descriptionStr = @"Maximum Pace";
+       descriptionStr = [NSString stringWithFormat:@"Maximum Pace (%@)", [CommonFunctions getPaceUnitString]];
             break;
         }
         default:

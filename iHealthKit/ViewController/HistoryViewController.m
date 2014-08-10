@@ -54,6 +54,7 @@
     _scrollView.delegate = self;
     [self GeneratePages];
     _pageControl.currentPage = 0;
+    _pageControl.numberOfPages = PAGE_NUMBER;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(historyChanged) name:@"HistoryChanged" object:nil];
     
@@ -171,7 +172,7 @@
         //page.backgroundColor = [UIColor grayColor];
         UILabel* lbValue = [[UILabel alloc] initWithFrame:CGRectMake(0, 37, 320, 70)];
         lbValue.backgroundColor = [UIColor clearColor];
-        lbValue.textColor = [CommonFunctions leftMenuBackgroundColor];
+        lbValue.textColor = [CommonFunctions navigationBarColor];
         lbValue.textAlignment = NSTextAlignmentCenter;
         lbValue.font = [UIFont fontWithName:@"Geeza Pro" size:70.0f];
         [page addSubview:lbValue];

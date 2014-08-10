@@ -16,12 +16,14 @@
     if (self) {
         // Initialization code
         [self.textLabel setTextColor:[CommonFunctions grayColor]];
-        [self.textLabel setFont:[UIFont systemFontOfSize:15.0f]];
         [self setSelectionStyle:UITableViewCellSelectionStyleNone];
         _textField = [[UITextField alloc] initWithFrame:CGRectMake(120, 0, self.frame.size.width - 120, self.frame.size.height)];
         [_textField setTintColor:[CommonFunctions grayColor]];
+        [_textField setFont:[UIFont fontWithName:@"Bradley Hand" size:18.0]];
         _textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"" attributes:@{NSForegroundColorAttributeName: [CommonFunctions lightGrayColor]}];
          [self addSubview:_textField];
+        
+        self.textLabel.font = [UIFont fontWithName:@"American Typewriter" size:14.0];
     }
     return self;
 }

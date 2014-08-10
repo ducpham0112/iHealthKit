@@ -82,7 +82,6 @@
 		841CCE4319852F0200DD6631 /* MMDrawerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 841CCE3C19852F0200DD6631 /* MMDrawerController.m */; };
 		841CCE4419852F0200DD6631 /* MMDrawerVisualState.m in Sources */ = {isa = PBXBuildFile; fileRef = 841CCE3E19852F0200DD6631 /* MMDrawerVisualState.m */; };
 		841CCE4519852F0200DD6631 /* UIViewController+MMDrawerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 841CCE4019852F0200DD6631 /* UIViewController+MMDrawerController.m */; };
-		841CCE48198540C400DD6631 /* MyFetchedResultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 841CCE47198540C400DD6631 /* MyFetchedResultsController.m */; };
 		84215AF91984C13D0016EF80 /* DistanceTypeChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84215AF81984C13D0016EF80 /* DistanceTypeChooserViewController.m */; };
 		84215B011984D17A0016EF80 /* Settings_VoiceCoaching_OnOffCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84215B001984D17A0016EF80 /* Settings_VoiceCoaching_OnOffCell.m */; };
 		84215B041984D2C00016EF80 /* Setting_DistanceTypeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84215B031984D2C00016EF80 /* Setting_DistanceTypeCell.m */; };
@@ -109,6 +108,8 @@
 		84ED9EDE19932C72007D5E13 /* RouteAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84ED9EDD19932C72007D5E13 /* RouteAnnotationView.m */; };
 		84F1CC5D19811B0100F257A9 /* UserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F1CC5C19811B0100F257A9 /* UserViewController.m */; };
 		84F307041987CD1400D5B232 /* CellWithRightImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F307031987CD1400D5B232 /* CellWithRightImage.m */; };
+		84F9B2C3199718CC00E71140 /* UserNameCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F9B2C1199718CC00E71140 /* UserNameCell.m */; };
+		84F9B2C4199718CC00E71140 /* UserNameCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84F9B2C2199718CC00E71140 /* UserNameCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -222,8 +223,6 @@
 		841CCE3E19852F0200DD6631 /* MMDrawerVisualState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMDrawerVisualState.m; sourceTree = "<group>"; };
 		841CCE3F19852F0200DD6631 /* UIViewController+MMDrawerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+MMDrawerController.h"; sourceTree = "<group>"; };
 		841CCE4019852F0200DD6631 /* UIViewController+MMDrawerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+MMDrawerController.m"; sourceTree = "<group>"; };
-		841CCE46198540C400DD6631 /* MyFetchedResultsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyFetchedResultsController.h; sourceTree = "<group>"; };
-		841CCE47198540C400DD6631 /* MyFetchedResultsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyFetchedResultsController.m; sourceTree = "<group>"; };
 		84215AF71984C13D0016EF80 /* DistanceTypeChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistanceTypeChooserViewController.h; sourceTree = "<group>"; };
 		84215AF81984C13D0016EF80 /* DistanceTypeChooserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistanceTypeChooserViewController.m; sourceTree = "<group>"; };
 		84215AFF1984D17A0016EF80 /* Settings_VoiceCoaching_OnOffCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings_VoiceCoaching_OnOffCell.h; sourceTree = "<group>"; };
@@ -264,6 +263,9 @@
 		84F1CC5C19811B0100F257A9 /* UserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserViewController.m; sourceTree = "<group>"; };
 		84F307021987CD1400D5B232 /* CellWithRightImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellWithRightImage.h; sourceTree = "<group>"; };
 		84F307031987CD1400D5B232 /* CellWithRightImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CellWithRightImage.m; sourceTree = "<group>"; };
+		84F9B2C0199718CC00E71140 /* UserNameCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserNameCell.h; sourceTree = "<group>"; };
+		84F9B2C1199718CC00E71140 /* UserNameCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserNameCell.m; sourceTree = "<group>"; };
+		84F9B2C2199718CC00E71140 /* UserNameCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserNameCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -322,10 +324,10 @@
 				84215AFF1984D17A0016EF80 /* Settings_VoiceCoaching_OnOffCell.h */,
 				84215B001984D17A0016EF80 /* Settings_VoiceCoaching_OnOffCell.m */,
 				84215B021984D2C00016EF80 /* Setting_DistanceTypeCell.h */,
+				84215B031984D2C00016EF80 /* Setting_DistanceTypeCell.m */,
 				84ED9ED719931C94007D5E13 /* DistanceTypeCell.h */,
 				84ED9ED819931C94007D5E13 /* DistanceTypeCell.m */,
 				84ED9ED919931C94007D5E13 /* DistanceTypeCell.xib */,
-				84215B031984D2C00016EF80 /* Setting_DistanceTypeCell.m */,
 				84F307021987CD1400D5B232 /* CellWithRightImage.h */,
 				84F307031987CD1400D5B232 /* CellWithRightImage.m */,
 				84215B051984D3D00016EF80 /* CellWithSegmentControl.h */,
@@ -336,6 +338,9 @@
 				841CCE2D19850C2E00DD6631 /* CellWithAdditionalLabel.m */,
 				84ED9EDC19932C72007D5E13 /* RouteAnnotationView.h */,
 				84ED9EDD19932C72007D5E13 /* RouteAnnotationView.m */,
+				84F9B2C0199718CC00E71140 /* UserNameCell.h */,
+				84F9B2C1199718CC00E71140 /* UserNameCell.m */,
+				84F9B2C2199718CC00E71140 /* UserNameCell.xib */,
 			);
 			name = View;
 			path = ViewController/View;
@@ -442,8 +447,6 @@
 				8417C225197ABE1F00007269 /* CommonFunctions.m */,
 				84132A2B197D50EF0077B926 /* CoreDataFuntions.h */,
 				84132A2C197D50EF0077B926 /* CoreDataFuntions.m */,
-				841CCE46198540C400DD6631 /* MyFetchedResultsController.h */,
-				841CCE47198540C400DD6631 /* MyFetchedResultsController.m */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -760,6 +763,7 @@
 				8418A1091994BC2500742EEB /* annotation_start.png in Resources */,
 				8418A10A1994BC2500742EEB /* annotation_start20.png in Resources */,
 				8421E5DE199682AA00EC18E8 /* icon-80.png in Resources */,
+				84F9B2C4199718CC00E71140 /* UserNameCell.xib in Resources */,
 				8418A10F1994BC2500742EEB /* icon_Settings.png in Resources */,
 				8418A1071994BC2500742EEB /* annotation_finished.png in Resources */,
 				84ED9EDB19931C94007D5E13 /* DistanceTypeCell.xib in Resources */,
@@ -789,7 +793,6 @@
 				843C22E81984018300197D31 /* LeftMenuCell.m in Sources */,
 				840F347119836F1500839995 /* MyPickerView.m in Sources */,
 				840F347819836F1500839995 /* ListUserCell.m in Sources */,
-				841CCE48198540C400DD6631 /* MyFetchedResultsController.m in Sources */,
 				84215B071984D3D00016EF80 /* CellWithSegmentControl.m in Sources */,
 				841CCE4519852F0200DD6631 /* UIViewController+MMDrawerController.m in Sources */,
 				84215AF91984C13D0016EF80 /* DistanceTypeChooserViewController.m in Sources */,
@@ -802,6 +805,7 @@
 				8417C226197ABE1F00007269 /* CommonFunctions.m in Sources */,
 				84132A2D197D50EF0077B926 /* CoreDataFuntions.m in Sources */,
 				841CCE4119852F0200DD6631 /* CWStatusBarNotification.m in Sources */,
+				84F9B2C3199718CC00E71140 /* UserNameCell.m in Sources */,
 				8407D5A4197D040400177962 /* ListUserViewController.m in Sources */,
 				84ED9EDE19932C72007D5E13 /* RouteAnnotationView.m in Sources */,
 				84E6A8E4199252CF001A982D /* HistoryViewController.m in Sources */,

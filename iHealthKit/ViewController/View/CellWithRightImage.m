@@ -15,7 +15,9 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
+        self.textLabel.font = [UIFont fontWithName:@"American Typewriter" size:14.0];
         _rightImage = [[UIImageView alloc] initWithFrame:CGRectMake(self.frame.size.width - self.frame.size.height - 10, 3, self.frame.size.height - 6, self.frame.size.height - 6)];
+        
         [self addSubview:_rightImage];
         
     }
