@@ -10,10 +10,13 @@
 #import "SettingsViewController.h"
 #import "TrackingViewController.h"
 #import "View/MyPickerView.h"
-#import "CellWithAdditionalLabel.h"
-#import "CellWithTextField.h"
+//#import "CellWithAdditionalLabel.h"
+//#import "CellWithTextField.h"
 #import "HistoryViewController.h"
-#import "View/UserNameCell.h"
+#import "View/UserInfo_NameCell.h"
+#import "View/UserInfo_GenderCell.h"
+#import "View/UserInfo_EmailCell.h"
+#import "View/UserInfo_PickerCell.h"
 
 typedef enum {
     AddUserVCSections_Name = 0,
@@ -96,6 +99,12 @@ typedef enum {
     userVC.gender = user.isMale;
     userVC.email = user.email;
     
+    UIImage* avatar = nil;
+    if (user.avatar != nil) {
+        avatar = [[UIImage alloc] initWithData:user.avatar];
+    }
+    userVC.avatar = avatar;
+    
     userVC.birthDate = user.birthday;
     userVC.weight = user.weight;
     userVC.height = user.height;
@@ -144,7 +153,10 @@ typedef enum {
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.view addSubview:self.tableView];
-    [self.tableView registerNib:[UINib nibWithNibName:@"UserNameCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"userNameCell"];
+    [self.tableView registerNib:[UINib nibWithNibName:@"UserInfo_NameCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"userNameCell"];
+    [self.tableView registerNib:[UINib nibWithNibName:@"UserInfo_PickerCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"pickerCell"];
+    [self.tableView registerNib:[UINib nibWithNibName:@"UserInfo_GenderCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"genderCell"];
+    [self.tableView registerNib:[UINib nibWithNibName:@"UserInfo_EmailCell"  bundle:[NSBundle mainBundle]]forCellReuseIdentifier:@"emailCell"];
     
     [self initPickers];
     [self setupBarButton];
@@ -213,7 +225,7 @@ typedef enum {
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
-        return 86;
+        return 94;
     }
     else {
         return 44;
@@ -223,9 +235,9 @@ typedef enum {
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     switch (indexPath.section) {
         case AddUserVCSections_Name:{
-            UserNameCell* cell = [self.tableView dequeueReusableCellWithIdentifier:@"userNameCell"];
+            UserInfo_NameCell* cell = [tableView dequeueReusableCellWithIdentifier:@"userNameCell"];
             if (cell == nil) {
-                cell = [[UserNameCell alloc] init];
+                cell = [[UserInfo_NameCell alloc] init];
             }
             cell.tfFirstName.text = _firstName;
             cell.tfLastName.text = _lastName;
@@ -261,7 +273,18 @@ typedef enum {
             break;
         }
         case AddUserVCSections_Gender: {
-            UITableViewCell* cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"GenderCell"];
+            UserInfo_GenderCell* cell = [tableView dequeueReusableCellWithIdentifier:@"genderCell"];
+            if (cell == nil) {
+                    cell = [[UserInfo_GenderCell alloc] init];
+            }
+            [cell.genderSegment addTarget:self action:@selector(updateGender:) forControlEvents:UIControlEventValueChanged];
+            if (_gender != nil) {
+                cell.genderSegment.selectedSegmentIndex = [_gender integerValue];
+            }
+            return cell;
+            break;
+            
+            /*UITableViewCell* cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"GenderCell"];
             UISegmentedControl* genderSegment = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"", @"", nil]];
             genderSegment.frame = CGRectMake(20, 5, cell.frame.size.width - 40, cell.frame.size.height - 10);
             [genderSegment setTitle:@"Male" forSegmentAtIndex:GenderType_Male];
@@ -273,74 +296,93 @@ typedef enum {
             [genderSegment setTintColor:[CommonFunctions navigationBarColor]];
             [cell addSubview:genderSegment];
             return  cell;
-            break;
+            break;*/
         }
         case AddUserVCSections_Info: {
             switch (indexPath.row) {
                 case RowInSectionInfo_email: {
-                    CellWithTextField* cell = [[CellWithTextField alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"TextFieldCell"];
+                    UserInfo_EmailCell* cell = [tableView dequeueReusableCellWithIdentifier:@"emailCell"];
+                    if (cell == nil) {
+                        cell = [[UserInfo_EmailCell alloc] init];
+                        [cell.tfValue addTarget:self action:@selector(updateEmail:) forControlEvents:UIControlEventEditingDidEnd];
+                    }
+                    cell.tfValue.text = _email;
+                    return cell;
+                    break;
+                    /*CellWithTextField* cell = [[CellWithTextField alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"TextFieldCell"];
                     cell.textLabel.text = @"E-Mail";
                     cell.textField.text = _email;
                     cell.textField.placeholder = @"Your email" ;
                     [cell.textField addTarget:self action:@selector(updateEmail:) forControlEvents:UIControlEventEditingDidEnd];
                     return cell;
-                    break;
+                    break;*/
                 }
                 case RowInSectionInfo_birthDate: {
-                    CellWithAdditionalLabel* cell = [[CellWithAdditionalLabel alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"LabelCell"];
-                    cell.textLabel.text = @"Birth Date";
+                    UserInfo_PickerCell* cell = [tableView dequeueReusableCellWithIdentifier:@"pickerCell"];
+                    
+                    if (cell == nil) {
+                        cell = [[UserInfo_PickerCell alloc] init];
+                    }
+                    
+                    cell.lbDescription.text = @"Birth Date";
+                    
                     if (_birthDate == nil) {
-                        cell.label.text = @"Your Birth Date";
-                        cell.label.textColor = [CommonFunctions lightGrayColor];
+                        cell.lbValue.text = @"Your Birth Date";
+                        cell.lbValue.textColor = [CommonFunctions lightGrayColor];
                     }
                     else {
-                        cell.label.text = [NSDateFormatter localizedStringFromDate:_birthDate dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterNoStyle];
-                        cell.label.textColor = [UIColor blackColor];
+                        cell.lbValue.text = [NSDateFormatter localizedStringFromDate:_birthDate dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterNoStyle];
+                        cell.lbValue.textColor = [UIColor blackColor];
                     }
                     
                     //cell.label.text = (_birthDate == nil) ? @"Your Birth Date" : [NSDateFormatter localizedStringFromDate:_birthDate dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterNoStyle];
                     UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(birthDateSelected)];
-                    [tapGesture setNumberOfTapsRequired:1];
-                    [tapGesture setNumberOfTouchesRequired:1];
-                    [cell.label addGestureRecognizer:tapGesture];
+                    [cell.lbValue addGestureRecognizer:tapGesture];
                     return cell;
                     break;
                 }
                 case RowInSectionInfo_height: {
-                    CellWithAdditionalLabel* cell = [[CellWithAdditionalLabel alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"LabelCell"];
-                    cell.textLabel.text = @"Height";
+                    UserInfo_PickerCell* cell = [tableView dequeueReusableCellWithIdentifier:@"pickerCell"];
+                    
+                    if (cell == nil) {
+                        cell = [[UserInfo_PickerCell alloc] init];
+                    }
+                    
+                    
+                    cell.lbDescription.text = @"Height";
                     if (_height == nil) {
-                        cell.label.text = @"Your Height";
-                        cell.label.textColor = [CommonFunctions lightGrayColor];
+                        cell.lbValue.text = @"Your Height";
+                        cell.lbValue.textColor = [CommonFunctions lightGrayColor];
                     }
                     else {
-                        cell.label.text = [self getHeightString];
-                        cell.label.textColor = [UIColor blackColor];
+                        cell.lbValue.text = [self getHeightString];
+                        cell.lbValue.textColor = [UIColor blackColor];
                     }
                     
                     //cell.label.text = (_height == nil) ? @"Your Height" : [self getHeightString];
                     UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(heightSelected)];
-                    [tapGesture setNumberOfTapsRequired:1];
-                    [tapGesture setNumberOfTouchesRequired:1];
-                    [cell.label addGestureRecognizer:tapGesture];
+                    [cell.lbValue addGestureRecognizer:tapGesture];
                     return cell;
                     break;
                 }
                 case RowInSectionInfo_weight: {
-                    CellWithAdditionalLabel* cell = [[CellWithAdditionalLabel alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"LabelCell"];
-                    cell.textLabel.text = @"Weight";
+                    UserInfo_PickerCell* cell = [tableView dequeueReusableCellWithIdentifier:@"pickerCell"];
+                    
+                    if (cell == nil) {
+                        cell = [[UserInfo_PickerCell alloc] init];
+                    }
+                    
+                    cell.lbDescription.text = @"Weight";
                     if (_weight == nil) {
-                        cell.label.text = @"Your Weight";
-                        cell.label.textColor = [CommonFunctions lightGrayColor];
+                        cell.lbValue.text = @"Your Weight";
+                        cell.lbValue.textColor = [CommonFunctions lightGrayColor];
                     }
                     else {
-                        cell.label.text = [self getWeightString];
-                        cell.label.textColor = [UIColor blackColor];
+                        cell.lbValue.text = [self getWeightString];
+                        cell.lbValue.textColor = [UIColor blackColor];
                     }
                     UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(weightSelected)];
-                    [tapGesture setNumberOfTapsRequired:1];
-                    [tapGesture setNumberOfTouchesRequired:1];
-                    [cell.label addGestureRecognizer:tapGesture];
+                    [cell.lbValue addGestureRecognizer:tapGesture];
                     return cell;
                     break;
                 }
@@ -595,7 +637,6 @@ typedef enum {
         [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:RowInSectionInfo_birthDate inSection:AddUserVCSections_Info] ]withRowAnimation:UITableViewRowAnimationFade];
     }
     [_birthDatePicker setDate:_birthDate animated:NO];
-    
 }
 
 - (void) setSelectedWeightInPickerView {
@@ -683,7 +724,17 @@ typedef enum {
 }
 
 - (void) updateAvatar: (id) sender {
-    
+    UIImagePickerController* picker = [[UIImagePickerController alloc] init];
+    picker.delegate = self;
+    picker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+    [self presentViewController:picker animated:YES completion:nil];
+}
+
+-(void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    _avatar = [info objectForKey:UIImagePickerControllerOriginalImage];
+    [self setRightBarButton];
+    [self.tableView reloadData];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void) updateFirstName: (id) sender {
@@ -892,7 +943,12 @@ typedef enum {
         return;
     }
     
-    [CoreDataFuntions saveNewUser:_firstName lastName:_lastName height:_height weight:_weight birthDate:_birthDate email:_email gender:_gender];
+    NSData* avatarData = nil;
+    if (_avatar != nil) {
+        avatarData = UIImagePNGRepresentation(_avatar);
+    }
+    
+    [CoreDataFuntions saveNewUser:_firstName lastName:_lastName height:_height weight:_weight birthDate:_birthDate email:_email gender:_gender avatar:avatarData];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"UserInfoChanged" object:self];
     
@@ -950,6 +1006,13 @@ typedef enum {
     _curUser.birthday = _birthDate;
     _curUser.height = _height;
     _curUser.weight = _weight;
+    
+    NSData* avatarData = nil;
+    if (_avatar != nil) {
+        avatarData = UIImagePNGRepresentation(_avatar);
+    }
+    _curUser.avatar = avatarData;
+    
     [CoreDataFuntions saveContent];
     
     [CommonFunctions showStatusBarAlert:@"User Infomation has been updated." duration:2.0f backgroundColor:[CommonFunctions greenColor]];

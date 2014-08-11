@@ -7,7 +7,8 @@
 //
 
 #import "DistanceTypeChooserViewController.h"
-#import "View/CellWithRightImage.h"
+//#import "View/CellWithRightImage.h"
+#import "View/RightImageCell.h"
 
 @interface DistanceTypeChooserViewController ()
 @property NSInteger distanceType;
@@ -41,6 +42,8 @@
         _distanceType = 0;
     }
     
+    [self.tableView registerNib:[UINib nibWithNibName:@"RightImageCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"rightImageCell"];
+    
     [self setTitle:@"Distance Type"];
 }
 
@@ -65,19 +68,19 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* CellIdentifier = @"Cell";
-    CellWithRightImage *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    static NSString* CellIdentifier = @"rightImageCell";
+    RightImageCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[CellWithRightImage alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        cell = [[RightImageCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
         //[cell setSelectionStyle:UITableViewCellSelectionStyleBlue];
     }
     
     if (_distanceType == indexPath.row) {
-        [cell.rightImage setImage:[UIImage imageNamed:@"check_icon.png"]];
+        [cell.imgCheck setImage:[UIImage imageNamed:@"check_icon.png"]];
         [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionTop];
     }
     else {
-        [cell.rightImage setImage:[UIImage imageNamed:@"uncheck_icon.png"]];
+        [cell.imgCheck setImage:[UIImage imageNamed:@"uncheck_icon.png"]];
     }
     return cell;
 }

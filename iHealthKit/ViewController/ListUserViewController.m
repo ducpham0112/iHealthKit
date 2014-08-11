@@ -36,7 +36,7 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    [self setTitle:@"List Users"];
+    [self setTitle:@"List Other Users"];
     
     [self.tableView registerNib:[UINib nibWithNibName:@"ListUserCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"userCell"];
     
@@ -123,10 +123,14 @@
     userCell.lbBirthDay.text = [NSDateFormatter localizedStringFromDate:user.birthday dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterNoStyle];
     userCell.lbActivity.text = [NSString stringWithFormat:@"Activities: %d",[[user.routeHistory allObjects] count]];
     
-    if ([user.isMale integerValue] == 0) {
-        userCell.imgAvatar.image = [UIImage imageNamed:@"avatar_male.jpg"];
+    if (user.avatar != nil) {
+        userCell.imgAvatar.image = [[UIImage alloc] initWithData:user.avatar];
     } else {
-        userCell.imgAvatar.image = [UIImage imageNamed:@"avatar_female.jpg"];
+        if ([user.isMale integerValue] == 0) {
+            userCell.imgAvatar.image = [UIImage imageNamed:@"avatar_male.jpg"];
+        } else {
+            userCell.imgAvatar.image = [UIImage imageNamed:@"avatar_female.jpg"];
+        }
     }
 }
 

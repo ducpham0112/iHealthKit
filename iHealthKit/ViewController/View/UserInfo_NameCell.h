@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UserNameCell : UITableViewCell
+@interface UserInfo_NameCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UITextField *tfFirstName;
 @property (weak, nonatomic) IBOutlet UITextField *tfLastName;
 @property (weak, nonatomic) IBOutlet UIImageView *imgAvatar;

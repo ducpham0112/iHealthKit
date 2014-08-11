@@ -2,7 +2,7 @@
 //  MyUser.h
 //  iHealthKit
 //
-//  Created by admin on 7/25/14.
+//  Created by admin on 8/10/14.
 //  Copyright (c) 2014 Duc Pham. All rights reserved.
 //
 
@@ -21,6 +21,7 @@
 @property (nonatomic, retain) NSNumber * isMale;
 @property (nonatomic, retain) NSString * lastName;
 @property (nonatomic, retain) NSNumber * weight;
+@property (nonatomic, retain) NSData * avatar;
 @property (nonatomic, retain) NSSet *routeHistory;
 @end
 

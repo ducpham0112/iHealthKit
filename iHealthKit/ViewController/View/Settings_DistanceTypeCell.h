@@ -1,14 +1,14 @@
 //
-//  DistanceTypeCell.h
+//  Settings_DistanceTypeCell.h
 //  iHealthKit
 //
-//  Created by admin on 8/7/14.
+//  Created by admin on 8/10/14.
 //  Copyright (c) 2014 Duc Pham. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-@interface DistanceTypeCell : UITableViewCell
+@interface Settings_DistanceTypeCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *lbUnitSystem;
 
 @end

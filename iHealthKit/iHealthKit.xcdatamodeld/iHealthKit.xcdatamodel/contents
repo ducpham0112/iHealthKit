@@ -13,6 +13,7 @@
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MyUser" inverseName="routeHistory" inverseEntity="MyUser" syncable="YES"/>
     </entity>
     <entity name="MyUser" representedClassName="MyUser" syncable="YES">
+        <attribute name="avatar" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="birthday" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
@@ -25,6 +26,6 @@
     </entity>
     <elements>
         <element name="MyRoute" positionX="0" positionY="0" width="128" height="195"/>
-        <element name="MyUser" positionX="0" positionY="0" width="128" height="178"/>
+        <element name="MyUser" positionX="0" positionY="0" width="128" height="195"/>
     </elements>
 </model>

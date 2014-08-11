@@ -52,7 +52,7 @@
     return delegate.fetchedResultsController.fetchedObjects;
 }
 
-+ (BOOL) saveNewUser:(NSString *)firstName lastName:(NSString *)lastName height:(NSNumber*)height weight:(NSNumber*)weight birthDate:(NSDate *)birthDate email:(NSString *)email gender:(NSNumber*)isMale{
++ (BOOL) saveNewUser:(NSString *)firstName lastName:(NSString *)lastName height:(NSNumber*)height weight:(NSNumber*)weight birthDate:(NSDate *)birthDate email:(NSString *)email gender:(NSNumber*)isMale avatar:(NSData *)avatar{
     while (YES){
         MyUser* curUser = [CoreDataFuntions getCurUser];
         if (curUser != nil) {
@@ -72,6 +72,7 @@
     newUser.birthday = birthDate;
     newUser.email = email;
     newUser.isMale = isMale;
+    newUser.avatar = avatar;
     newUser.routeHistory = nil;
     newUser.isCurrentUser = [NSNumber numberWithBool:YES];
     

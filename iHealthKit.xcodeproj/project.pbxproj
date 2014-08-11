@@ -7,6 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		840472AB19976FC200E54933 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 840472AA19976FC200E54933 /* Images.xcassets */; };
+		840472AF1997730700E54933 /* Settings_SegmentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 840472AD1997730700E54933 /* Settings_SegmentCell.m */; };
+		840472B01997730700E54933 /* Settings_SegmentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 840472AE1997730700E54933 /* Settings_SegmentCell.xib */; };
+		840472B9199777A500E54933 /* Settings_DistanceTypeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 840472B7199777A500E54933 /* Settings_DistanceTypeCell.m */; };
+		840472BA199777A500E54933 /* Settings_DistanceTypeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 840472B8199777A500E54933 /* Settings_DistanceTypeCell.xib */; };
+		840472BE1997790800E54933 /* RightImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 840472BC1997790800E54933 /* RightImageCell.m */; };
+		840472BF1997790800E54933 /* RightImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 840472BD1997790800E54933 /* RightImageCell.xib */; };
+		840472C81997881400E54933 /* UserInfo_PickerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 840472C61997881400E54933 /* UserInfo_PickerCell.m */; };
+		840472C91997881400E54933 /* UserInfo_PickerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 840472C71997881400E54933 /* UserInfo_PickerCell.xib */; };
+		840472CD1997899200E54933 /* UserInfo_EmailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 840472CB1997899200E54933 /* UserInfo_EmailCell.m */; };
+		840472CE1997899200E54933 /* UserInfo_EmailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 840472CC1997899200E54933 /* UserInfo_EmailCell.xib */; };
+		840472D219978A2500E54933 /* UserInfo_GenderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 840472D019978A2500E54933 /* UserInfo_GenderCell.m */; };
+		840472D319978A2500E54933 /* UserInfo_GenderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 840472D119978A2500E54933 /* UserInfo_GenderCell.xib */; };
+		840472D61997A06600E54933 /* MyRoute.m in Sources */ = {isa = PBXBuildFile; fileRef = 840472D51997A06600E54933 /* MyRoute.m */; };
+		840472D91997A06700E54933 /* MyUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 840472D81997A06700E54933 /* MyUser.m */; };
 		8407D5A4197D040400177962 /* ListUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8407D5A3197D040400177962 /* ListUserViewController.m */; };
 		840F347119836F1500839995 /* MyPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 840F345E19836F1500839995 /* MyPickerView.m */; };
 		840F347219836F1500839995 /* RouteDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 840F346019836F1500839995 /* RouteDetailCell.m */; };
@@ -75,17 +90,12 @@
 		8418A1231994BC2500742EEB /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8418A1041994BC2500742EEB /* Default-568h@2x.png */; };
 		8418A1241994BC2500742EEB /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 8418A1051994BC2500742EEB /* Default.png */; };
 		8418A1251994BC2500742EEB /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8418A1061994BC2500742EEB /* Default@2x.png */; };
-		841CCE2B19850B2800DD6631 /* CellWithTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 841CCE2A19850B2800DD6631 /* CellWithTextField.m */; };
-		841CCE2E19850C2E00DD6631 /* CellWithAdditionalLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 841CCE2D19850C2E00DD6631 /* CellWithAdditionalLabel.m */; };
 		841CCE4119852F0200DD6631 /* CWStatusBarNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 841CCE3619852F0200DD6631 /* CWStatusBarNotification.m */; };
 		841CCE4219852F0200DD6631 /* MMDrawerBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 841CCE3919852F0200DD6631 /* MMDrawerBarButtonItem.m */; };
 		841CCE4319852F0200DD6631 /* MMDrawerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 841CCE3C19852F0200DD6631 /* MMDrawerController.m */; };
 		841CCE4419852F0200DD6631 /* MMDrawerVisualState.m in Sources */ = {isa = PBXBuildFile; fileRef = 841CCE3E19852F0200DD6631 /* MMDrawerVisualState.m */; };
 		841CCE4519852F0200DD6631 /* UIViewController+MMDrawerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 841CCE4019852F0200DD6631 /* UIViewController+MMDrawerController.m */; };
 		84215AF91984C13D0016EF80 /* DistanceTypeChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84215AF81984C13D0016EF80 /* DistanceTypeChooserViewController.m */; };
-		84215B011984D17A0016EF80 /* Settings_VoiceCoaching_OnOffCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84215B001984D17A0016EF80 /* Settings_VoiceCoaching_OnOffCell.m */; };
-		84215B041984D2C00016EF80 /* Setting_DistanceTypeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84215B031984D2C00016EF80 /* Setting_DistanceTypeCell.m */; };
-		84215B071984D3D00016EF80 /* CellWithSegmentControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 84215B061984D3D00016EF80 /* CellWithSegmentControl.m */; };
 		8421E5DA199682AA00EC18E8 /* icon-120.png in Resources */ = {isa = PBXBuildFile; fileRef = 8421E5D3199682AA00EC18E8 /* icon-120.png */; };
 		8421E5DB199682AA00EC18E8 /* icon-58.png in Resources */ = {isa = PBXBuildFile; fileRef = 8421E5D4199682AA00EC18E8 /* icon-58.png */; };
 		8421E5DC199682AA00EC18E8 /* icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = 8421E5D5199682AA00EC18E8 /* icon-72.png */; };
@@ -98,18 +108,13 @@
 		842BC1C0199635A500B235F1 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 842BC1BF199635A500B235F1 /* AVFoundation.framework */; };
 		843C22E81984018300197D31 /* LeftMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 843C22E61984018300197D31 /* LeftMenuCell.m */; };
 		843C22E91984018300197D31 /* LeftMenuCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 843C22E71984018300197D31 /* LeftMenuCell.xib */; };
-		8457FCC5198211BB005EC2C7 /* MyUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 8457FCC4198211BB005EC2C7 /* MyUser.m */; };
-		8457FCCE19823CBE005EC2C7 /* MyRoute.m in Sources */ = {isa = PBXBuildFile; fileRef = 8457FCCD19823CBE005EC2C7 /* MyRoute.m */; };
 		8457FCD119824437005EC2C7 /* MyNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8457FCD019824437005EC2C7 /* MyNavigationViewController.m */; };
 		84E6A8E4199252CF001A982D /* HistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E6A8E2199252CF001A982D /* HistoryViewController.m */; };
 		84E6A8E5199252CF001A982D /* HistoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84E6A8E3199252CF001A982D /* HistoryViewController.xib */; };
-		84ED9EDA19931C94007D5E13 /* DistanceTypeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84ED9ED819931C94007D5E13 /* DistanceTypeCell.m */; };
-		84ED9EDB19931C94007D5E13 /* DistanceTypeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84ED9ED919931C94007D5E13 /* DistanceTypeCell.xib */; };
 		84ED9EDE19932C72007D5E13 /* RouteAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84ED9EDD19932C72007D5E13 /* RouteAnnotationView.m */; };
 		84F1CC5D19811B0100F257A9 /* UserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F1CC5C19811B0100F257A9 /* UserViewController.m */; };
-		84F307041987CD1400D5B232 /* CellWithRightImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F307031987CD1400D5B232 /* CellWithRightImage.m */; };
-		84F9B2C3199718CC00E71140 /* UserNameCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F9B2C1199718CC00E71140 /* UserNameCell.m */; };
-		84F9B2C4199718CC00E71140 /* UserNameCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84F9B2C2199718CC00E71140 /* UserNameCell.xib */; };
+		84F9B2C3199718CC00E71140 /* UserInfo_NameCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F9B2C1199718CC00E71140 /* UserInfo_NameCell.m */; };
+		84F9B2C4199718CC00E71140 /* UserInfo_NameCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84F9B2C2199718CC00E71140 /* UserInfo_NameCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -123,6 +128,29 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		840472AA19976FC200E54933 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		840472AC1997730700E54933 /* Settings_SegmentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings_SegmentCell.h; sourceTree = "<group>"; };
+		840472AD1997730700E54933 /* Settings_SegmentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings_SegmentCell.m; sourceTree = "<group>"; };
+		840472AE1997730700E54933 /* Settings_SegmentCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Settings_SegmentCell.xib; sourceTree = "<group>"; };
+		840472B6199777A500E54933 /* Settings_DistanceTypeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings_DistanceTypeCell.h; sourceTree = "<group>"; };
+		840472B7199777A500E54933 /* Settings_DistanceTypeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings_DistanceTypeCell.m; sourceTree = "<group>"; };
+		840472B8199777A500E54933 /* Settings_DistanceTypeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Settings_DistanceTypeCell.xib; sourceTree = "<group>"; };
+		840472BB1997790800E54933 /* RightImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RightImageCell.h; sourceTree = "<group>"; };
+		840472BC1997790800E54933 /* RightImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RightImageCell.m; sourceTree = "<group>"; };
+		840472BD1997790800E54933 /* RightImageCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RightImageCell.xib; sourceTree = "<group>"; };
+		840472C51997881400E54933 /* UserInfo_PickerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserInfo_PickerCell.h; sourceTree = "<group>"; };
+		840472C61997881400E54933 /* UserInfo_PickerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserInfo_PickerCell.m; sourceTree = "<group>"; };
+		840472C71997881400E54933 /* UserInfo_PickerCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserInfo_PickerCell.xib; sourceTree = "<group>"; };
+		840472CA1997899200E54933 /* UserInfo_EmailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserInfo_EmailCell.h; sourceTree = "<group>"; };
+		840472CB1997899200E54933 /* UserInfo_EmailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserInfo_EmailCell.m; sourceTree = "<group>"; };
+		840472CC1997899200E54933 /* UserInfo_EmailCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserInfo_EmailCell.xib; sourceTree = "<group>"; };
+		840472CF19978A2500E54933 /* UserInfo_GenderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserInfo_GenderCell.h; sourceTree = "<group>"; };
+		840472D019978A2500E54933 /* UserInfo_GenderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserInfo_GenderCell.m; sourceTree = "<group>"; };
+		840472D119978A2500E54933 /* UserInfo_GenderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserInfo_GenderCell.xib; sourceTree = "<group>"; };
+		840472D41997A06600E54933 /* MyRoute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyRoute.h; sourceTree = "<group>"; };
+		840472D51997A06600E54933 /* MyRoute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyRoute.m; sourceTree = "<group>"; };
+		840472D71997A06700E54933 /* MyUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyUser.h; sourceTree = "<group>"; };
+		840472D81997A06700E54933 /* MyUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyUser.m; sourceTree = "<group>"; };
 		8407D5A2197D040400177962 /* ListUserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListUserViewController.h; sourceTree = "<group>"; };
 		8407D5A3197D040400177962 /* ListUserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListUserViewController.m; sourceTree = "<group>"; };
 		840F345D19836F1500839995 /* MyPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyPickerView.h; sourceTree = "<group>"; };
@@ -208,10 +236,6 @@
 		8418A1041994BC2500742EEB /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		8418A1051994BC2500742EEB /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		8418A1061994BC2500742EEB /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
-		841CCE2919850B2800DD6631 /* CellWithTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellWithTextField.h; sourceTree = "<group>"; };
-		841CCE2A19850B2800DD6631 /* CellWithTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CellWithTextField.m; sourceTree = "<group>"; };
-		841CCE2C19850C2E00DD6631 /* CellWithAdditionalLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellWithAdditionalLabel.h; sourceTree = "<group>"; };
-		841CCE2D19850C2E00DD6631 /* CellWithAdditionalLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CellWithAdditionalLabel.m; sourceTree = "<group>"; };
 		841CCE3519852F0200DD6631 /* CWStatusBarNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWStatusBarNotification.h; sourceTree = "<group>"; };
 		841CCE3619852F0200DD6631 /* CWStatusBarNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CWStatusBarNotification.m; sourceTree = "<group>"; };
 		841CCE3819852F0200DD6631 /* MMDrawerBarButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMDrawerBarButtonItem.h; sourceTree = "<group>"; };
@@ -225,12 +249,6 @@
 		841CCE4019852F0200DD6631 /* UIViewController+MMDrawerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+MMDrawerController.m"; sourceTree = "<group>"; };
 		84215AF71984C13D0016EF80 /* DistanceTypeChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistanceTypeChooserViewController.h; sourceTree = "<group>"; };
 		84215AF81984C13D0016EF80 /* DistanceTypeChooserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistanceTypeChooserViewController.m; sourceTree = "<group>"; };
-		84215AFF1984D17A0016EF80 /* Settings_VoiceCoaching_OnOffCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings_VoiceCoaching_OnOffCell.h; sourceTree = "<group>"; };
-		84215B001984D17A0016EF80 /* Settings_VoiceCoaching_OnOffCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings_VoiceCoaching_OnOffCell.m; sourceTree = "<group>"; };
-		84215B021984D2C00016EF80 /* Setting_DistanceTypeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Setting_DistanceTypeCell.h; sourceTree = "<group>"; };
-		84215B031984D2C00016EF80 /* Setting_DistanceTypeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Setting_DistanceTypeCell.m; sourceTree = "<group>"; };
-		84215B051984D3D00016EF80 /* CellWithSegmentControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellWithSegmentControl.h; sourceTree = "<group>"; };
-		84215B061984D3D00016EF80 /* CellWithSegmentControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CellWithSegmentControl.m; sourceTree = "<group>"; };
 		8421E5D3199682AA00EC18E8 /* icon-120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-120.png"; sourceTree = "<group>"; };
 		8421E5D4199682AA00EC18E8 /* icon-58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-58.png"; sourceTree = "<group>"; };
 		8421E5D5199682AA00EC18E8 /* icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-72.png"; sourceTree = "<group>"; };
@@ -245,27 +263,18 @@
 		843C22E51984018300197D31 /* LeftMenuCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftMenuCell.h; sourceTree = "<group>"; };
 		843C22E61984018300197D31 /* LeftMenuCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftMenuCell.m; sourceTree = "<group>"; };
 		843C22E71984018300197D31 /* LeftMenuCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LeftMenuCell.xib; sourceTree = "<group>"; };
-		8457FCC3198211BB005EC2C7 /* MyUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyUser.h; sourceTree = "<group>"; };
-		8457FCC4198211BB005EC2C7 /* MyUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyUser.m; sourceTree = "<group>"; };
-		8457FCCC19823CBE005EC2C7 /* MyRoute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyRoute.h; sourceTree = "<group>"; };
-		8457FCCD19823CBE005EC2C7 /* MyRoute.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyRoute.m; sourceTree = "<group>"; };
 		8457FCCF19824437005EC2C7 /* MyNavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyNavigationViewController.h; sourceTree = "<group>"; };
 		8457FCD019824437005EC2C7 /* MyNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyNavigationViewController.m; sourceTree = "<group>"; };
 		84E6A8E1199252CF001A982D /* HistoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryViewController.h; sourceTree = "<group>"; };
 		84E6A8E2199252CF001A982D /* HistoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryViewController.m; sourceTree = "<group>"; };
 		84E6A8E3199252CF001A982D /* HistoryViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HistoryViewController.xib; sourceTree = "<group>"; };
-		84ED9ED719931C94007D5E13 /* DistanceTypeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistanceTypeCell.h; sourceTree = "<group>"; };
-		84ED9ED819931C94007D5E13 /* DistanceTypeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistanceTypeCell.m; sourceTree = "<group>"; };
-		84ED9ED919931C94007D5E13 /* DistanceTypeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DistanceTypeCell.xib; sourceTree = "<group>"; };
 		84ED9EDC19932C72007D5E13 /* RouteAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RouteAnnotationView.h; sourceTree = "<group>"; };
 		84ED9EDD19932C72007D5E13 /* RouteAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RouteAnnotationView.m; sourceTree = "<group>"; };
 		84F1CC5B19811B0100F257A9 /* UserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserViewController.h; sourceTree = "<group>"; };
 		84F1CC5C19811B0100F257A9 /* UserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserViewController.m; sourceTree = "<group>"; };
-		84F307021987CD1400D5B232 /* CellWithRightImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellWithRightImage.h; sourceTree = "<group>"; };
-		84F307031987CD1400D5B232 /* CellWithRightImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CellWithRightImage.m; sourceTree = "<group>"; };
-		84F9B2C0199718CC00E71140 /* UserNameCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserNameCell.h; sourceTree = "<group>"; };
-		84F9B2C1199718CC00E71140 /* UserNameCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserNameCell.m; sourceTree = "<group>"; };
-		84F9B2C2199718CC00E71140 /* UserNameCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserNameCell.xib; sourceTree = "<group>"; };
+		84F9B2C0199718CC00E71140 /* UserInfo_NameCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserInfo_NameCell.h; sourceTree = "<group>"; };
+		84F9B2C1199718CC00E71140 /* UserInfo_NameCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserInfo_NameCell.m; sourceTree = "<group>"; };
+		84F9B2C2199718CC00E71140 /* UserInfo_NameCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserInfo_NameCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -321,26 +330,29 @@
 				842BC1BA199625BB00B235F1 /* LeftMenuHeaderCell.h */,
 				842BC1BB199625BB00B235F1 /* LeftMenuHeaderCell.m */,
 				842BC1BC199625BB00B235F1 /* LeftMenuHeaderCell.xib */,
-				84215AFF1984D17A0016EF80 /* Settings_VoiceCoaching_OnOffCell.h */,
-				84215B001984D17A0016EF80 /* Settings_VoiceCoaching_OnOffCell.m */,
-				84215B021984D2C00016EF80 /* Setting_DistanceTypeCell.h */,
-				84215B031984D2C00016EF80 /* Setting_DistanceTypeCell.m */,
-				84ED9ED719931C94007D5E13 /* DistanceTypeCell.h */,
-				84ED9ED819931C94007D5E13 /* DistanceTypeCell.m */,
-				84ED9ED919931C94007D5E13 /* DistanceTypeCell.xib */,
-				84F307021987CD1400D5B232 /* CellWithRightImage.h */,
-				84F307031987CD1400D5B232 /* CellWithRightImage.m */,
-				84215B051984D3D00016EF80 /* CellWithSegmentControl.h */,
-				84215B061984D3D00016EF80 /* CellWithSegmentControl.m */,
-				841CCE2919850B2800DD6631 /* CellWithTextField.h */,
-				841CCE2A19850B2800DD6631 /* CellWithTextField.m */,
-				841CCE2C19850C2E00DD6631 /* CellWithAdditionalLabel.h */,
-				841CCE2D19850C2E00DD6631 /* CellWithAdditionalLabel.m */,
 				84ED9EDC19932C72007D5E13 /* RouteAnnotationView.h */,
 				84ED9EDD19932C72007D5E13 /* RouteAnnotationView.m */,
-				84F9B2C0199718CC00E71140 /* UserNameCell.h */,
-				84F9B2C1199718CC00E71140 /* UserNameCell.m */,
-				84F9B2C2199718CC00E71140 /* UserNameCell.xib */,
+				840472AC1997730700E54933 /* Settings_SegmentCell.h */,
+				840472AD1997730700E54933 /* Settings_SegmentCell.m */,
+				840472AE1997730700E54933 /* Settings_SegmentCell.xib */,
+				840472B6199777A500E54933 /* Settings_DistanceTypeCell.h */,
+				840472B7199777A500E54933 /* Settings_DistanceTypeCell.m */,
+				840472B8199777A500E54933 /* Settings_DistanceTypeCell.xib */,
+				840472BB1997790800E54933 /* RightImageCell.h */,
+				840472BC1997790800E54933 /* RightImageCell.m */,
+				840472BD1997790800E54933 /* RightImageCell.xib */,
+				84F9B2C0199718CC00E71140 /* UserInfo_NameCell.h */,
+				84F9B2C1199718CC00E71140 /* UserInfo_NameCell.m */,
+				84F9B2C2199718CC00E71140 /* UserInfo_NameCell.xib */,
+				840472C51997881400E54933 /* UserInfo_PickerCell.h */,
+				840472C61997881400E54933 /* UserInfo_PickerCell.m */,
+				840472C71997881400E54933 /* UserInfo_PickerCell.xib */,
+				840472CA1997899200E54933 /* UserInfo_EmailCell.h */,
+				840472CB1997899200E54933 /* UserInfo_EmailCell.m */,
+				840472CC1997899200E54933 /* UserInfo_EmailCell.xib */,
+				840472CF19978A2500E54933 /* UserInfo_GenderCell.h */,
+				840472D019978A2500E54933 /* UserInfo_GenderCell.m */,
+				840472D119978A2500E54933 /* UserInfo_GenderCell.xib */,
 			);
 			name = View;
 			path = ViewController/View;
@@ -395,6 +407,7 @@
 				8417C18C197AA32300007269 /* AppDelegate.h */,
 				8417C18D197AA32300007269 /* AppDelegate.m */,
 				8417C18F197AA32300007269 /* iHealthKit.xcdatamodeld */,
+				840472AA19976FC200E54933 /* Images.xcassets */,
 				8417C184197AA32300007269 /* Supporting Files */,
 			);
 			path = iHealthKit;
@@ -432,10 +445,10 @@
 		8417C1B0197AA43200007269 /* Core Data */ = {
 			isa = PBXGroup;
 			children = (
-				8457FCC3198211BB005EC2C7 /* MyUser.h */,
-				8457FCC4198211BB005EC2C7 /* MyUser.m */,
-				8457FCCC19823CBE005EC2C7 /* MyRoute.h */,
-				8457FCCD19823CBE005EC2C7 /* MyRoute.m */,
+				840472D41997A06600E54933 /* MyRoute.h */,
+				840472D51997A06600E54933 /* MyRoute.m */,
+				840472D71997A06700E54933 /* MyUser.h */,
+				840472D81997A06700E54933 /* MyUser.m */,
 			);
 			path = "Core Data";
 			sourceTree = "<group>";
@@ -468,20 +481,20 @@
 				84E6A8E3199252CF001A982D /* HistoryViewController.xib */,
 				8417C1D5197AA43200007269 /* LeftMenuViewController.h */,
 				8417C1D6197AA43200007269 /* LeftMenuViewController.m */,
+				8407D5A2197D040400177962 /* ListUserViewController.h */,
+				8407D5A3197D040400177962 /* ListUserViewController.m */,
+				8457FCCF19824437005EC2C7 /* MyNavigationViewController.h */,
+				8457FCD019824437005EC2C7 /* MyNavigationViewController.m */,
+				8417C219197AACD500007269 /* RouteViewController.h */,
+				8417C21A197AACD500007269 /* RouteViewController.m */,
+				8417C21B197AACD500007269 /* RouteViewController.xib */,
 				8417C1E3197AA43200007269 /* SettingsViewController.h */,
 				8417C1E4197AA43200007269 /* SettingsViewController.m */,
 				8417C1E6197AA43200007269 /* TrackingViewController.h */,
 				8417C1E7197AA43200007269 /* TrackingViewController.m */,
 				8417C1E8197AA43200007269 /* TrackingViewController.xib */,
-				8417C219197AACD500007269 /* RouteViewController.h */,
-				8417C21A197AACD500007269 /* RouteViewController.m */,
-				8417C21B197AACD500007269 /* RouteViewController.xib */,
-				8407D5A2197D040400177962 /* ListUserViewController.h */,
-				8407D5A3197D040400177962 /* ListUserViewController.m */,
 				84F1CC5B19811B0100F257A9 /* UserViewController.h */,
 				84F1CC5C19811B0100F257A9 /* UserViewController.m */,
-				8457FCCF19824437005EC2C7 /* MyNavigationViewController.h */,
-				8457FCD019824437005EC2C7 /* MyNavigationViewController.m */,
 				84215AF71984C13D0016EF80 /* DistanceTypeChooserViewController.h */,
 				84215AF81984C13D0016EF80 /* DistanceTypeChooserViewController.m */,
 			);
@@ -725,6 +738,7 @@
 				8418A10D1994BC2500742EEB /* icon_Activity2.png in Resources */,
 				8418A1161994BC2500742EEB /* icon_timeStart.png in Resources */,
 				8418A1211994BC2500742EEB /* icon_moon.png in Resources */,
+				840472BF1997790800E54933 /* RightImageCell.xib in Resources */,
 				840F347519836F1500839995 /* RouteOverviewCell.xib in Resources */,
 				843C22E91984018300197D31 /* LeftMenuCell.xib in Resources */,
 				8418A1171994BC2500742EEB /* icon_timeStop.png in Resources */,
@@ -738,8 +752,11 @@
 				8418A1111994BC2500742EEB /* icon_UserInfo.png in Resources */,
 				8418A1231994BC2500742EEB /* Default-568h@2x.png in Resources */,
 				8418A1101994BC2500742EEB /* icon_SwitchUser.png in Resources */,
+				840472B01997730700E54933 /* Settings_SegmentCell.xib in Resources */,
+				840472C91997881400E54933 /* UserInfo_PickerCell.xib in Resources */,
 				8418A11B1994BC2500742EEB /* icon_signal_strong.png in Resources */,
 				8418A11A1994BC2500742EEB /* icon_signal_medium.png in Resources */,
+				840472CE1997899200E54933 /* UserInfo_EmailCell.xib in Resources */,
 				8417C209197AA43200007269 /* TrackingViewController.xib in Resources */,
 				8418A1181994BC2500742EEB /* show_location.png in Resources */,
 				8418A1201994BC2500742EEB /* avatar_male.jpg in Resources */,
@@ -747,11 +764,13 @@
 				8421E5DD199682AA00EC18E8 /* icon-72@2x.png in Resources */,
 				840F347319836F1500839995 /* RouteDetailCell.xib in Resources */,
 				8418A1141994BC2500742EEB /* icon_speedAvg.png in Resources */,
+				840472BA199777A500E54933 /* Settings_DistanceTypeCell.xib in Resources */,
 				8418A1131994BC2500742EEB /* icon_paceMax.png in Resources */,
 				8418A10E1994BC2500742EEB /* icon_History.png in Resources */,
 				8418A1151994BC2500742EEB /* icon_speedMax.png in Resources */,
 				8418A1081994BC2500742EEB /* annotation_finished20.png in Resources */,
 				8418A10B1994BC2500742EEB /* check_icon.png in Resources */,
+				840472D319978A2500E54933 /* UserInfo_GenderCell.xib in Resources */,
 				8418A11E1994BC2500742EEB /* uncheck_icon.png in Resources */,
 				842BC1BE199625BB00B235F1 /* LeftMenuHeaderCell.xib in Resources */,
 				8417C21D197AACD500007269 /* RouteViewController.xib in Resources */,
@@ -763,10 +782,10 @@
 				8418A1091994BC2500742EEB /* annotation_start.png in Resources */,
 				8418A10A1994BC2500742EEB /* annotation_start20.png in Resources */,
 				8421E5DE199682AA00EC18E8 /* icon-80.png in Resources */,
-				84F9B2C4199718CC00E71140 /* UserNameCell.xib in Resources */,
+				840472AB19976FC200E54933 /* Images.xcassets in Resources */,
+				84F9B2C4199718CC00E71140 /* UserInfo_NameCell.xib in Resources */,
 				8418A10F1994BC2500742EEB /* icon_Settings.png in Resources */,
 				8418A1071994BC2500742EEB /* annotation_finished.png in Resources */,
-				84ED9EDB19931C94007D5E13 /* DistanceTypeCell.xib in Resources */,
 				8421E5E0199682AA00EC18E8 /* icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -786,43 +805,42 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8457FCCE19823CBE005EC2C7 /* MyRoute.m in Sources */,
+				840472D91997A06700E54933 /* MyUser.m in Sources */,
 				8417C18E197AA32300007269 /* AppDelegate.m in Sources */,
 				8417C208197AA43200007269 /* TrackingViewController.m in Sources */,
 				84F1CC5D19811B0100F257A9 /* UserViewController.m in Sources */,
 				843C22E81984018300197D31 /* LeftMenuCell.m in Sources */,
+				840472D61997A06600E54933 /* MyRoute.m in Sources */,
+				840472BE1997790800E54933 /* RightImageCell.m in Sources */,
+				840472C81997881400E54933 /* UserInfo_PickerCell.m in Sources */,
+				840472D219978A2500E54933 /* UserInfo_GenderCell.m in Sources */,
 				840F347119836F1500839995 /* MyPickerView.m in Sources */,
 				840F347819836F1500839995 /* ListUserCell.m in Sources */,
-				84215B071984D3D00016EF80 /* CellWithSegmentControl.m in Sources */,
 				841CCE4519852F0200DD6631 /* UIViewController+MMDrawerController.m in Sources */,
 				84215AF91984C13D0016EF80 /* DistanceTypeChooserViewController.m in Sources */,
-				841CCE2E19850C2E00DD6631 /* CellWithAdditionalLabel.m in Sources */,
+				840472CD1997899200E54933 /* UserInfo_EmailCell.m in Sources */,
 				841CCE4219852F0200DD6631 /* MMDrawerBarButtonItem.m in Sources */,
-				841CCE2B19850B2800DD6631 /* CellWithTextField.m in Sources */,
+				840472AF1997730700E54933 /* Settings_SegmentCell.m in Sources */,
 				841CCE4419852F0200DD6631 /* MMDrawerVisualState.m in Sources */,
 				840F347419836F1500839995 /* RouteOverviewCell.m in Sources */,
 				840F347619836F1500839995 /* HistoryCell.m in Sources */,
 				8417C226197ABE1F00007269 /* CommonFunctions.m in Sources */,
 				84132A2D197D50EF0077B926 /* CoreDataFuntions.m in Sources */,
 				841CCE4119852F0200DD6631 /* CWStatusBarNotification.m in Sources */,
-				84F9B2C3199718CC00E71140 /* UserNameCell.m in Sources */,
+				84F9B2C3199718CC00E71140 /* UserInfo_NameCell.m in Sources */,
+				840472B9199777A500E54933 /* Settings_DistanceTypeCell.m in Sources */,
 				8407D5A4197D040400177962 /* ListUserViewController.m in Sources */,
 				84ED9EDE19932C72007D5E13 /* RouteAnnotationView.m in Sources */,
 				84E6A8E4199252CF001A982D /* HistoryViewController.m in Sources */,
 				8417C1FF197AA43200007269 /* LeftMenuViewController.m in Sources */,
 				841CCE4319852F0200DD6631 /* MMDrawerController.m in Sources */,
-				84F307041987CD1400D5B232 /* CellWithRightImage.m in Sources */,
 				840F347219836F1500839995 /* RouteDetailCell.m in Sources */,
 				8417C21C197AACD500007269 /* RouteViewController.m in Sources */,
-				84215B011984D17A0016EF80 /* Settings_VoiceCoaching_OnOffCell.m in Sources */,
 				8417C18A197AA32300007269 /* main.m in Sources */,
 				8457FCD119824437005EC2C7 /* MyNavigationViewController.m in Sources */,
 				8417C20C197AA43200007269 /* MyVisualStateManager.m in Sources */,
 				842BC1BD199625BB00B235F1 /* LeftMenuHeaderCell.m in Sources */,
-				8457FCC5198211BB005EC2C7 /* MyUser.m in Sources */,
-				84ED9EDA19931C94007D5E13 /* DistanceTypeCell.m in Sources */,
 				8417C191197AA32300007269 /* iHealthKit.xcdatamodeld in Sources */,
-				84215B041984D2C00016EF80 /* Setting_DistanceTypeCell.m in Sources */,
 				8417C206197AA43200007269 /* SettingsViewController.m in Sources */,
 				8417C1F5197AA43200007269 /* MyLocationManager.m in Sources */,
 			);
@@ -939,7 +957,8 @@
 		8417C1AB197AA32400007269 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-3";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -954,7 +973,8 @@
 		8417C1AC197AA32400007269 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-3";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;

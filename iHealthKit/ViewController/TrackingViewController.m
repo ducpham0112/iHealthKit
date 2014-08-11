@@ -10,7 +10,7 @@
 #import "MyVisualStateManager.h"
 #import "RouteViewController.h"
 #import <QuartzCore/QuartzCore.h>
-#import "View/CellWithRightImage.h"
+#import "View/RightImageCell.h"
 
 #define VOICE_PITCH 1.49881518
 #define VOICE_RATE 0.168246448
@@ -146,12 +146,10 @@ typedef enum {
     [_listInfoView addObject:[NSNumber numberWithInt:InfoType_Calories]];
     
     _listInfoTableView.frame = [self tableHiddenFrame];
-    _listInfoTableView.hidden = YES;
     _listInfoTableView.delegate = self;
     _listInfoTableView.dataSource = self;
+    [_listInfoTableView registerNib:[UINib nibWithNibName:@"RightImageCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"rightImageCell"];
     [[_btnDone layer] setOpacity:0.0f];
-    
-    _btnClose.hidden = YES;
     
     _isTableShowed = NO;
     
@@ -167,6 +165,8 @@ typedef enum {
     _arrayLbValue = [NSArray arrayWithObjects:_lbValue0, _lbValue1, _lbValue2, nil];
     
     [self updateView];
+    
+    
 }
 
 - (void) updateView {
@@ -176,7 +176,11 @@ typedef enum {
 }
 
 - (void) voiceCoachingChanged {
-    _isVoiceTurnOn = [[NSUserDefaults standardUserDefaults] boolForKey:@"VoiceCoaching"];
+    if ([[NSUserDefaults standardUserDefaults] integerForKey:@"VoiceCoaching"] == 1) {
+        _isVoiceTurnOn = YES;
+    } else {
+        _isVoiceTurnOn = NO;
+    }
 }
 
 - (void) updateValue {
@@ -418,9 +422,6 @@ typedef enum {
     }
     else {
         //start
-        [_lbValue0 setUserInteractionEnabled:YES];
-        [_lbValue1 setUserInteractionEnabled:YES];
-        [_lbValue2 setUserInteractionEnabled:YES];
         [self startTracking];
     }
 }
@@ -429,9 +430,6 @@ typedef enum {
     switch (buttonIndex) {
         case 0:
             [self stopTracking];
-            [_lbValue0 setUserInteractionEnabled:NO];
-            [_lbValue1 setUserInteractionEnabled:NO];
-            [_lbValue2 setUserInteractionEnabled:NO];
             break;
         default:
             break;
@@ -685,23 +683,22 @@ typedef enum {
 }
 
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString* CellIdentifier = @"cell";
+    static NSString* CellIdentifier = @"rightImageCell";
     
-    CellWithRightImage* cell = [self.listInfoTableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    RightImageCell* cell = [self.listInfoTableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (cell == nil) {
-        cell = [[CellWithRightImage alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+        cell = [[RightImageCell alloc] init];
     }
     
-    cell.textLabel.text = [self lbDescriptionStr:indexPath.row];
+    cell.lbUnitType.text = [self lbDescriptionStr:indexPath.row];
     
     if (indexPath.row == [[_listInfoView objectAtIndex:_selectedIndex] integerValue]) {
-        [cell.rightImage setImage:[UIImage imageNamed:@"check_icon.png"]];
+        [cell.imgCheck setImage:[UIImage imageNamed:@"check_icon.png"]];
         //[self.listInfoTableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionTop];
     }
     else {
-        [cell.rightImage setImage:[UIImage imageNamed:@"uncheck_icon.png"]];
+        [cell.imgCheck setImage:[UIImage imageNamed:@"uncheck_icon.png"]];
     }
     
     return  cell;

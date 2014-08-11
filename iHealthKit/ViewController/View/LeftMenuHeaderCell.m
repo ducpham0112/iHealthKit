@@ -13,6 +13,10 @@
 - (void)awakeFromNib
 {
     // Initialization code
+    [self setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
+    [self setSelectionStyle:UITableViewCellSelectionStyleNone];
+    self.imgAvatar.layer.cornerRadius = self.imgAvatar.frame.size.width/2;
+    self.imgAvatar.clipsToBounds = YES;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -20,10 +24,7 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
-    [self setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
-    [self setSelectionStyle:UITableViewCellSelectionStyleNone];
-    self.imgAvatar.layer.cornerRadius = self.imgAvatar.frame.size.width/2;
-    self.imgAvatar.clipsToBounds = YES;
+    
 }
 
 @end

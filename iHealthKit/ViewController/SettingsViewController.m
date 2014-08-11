@@ -9,9 +9,11 @@
 #import "SettingsViewController.h"
 #import "TrackingViewController.h"
 #import "DistanceTypeChooserViewController.h"
-#import "Settings_VoiceCoaching_OnOffCell.h"
-#import "View/DistanceTypeCell.h"
-#import "CellWithSegmentControl.h"
+//#import "Settings_VoiceCoaching_OnOffCell.h"
+//#import "View/DistanceTypeCell.h"
+#import "View/Settings_DistanceTypeCell.h"
+#import "View/Settings_SegmentCell.h"
+//#import "CellWithSegmentControl.h"
 
 typedef enum {
     SettingsVCSection_VoiceCoaching = 0,
@@ -28,7 +30,7 @@ typedef enum {
 
 @interface SettingsViewController ()
 @property (strong, nonatomic) UITableView *tableView;
-@property BOOL voiceCoaching;
+@property NSInteger voiceCoaching;
 @property NSInteger distanceUnit;
 @property NSInteger weightUnit;
 @property NSInteger veclocityUnit;
@@ -68,11 +70,14 @@ typedef enum {
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, self.view.frame.size.height-64) style:UITableViewStyleGrouped];
+    _tableView = [[UITableView alloc] initWithFrame:self.view.frame style:UITableViewStyleGrouped];
     [_tableView setDelegate:self];
     [_tableView setDataSource:self];
     [_tableView setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
-    [_tableView registerNib:[UINib nibWithNibName:@"DistanceTypeCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"DistanceTypeCell"];
+    //[_tableView registerNib:[UINib nibWithNibName:@"DistanceTypeCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"DistanceTypeCell"];
+    [_tableView registerNib:[UINib nibWithNibName:@"Settings_DistanceTypeCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"DistanceTypeCell"];
+    [_tableView registerNib:[UINib nibWithNibName:@"Settings_SegmentCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"SegmentedCell"];
+    
     [self.view addSubview:_tableView];
     
     [self loadPreference];
@@ -94,7 +99,7 @@ typedef enum {
 - (void) saveSettings {
     NSUserDefaults* preference = [NSUserDefaults standardUserDefaults];
     
-    [preference setBool:_voiceCoaching forKey:@"VoiceCoaching"];
+    [preference setInteger:_voiceCoaching forKey:@"VoiceCoaching"];
     [preference setInteger:_distanceUnit forKey:@"DistanceUnit"];
     [preference setInteger:_distanceUnit forKey:@"WeightUnit"];
     [preference setInteger:_veclocityUnit forKey:@"VelocityUnit"];
@@ -132,16 +137,17 @@ typedef enum {
         _weightUnit = 0;
     }
     if ([NSNumber numberWithBool:[preference boolForKey:@"VoiceCoaching"]] != nil) {
-        _voiceCoaching = [preference boolForKey:@"VoiceCoaching"];
+        _voiceCoaching = [preference integerForKey:@"VoiceCoaching"];
     } else {
-        _voiceCoaching = NO;
+        _voiceCoaching = 0;
     }
 }
 
 - (void)voiceCoachingChanged: (id) sender {
-    UISwitch* voiceCoaching = (UISwitch*) sender;
-    _voiceCoaching = voiceCoaching.isOn;
-    [[NSUserDefaults standardUserDefaults] setBool:_voiceCoaching forKey:@"VoiceCoaching"];
+    UISegmentedControl* voiceSegment = (UISegmentedControl*) sender;
+    _voiceCoaching = voiceSegment.selectedSegmentIndex;
+    //_voiceCoaching = voiceCoaching.isOn;
+    [[NSUserDefaults standardUserDefaults] setInteger:_voiceCoaching forKey:@"VoiceCoaching"];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"VoiceCoachingChanged" object:nil];
 }
 
@@ -208,89 +214,98 @@ typedef enum {
    
     switch (indexPath.section) {
         case SettingsVCSection_VoiceCoaching: {
-            Settings_VoiceCoaching_OnOffCell* cell = [self.tableView dequeueReusableCellWithIdentifier:@"VoiceCoachingCell"];
+            Settings_SegmentCell* cell = [self.tableView dequeueReusableCellWithIdentifier:@"SegmentedCell"];
             if (cell == nil) {
-                cell = [[Settings_VoiceCoaching_OnOffCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"VoiceCoachingCell"];
+                cell = [[Settings_SegmentCell alloc] init];
                 
-                [cell.voiceSwitch addTarget:self action:@selector(voiceCoachingChanged:) forControlEvents:UIControlEventValueChanged];
             }
             
-            [cell.textLabel setText:@"Turn on voice"];
+            [cell.segmentControl addTarget:self action:@selector(voiceCoachingChanged:) forControlEvents:UIControlEventValueChanged];
+            cell.lbDescription.text = @"Turn on Voice";
+            [cell.segmentControl setTitle:@"Off" forSegmentAtIndex:0];
+            [cell.segmentControl setTitle:@"On" forSegmentAtIndex:1];
             
-            BOOL voiceCoaching = ([[NSUserDefaults standardUserDefaults] boolForKey:@"VoiceCoaching"]) ? [[NSUserDefaults standardUserDefaults] boolForKey:@"VoiceCoaching"] : NO;
-            [cell.voiceSwitch setOn:voiceCoaching];
+            cell.segmentControl.selectedSegmentIndex = _voiceCoaching;
+            
             return  cell;
             break;
         }
           
         case SettingsVCSection_WeightUnit: {
-            switch (indexPath.row) {
-                case 0: {
-                    CellWithSegmentControl* cell = [self.tableView dequeueReusableCellWithIdentifier:@"UnitCell"];
-                    if (cell == nil) {
-                        cell = [[CellWithSegmentControl alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UnitCell"];
-                    }
-                    
-                    cell.textLabel.text = @"Weight";
-                    [cell.segmentControl addTarget:self action:@selector(weightUnitChanged:)forControlEvents:UIControlEventValueChanged];
-                    [cell.segmentControl setTitle:@"kg" forSegmentAtIndex:0];
-                    [cell.segmentControl setTitle:@"lb" forSegmentAtIndex:1];
-                    
-                    cell.segmentControl.selectedSegmentIndex = _weightUnit;
-                    return cell;
-                    break;
-                }
-                default:
-                    break;
+            
+            // weight
+            Settings_SegmentCell* cell = [self.tableView dequeueReusableCellWithIdentifier:@"SegmentedCell"];
+            if (cell == nil) {
+                cell = [[Settings_SegmentCell alloc] init];
             }
+            
+            [cell.segmentControl addTarget:self action:@selector(weightUnitChanged:) forControlEvents:UIControlEventValueChanged];
+            cell.lbDescription.text = @"Weight";
+            [cell.segmentControl setTitle:@"kg" forSegmentAtIndex:0];
+            [cell.segmentControl setTitle:@"lb" forSegmentAtIndex:1];
+            
+            cell.segmentControl.selectedSegmentIndex = _weightUnit;
+            
+            return  cell;
             break;
         }
             
         case SettingsVCSection_DistanceUnit: {
             switch (indexPath.row) {
                 case RowInUnitSection_distanceType: {
-                    DistanceTypeCell* cell = [self.tableView dequeueReusableCellWithIdentifier:@"DistanceTypeCell"];
+                    Settings_DistanceTypeCell* cell = [self.tableView dequeueReusableCellWithIdentifier:@"DistanceTypeCell"];
                     if (cell == nil) {
-                        cell = [[DistanceTypeCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"DistanceTypeCell"];
+                        cell = [[Settings_DistanceTypeCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"DistanceTypeCell"];
                     }
                     
                     cell.lbUnitSystem.text = (_distanceType == 1) ? @"US/Imperial" : @"Metric";
                     return  cell;
                     break;
                 }
-                case RowInUnitSection_distanceUnit:
-                case RowInUnitSection_velocityUnit:{
-                    CellWithSegmentControl* cell = [self.tableView dequeueReusableCellWithIdentifier:@"UnitCell"];
+                case RowInUnitSection_distanceUnit: {
+                    Settings_SegmentCell* cell = [self.tableView dequeueReusableCellWithIdentifier:@"SegmentedCell"];
                     if (cell == nil) {
-                        cell = [[CellWithSegmentControl alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UnitCell"];
+                        cell = [[Settings_SegmentCell alloc] init];
                     }
                     
-                    if (indexPath.row == RowInUnitSection_distanceUnit) {
-                        cell.textLabel.text = @"Distance";
-                        [cell.segmentControl addTarget:self action:@selector(distanceUnitChanged:) forControlEvents:UIControlEventValueChanged];
-                        if (_distanceType == 0) {
-                            [cell.segmentControl setTitle:@"km" forSegmentAtIndex:0];
-                            [cell.segmentControl setTitle:@"m" forSegmentAtIndex:1];
-                        }
-                        else if (_distanceType == 1) {
-                            [cell.segmentControl setTitle:@"mi" forSegmentAtIndex:0];
-                            [cell.segmentControl setTitle:@"ft" forSegmentAtIndex:1];
-                        }
-                        cell.segmentControl.selectedSegmentIndex = _distanceUnit;
+                    [cell.segmentControl addTarget:self action:@selector(distanceUnitChanged:) forControlEvents:UIControlEventValueChanged];
+                    cell.lbDescription.text = @"Distance";
+                    
+                    if (_distanceType == 0) {
+                        [cell.segmentControl setTitle:@"km" forSegmentAtIndex:0];
+                        [cell.segmentControl setTitle:@"m" forSegmentAtIndex:1];
                     }
-                    else if (indexPath.row == RowInUnitSection_velocityUnit) {
-                        cell.textLabel.text = @"Velocity";
-                        [cell.segmentControl addTarget:self action:@selector(velocityUnitChanged:) forControlEvents:UIControlEventValueChanged];
-                        if (_distanceType == 0) {
-                            [cell.segmentControl setTitle:@"km/h" forSegmentAtIndex:0];
-                            [cell.segmentControl setTitle:@"m/s" forSegmentAtIndex:1];
-                        }
-                        else if (_distanceType == 1) {
-                            [cell.segmentControl setTitle:@"mph" forSegmentAtIndex:0];
-                            [cell.segmentControl setTitle:@"fps" forSegmentAtIndex:1];
-                        }
-                        cell.segmentControl.selectedSegmentIndex = _veclocityUnit;
+                    else if (_distanceType == 1) {
+                        [cell.segmentControl setTitle:@"mi" forSegmentAtIndex:0];
+                        [cell.segmentControl setTitle:@"ft" forSegmentAtIndex:1];
                     }
+                    
+                    cell.segmentControl.selectedSegmentIndex = _distanceUnit;
+                    
+                    return  cell;
+                    break;
+                }
+                    
+                    
+                case RowInUnitSection_velocityUnit:{
+                    Settings_SegmentCell* cell = [self.tableView dequeueReusableCellWithIdentifier:@"SegmentedCell"];
+                    if (cell == nil) {
+                        cell = [[Settings_SegmentCell alloc] init];
+                    }
+                    
+                    [cell.segmentControl addTarget:self action:@selector(velocityUnitChanged:) forControlEvents:UIControlEventValueChanged];
+                    cell.lbDescription.text = @"Velocity";
+                    
+                    if (_distanceType == 0) {
+                        [cell.segmentControl setTitle:@"km/h" forSegmentAtIndex:0];
+                        [cell.segmentControl setTitle:@"m/s" forSegmentAtIndex:1];
+                    }
+                    else if (_distanceType == 1) {
+                        [cell.segmentControl setTitle:@"mph" forSegmentAtIndex:0];
+                        [cell.segmentControl setTitle:@"fps" forSegmentAtIndex:1];
+                    }
+                    
+                    cell.segmentControl.selectedSegmentIndex = _veclocityUnit;
                     
                     return  cell;
                     break;
@@ -331,7 +346,7 @@ typedef enum {
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 34;
+    return 44;
 }
 
 #pragma mark - setup bar button

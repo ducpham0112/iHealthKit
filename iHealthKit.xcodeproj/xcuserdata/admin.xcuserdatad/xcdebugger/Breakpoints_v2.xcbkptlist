@@ -36,12 +36,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iHealthKit/Helper/CoreDataFuntions.m"
-            timestampString = "428163982.080438"
+            timestampString = "429368455.256924"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "76"
-            endingLineNumber = "76"
-            landmarkName = "+saveNewUser:lastName:height:weight:birthDate:email:gender:"
+            startingLineNumber = "77"
+            endingLineNumber = "77"
+            landmarkName = "+saveNewUser:lastName:height:weight:birthDate:email:gender:avatar:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -180,11 +180,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iHealthKit/ViewController/SettingsViewController.m"
-            timestampString = "429330737.067328"
+            timestampString = "429359018.147331"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "196"
-            endingLineNumber = "196"
+            startingLineNumber = "202"
+            endingLineNumber = "202"
             landmarkName = "-tableView:numberOfRowsInSection:"
             landmarkType = "5">
          </BreakpointContent>
@@ -196,11 +196,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iHealthKit/ViewController/SettingsViewController.m"
-            timestampString = "429330737.067328"
+            timestampString = "429359018.147331"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "187"
-            endingLineNumber = "187"
+            startingLineNumber = "193"
+            endingLineNumber = "193"
             landmarkName = "-tableView:numberOfRowsInSection:"
             landmarkType = "5">
          </BreakpointContent>
@@ -212,11 +212,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iHealthKit/ViewController/SettingsViewController.m"
-            timestampString = "429330737.067328"
+            timestampString = "429359018.147331"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "206"
-            endingLineNumber = "206"
+            startingLineNumber = "212"
+            endingLineNumber = "212"
             landmarkName = "@implementation SettingsViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -243,44 +243,12 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "iHealthKit/ViewController/SettingsViewController.m"
-            timestampString = "429330737.067328"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "256"
-            endingLineNumber = "256"
-            landmarkName = "-tableView:cellForRowAtIndexPath:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "iHealthKit/ViewController/SettingsViewController.m"
-            timestampString = "429330737.067328"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "266"
-            endingLineNumber = "266"
-            landmarkName = "-tableView:cellForRowAtIndexPath:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "iHealthKit/ViewController/DistanceTypeChooserViewController.m"
-            timestampString = "428333749.276764"
+            timestampString = "429360776.690722"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "86"
-            endingLineNumber = "86"
+            startingLineNumber = "89"
+            endingLineNumber = "89"
             landmarkName = "-tableView:didSelectRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -292,11 +260,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iHealthKit/ViewController/DistanceTypeChooserViewController.m"
-            timestampString = "428333749.276764"
+            timestampString = "429360776.690722"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "74"
-            endingLineNumber = "74"
+            startingLineNumber = "77"
+            endingLineNumber = "77"
             landmarkName = "-tableView:cellForRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -308,11 +276,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iHealthKit/ViewController/SettingsViewController.m"
-            timestampString = "429330737.067328"
+            timestampString = "429359018.147331"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "214"
-            endingLineNumber = "214"
+            startingLineNumber = "220"
+            endingLineNumber = "220"
             landmarkName = "-tableView:cellForRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -324,11 +292,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iHealthKit/ViewController/SettingsViewController.m"
-            timestampString = "429330737.067328"
+            timestampString = "429359018.147331"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "215"
-            endingLineNumber = "215"
+            startingLineNumber = "221"
+            endingLineNumber = "221"
             landmarkName = "-tableView:cellForRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -340,43 +308,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iHealthKit/ViewController/SettingsViewController.m"
-            timestampString = "429330737.067328"
+            timestampString = "429359018.147331"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "216"
-            endingLineNumber = "216"
-            landmarkName = "-tableView:cellForRowAtIndexPath:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "iHealthKit/ViewController/SettingsViewController.m"
-            timestampString = "429330737.067328"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "233"
-            endingLineNumber = "233"
-            landmarkName = "-tableView:cellForRowAtIndexPath:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "iHealthKit/ViewController/SettingsViewController.m"
-            timestampString = "429330737.067328"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "234"
-            endingLineNumber = "234"
+            startingLineNumber = "241"
+            endingLineNumber = "241"
             landmarkName = "-tableView:cellForRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -388,11 +324,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iHealthKit/Helper/CoreDataFuntions.m"
-            timestampString = "428163982.080438"
+            timestampString = "429368455.256924"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "99"
-            endingLineNumber = "99"
+            startingLineNumber = "100"
+            endingLineNumber = "100"
             landmarkName = "+saveNewRoute:endTime:calories:maxSpeed:avgSpeed:distance:locations:mood:"
             landmarkType = "5">
          </BreakpointContent>
@@ -409,7 +345,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "56"
             endingLineNumber = "56"
-            landmarkName = "+saveNewUser:lastName:height:weight:birthDate:email:gender:"
+            landmarkName = "+saveNewUser:lastName:height:weight:birthDate:email:gender:avatar:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -804,11 +740,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iHealthKit/ViewController/LeftMenuViewController.m"
-            timestampString = "429334589.943372"
+            timestampString = "429369279.275657"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "131"
-            endingLineNumber = "131"
+            startingLineNumber = "134"
+            endingLineNumber = "134"
             landmarkName = "-tableView:cellForRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -820,7 +756,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iHealthKit/ViewController/LeftMenuViewController.m"
-            timestampString = "429334589.943372"
+            timestampString = "429369279.275657"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "130"
@@ -868,11 +804,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iHealthKit/ViewController/UserViewController.m"
-            timestampString = "429334197.726633"
+            timestampString = "429369557.289149"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "897"
-            endingLineNumber = "897"
+            startingLineNumber = "953"
+            endingLineNumber = "953"
             landmarkName = "-addNewUser"
             landmarkType = "5">
          </BreakpointContent>
@@ -884,11 +820,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iHealthKit/ViewController/UserViewController.m"
-            timestampString = "429334197.726633"
+            timestampString = "429369557.289149"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "895"
-            endingLineNumber = "895"
+            startingLineNumber = "951"
+            endingLineNumber = "951"
             landmarkName = "-addNewUser"
             landmarkType = "5">
          </BreakpointContent>
@@ -922,6 +858,38 @@
             startingLineNumber = "42"
             endingLineNumber = "42"
             landmarkName = "-viewDidLoad"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "iHealthKit/ViewController/UserViewController.m"
+            timestampString = "429368455.256924"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "727"
+            endingLineNumber = "727"
+            landmarkName = "-updateAvatar:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "iHealthKit/ViewController/UserViewController.m"
+            timestampString = "429369557.289149"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "757"
+            endingLineNumber = "757"
+            landmarkName = "-updateGender:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

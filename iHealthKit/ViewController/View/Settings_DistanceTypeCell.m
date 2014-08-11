@@ -1,20 +1,19 @@
 //
-//  DistanceTypeCell.m
+//  Settings_DistanceTypeCell.m
 //  iHealthKit
 //
-//  Created by admin on 8/7/14.
+//  Created by admin on 8/10/14.
 //  Copyright (c) 2014 Duc Pham. All rights reserved.
 //
 
-#import "DistanceTypeCell.h"
+#import "Settings_DistanceTypeCell.h"
 
-@implementation DistanceTypeCell
+@implementation Settings_DistanceTypeCell
 
 - (void)awakeFromNib
 {
     // Initialization code
-    self.textLabel.font = [UIFont fontWithName:@"American Typewriter" size:14.0];
-    self.textLabel.text = @"Unit System";
+    self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -22,6 +21,7 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+    
 }
 
 @end

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UserViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
+@interface UserViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 -(id)initEdit: (MyUser*) user ;
 -(id)initAdd;

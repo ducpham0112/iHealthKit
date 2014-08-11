@@ -128,10 +128,14 @@ typedef enum {
             
             cell.lbActivity.text = [NSString stringWithFormat:@"Activities: %d", [[curUser.routeHistory allObjects] count]];
             
-            if ([curUser.isMale integerValue] == 0) {
-                cell.imgAvatar.image = [UIImage imageNamed:@"avatar_male.jpg"];
+            if (curUser.avatar != nil) {
+                cell.imgAvatar.image = [[UIImage alloc] initWithData:curUser.avatar];
             } else {
-                cell.imgAvatar.image = [UIImage imageNamed:@"avatar_female.jpg"];
+                if ([curUser.isMale integerValue] == 0) {
+                    cell.imgAvatar.image = [UIImage imageNamed:@"avatar_male.jpg"];
+                } else {
+                    cell.imgAvatar.image = [UIImage imageNamed:@"avatar_female.jpg"];
+                }
             }
             return cell;
             break;
