@@ -13,16 +13,20 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" translatesAutoresizingMaskIntoConstraints="NO" id="tr2-T1-cJM">
+                    <segmentedControl opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" translatesAutoresizingMaskIntoConstraints="NO" id="tr2-T1-cJM">
                         <rect key="frame" x="20" y="8" width="280" height="29"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <segments>
                             <segment title="Male" width="139.5"/>
-                            <segment title="Male" width="139.5"/>
+                            <segment title="Female" width="139.5"/>
                         </segments>
                         <color key="tintColor" red="0.27450980390000002" green="0.57254901960000004" blue="0.80392156859999997" alpha="1" colorSpace="calibratedRGB"/>
                     </segmentedControl>
                 </subviews>
+                <constraints>
+                    <constraint firstAttribute="centerX" secondItem="tr2-T1-cJM" secondAttribute="centerX" id="UjN-Bi-iBM"/>
+                    <constraint firstAttribute="centerY" secondItem="tr2-T1-cJM" secondAttribute="centerY" id="xQ7-jk-Rl5"/>
+                </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="genderSegment" destination="tr2-T1-cJM" id="Vgt-PI-nfn"/>

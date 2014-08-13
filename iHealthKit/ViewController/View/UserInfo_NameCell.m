@@ -20,8 +20,6 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
-    //_imgAvatar.layer.cornerRadius = _imgAvatar.frame.size.width/2;
-    //_imgAvatar.clipsToBounds = YES;
 }
 
 @end

@@ -3,7 +3,7 @@
 //  Distance Tracking
 //
 //  Created by admin on 7/5/14.
-//  Copyright (c) 2014 iOS Fresher. All rights reserved.
+//  Copyright (c) 2014 Duc Pham. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -23,7 +23,6 @@ typedef enum {
 @optional
 - (void)locationManager:(MyLocationManager *)locationManager signalStrengthChanged:(GPSSignalStrength)signalStrength;
 
-//- (void)locationManager:(MyLocationManager *)locationManager distanceUpdated:(CLLocationDistance)distance;
 - (void)locationManager:(MyLocationManager *)locationManager routePoint:(CLLocation *)routePoint calculatedSpeed:(double)calculatedSpeed;
 
 - (void)locationManager:(MyLocationManager *)locationManager error:(NSError *)error;

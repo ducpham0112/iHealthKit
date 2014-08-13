@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Walk</key>
+	<integer>4</integer>
+	<key>Run4mph</key>
+	<real>6</real>
+	<key>Run5mph</key>
+	<real>8.300000000000001</real>
+	<key>Run6mph</key>
+	<real>9.800000000000001</real>
+	<key>Run7mph</key>
+	<integer>11</integer>
+	<key>Run8mph</key>
+	<real>11.8</real>
+	<key>Run9mph</key>
+	<real>12.9</real>
+	<key>Run10mph</key>
+	<real>14.5</real>
+	<key>Rum11mph</key>
+	<integer>16</integer>
+	<key>Run12mph</key>
+	<integer>19</integer>
+	<key>Run13mph</key>
+	<real>19.8</real>
+	<key>Run14mph</key>
+	<real>23</real>
+</dict>
+</plist>

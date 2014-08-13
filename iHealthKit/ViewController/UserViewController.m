@@ -179,7 +179,7 @@ typedef enum {
     [CoreDataFuntions switchUser:_curUser];
     HistoryViewController* historyVC = [[HistoryViewController alloc] init];
     [self.navigationController pushViewController:historyVC animated:YES];
-    [[NSNotificationCenter defaultCenter]  postNotificationName:@"UserInfoChanged" object:self];
+    [[NSNotificationCenter defaultCenter]  postNotificationName:@"UserChanged" object:self];
 }
 
 
@@ -242,8 +242,6 @@ typedef enum {
             cell.tfFirstName.text = _firstName;
             cell.tfLastName.text = _lastName;
             
-            [cell.tfFirstName addTarget:self action:@selector(updateFirstName:) forControlEvents:UIControlEventEditingDidEnd];
-            [cell.tfLastName addTarget:self action:@selector(updateLastName:) forControlEvents:UIControlEventEditingDidEnd];
             
             if (_avatar == nil) {
                 if ([_curUser.isMale integerValue] == 0) {
@@ -254,21 +252,16 @@ typedef enum {
             } else {
                 cell.imgAvatar.image = _avatar;
             }
-            UITapGestureRecognizer* tapAvatarGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(updateAvatar:)];
-            [cell.imgAvatar addGestureRecognizer:tapAvatarGesture];
-            /*CellWithTextField* cell = [[CellWithTextField alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"TextFieldCell"];
-            if (indexPath.row == 0) {
-                cell.textLabel.text = @"First Name";
-                cell.textField.text = _firstName;
-                cell.textField.placeholder = @"First Name";
-                [cell.textField addTarget:self action:@selector(updateFirstName:) forControlEvents:UIControlEventEditingDidEnd];
+            
+            if (_viewMode != ViewMode_LogIn) {
+                cell.tfFirstName.enabled = YES;
+                cell.tfLastName.enabled = YES;
+                [cell.tfFirstName addTarget:self action:@selector(updateFirstName:) forControlEvents:UIControlEventEditingDidEnd];
+                [cell.tfLastName addTarget:self action:@selector(updateLastName:) forControlEvents:UIControlEventEditingDidEnd];
+                UITapGestureRecognizer* tapAvatarGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(updateAvatar:)];
+                [cell.imgAvatar addGestureRecognizer:tapAvatarGesture];
             }
-            else {
-                cell.textLabel.text = @"Last Name";
-                cell.textField.text = _lastName;
-                cell.textField.placeholder = @"Last Name";
-                [cell.textField addTarget:self action:@selector(updateLastName:) forControlEvents:UIControlEventEditingDidEnd];
-            }*/
+            
             return  cell;
             break;
         }
@@ -277,26 +270,18 @@ typedef enum {
             if (cell == nil) {
                     cell = [[UserInfo_GenderCell alloc] init];
             }
-            [cell.genderSegment addTarget:self action:@selector(updateGender:) forControlEvents:UIControlEventValueChanged];
+            
             if (_gender != nil) {
                 cell.genderSegment.selectedSegmentIndex = [_gender integerValue];
+            }
+            
+            if (_viewMode != ViewMode_LogIn) {
+                cell.genderSegment.userInteractionEnabled = YES;
+                [cell.genderSegment addTarget:self action:@selector(updateGender:) forControlEvents:UIControlEventValueChanged];
             }
             return cell;
             break;
             
-            /*UITableViewCell* cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"GenderCell"];
-            UISegmentedControl* genderSegment = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"", @"", nil]];
-            genderSegment.frame = CGRectMake(20, 5, cell.frame.size.width - 40, cell.frame.size.height - 10);
-            [genderSegment setTitle:@"Male" forSegmentAtIndex:GenderType_Male];
-            [genderSegment setTitle:@"Female" forSegmentAtIndex:GenderType_Female];
-            if (_gender != nil) {
-                genderSegment.selectedSegmentIndex = [_gender integerValue];
-            }
-            [genderSegment addTarget:self action:@selector(updateGender:) forControlEvents:UIControlEventValueChanged];
-            [genderSegment setTintColor:[CommonFunctions navigationBarColor]];
-            [cell addSubview:genderSegment];
-            return  cell;
-            break;*/
         }
         case AddUserVCSections_Info: {
             switch (indexPath.row) {
@@ -304,18 +289,15 @@ typedef enum {
                     UserInfo_EmailCell* cell = [tableView dequeueReusableCellWithIdentifier:@"emailCell"];
                     if (cell == nil) {
                         cell = [[UserInfo_EmailCell alloc] init];
+                    }
+                    
+                    cell.tfValue.text = _email;
+                    if (_viewMode != ViewMode_LogIn) {
+                        cell.tfValue.enabled = YES;
                         [cell.tfValue addTarget:self action:@selector(updateEmail:) forControlEvents:UIControlEventEditingDidEnd];
                     }
-                    cell.tfValue.text = _email;
                     return cell;
                     break;
-                    /*CellWithTextField* cell = [[CellWithTextField alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"TextFieldCell"];
-                    cell.textLabel.text = @"E-Mail";
-                    cell.textField.text = _email;
-                    cell.textField.placeholder = @"Your email" ;
-                    [cell.textField addTarget:self action:@selector(updateEmail:) forControlEvents:UIControlEventEditingDidEnd];
-                    return cell;
-                    break;*/
                 }
                 case RowInSectionInfo_birthDate: {
                     UserInfo_PickerCell* cell = [tableView dequeueReusableCellWithIdentifier:@"pickerCell"];
@@ -335,9 +317,11 @@ typedef enum {
                         cell.lbValue.textColor = [UIColor blackColor];
                     }
                     
-                    //cell.label.text = (_birthDate == nil) ? @"Your Birth Date" : [NSDateFormatter localizedStringFromDate:_birthDate dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterNoStyle];
-                    UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(birthDateSelected)];
-                    [cell.lbValue addGestureRecognizer:tapGesture];
+                    if (_viewMode != ViewMode_LogIn) {
+                        UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(birthDateSelected)];
+                        [cell.lbValue addGestureRecognizer:tapGesture];
+                    }
+                    
                     return cell;
                     break;
                 }
@@ -359,9 +343,11 @@ typedef enum {
                         cell.lbValue.textColor = [UIColor blackColor];
                     }
                     
-                    //cell.label.text = (_height == nil) ? @"Your Height" : [self getHeightString];
-                    UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(heightSelected)];
-                    [cell.lbValue addGestureRecognizer:tapGesture];
+                    if (_viewMode != ViewMode_LogIn) {
+                        UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(heightSelected)];
+                        [cell.lbValue addGestureRecognizer:tapGesture];
+                    }
+                    
                     return cell;
                     break;
                 }
@@ -381,8 +367,12 @@ typedef enum {
                         cell.lbValue.text = [self getWeightString];
                         cell.lbValue.textColor = [UIColor blackColor];
                     }
-                    UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(weightSelected)];
-                    [cell.lbValue addGestureRecognizer:tapGesture];
+                    
+                    if (_viewMode != ViewMode_LogIn) {
+                        UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(weightSelected)];
+                        [cell.lbValue addGestureRecognizer:tapGesture];
+                    }
+                    
                     return cell;
                     break;
                 }
@@ -950,13 +940,11 @@ typedef enum {
     
     [CoreDataFuntions saveNewUser:_firstName lastName:_lastName height:_height weight:_weight birthDate:_birthDate email:_email gender:_gender avatar:avatarData];
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"UserInfoChanged" object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"UserChanged" object:self];
     
     if (_isFirstLaunch) {
-        SettingsViewController* settingVC = [[SettingsViewController alloc] initNormal];
-        AppDelegate* del = [[UIApplication sharedApplication] delegate];
-        del.fetchedResultsController = nil;
-        [self.navigationController pushViewController:settingVC animated: YES];
+        [CommonFunctions setupDrawer];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"FirstLaunchComplete"];
     }
     else {
         TrackingViewController* trackingVC = [[TrackingViewController alloc] init];
@@ -1019,7 +1007,7 @@ typedef enum {
     
     self.title = [CoreDataFuntions getFullnameUser:_curUser];
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"UserInfoChanged" object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"UserChanged" object:self];
     [self.navigationItem setRightBarButtonItem:nil];
     
 }
@@ -1044,7 +1032,7 @@ typedef enum {
     [_birthDatePicker setDatePickerMode:UIDatePickerModeDate];
     [_birthDatePicker setMinimumDate:[CommonFunctions dateFromString:@"01/01/1900" withFormat:nil]];
     [_birthDatePicker setMaximumDate:[CommonFunctions dateFromString:@"31/12/2010" withFormat:nil]];
-    
+    [_birthDatePicker addTarget:self action:@selector(updateBirthDate:) forControlEvents:UIControlEventValueChanged];
     [_birthDatePicker setBackgroundColor:[UIColor whiteColor]];
     _birthDatePicker.hidden = YES;
     [self.view addSubview:_birthDatePicker];
@@ -1053,13 +1041,14 @@ typedef enum {
 - (void) setupBarButton {
     
     if (_viewMode == ViewMode_ViewInfo) {
-        [self setTitle:[NSString stringWithFormat:@"%@ ", [CoreDataFuntions getFullnameUser:_curUser]]];
-        [_birthDatePicker addTarget:self action:@selector(updateBirthDate:) forControlEvents:UIControlEventValueChanged];
+        [self setTitle:[NSString stringWithFormat:@"%@", [CoreDataFuntions getFullnameUser:_curUser]]];
         
         MMDrawerBarButtonItem * leftDrawerButton = [[MMDrawerBarButtonItem alloc] initWithTarget:self action:@selector(leftDrawerButtonPress:)];
         [self.navigationItem setLeftBarButtonItem:leftDrawerButton animated:YES];
     }
     else if (_viewMode == ViewMode_LogIn) {
+        [self setTitle:[NSString stringWithFormat:@"%@", [CoreDataFuntions getFullnameUser:_curUser]]];
+        
         UIBarButtonItem* loginBtn = [[UIBarButtonItem alloc] initWithTitle:@"Login" style:UIBarButtonItemStylePlain target:self action:@selector(login)];
         UIBarButtonItem* deleteBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(deleteUser)];
         
@@ -1068,13 +1057,9 @@ typedef enum {
     else {
         [self setTitle:@"New User"];
         UIBarButtonItem* rightBarBtn;
-        [_birthDatePicker addTarget:self action:@selector(updateBirthDate:) forControlEvents:UIControlEventValueChanged];
-        if (_isFirstLaunch) {
-            rightBarBtn = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(addNewUser)];
-        }
-        else {
-            rightBarBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(addNewUser)];
-        }
+        
+        rightBarBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(addNewUser)];
+        
         [self.navigationItem setRightBarButtonItem:rightBarBtn];
     }
     

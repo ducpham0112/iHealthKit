@@ -107,12 +107,15 @@ typedef enum  {
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    
     _duration = [CommonFunctions getDuration:_startTime endTime:_endTime];
     
     [self setupBarButton];
     
     [_tableView setDelegate:self];
     [_tableView setDataSource:self];
+    
     [self.tableView registerNib:[UINib nibWithNibName:@"RouteDetailCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"routeDetailCell"];
     [self.tableView registerNib:[UINib nibWithNibName:@"RouteOverviewCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"routeHeaderCell"];
     
@@ -125,11 +128,7 @@ typedef enum  {
     [_mapView addGestureRecognizer:holdGesture];
     
     [self drawRoute];
-    
-    
 }
-
-
 
 - (void)didReceiveMemoryWarning
 {
@@ -146,7 +145,8 @@ typedef enum  {
     if (section == 0) {
         return 1;
     }
-    return 6;
+    else
+        return 6;
 }
 
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -156,91 +156,90 @@ typedef enum  {
         if (cell == nil) {
             cell = [[RouteOverviewCell alloc] init];
         }
+        RouteOverviewCell* overviewCell = (RouteOverviewCell*) cell;
+        overviewCell.lbCalories.text = [NSString stringWithFormat:@"%.0f", _calories];
+        overviewCell.lbDistance.text = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertDistance:_distance]];
         
+        overviewCell.lbDistanceUnit.text = [NSString stringWithFormat:@"Distance (%@)", [CommonFunctions getDistanceUnitString]];
+        overviewCell.lbDistance.text = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertDistance:_distance]];
+        overviewCell.lbDuration.text = [CommonFunctions stringSecondFromInterval:_duration];
     }
+    
     else {
         cell = [_tableView dequeueReusableCellWithIdentifier:@"routeDetailCell"];
         if (cell == nil) {
             cell = [[RouteDetailCell alloc] init];
         }
+        [self configureCell:cell atIndexPath:indexPath];
     }
     
-    [self configureCell:cell atIndexPath:indexPath];
+    
     
     return cell;
 }
 
-- (void) configureCell: (UITableViewCell*) cell atIndexPath: (NSIndexPath*) indexPath {
-    if (indexPath.section == 0) {
-        RouteOverviewCell* headerCell = (RouteOverviewCell*) cell;
-        headerCell.lbCalories.text = [NSString stringWithFormat:@"%.0f", _calories];
-        headerCell.lbDistance.text = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertDistance:_distance]];
-        
-        headerCell.lbDistanceUnit.text = [NSString stringWithFormat:@"Distance (%@)", [CommonFunctions getDistanceUnitString]];
-        headerCell.lbDistance.text = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertDistance:_distance]];
-        headerCell.lbDuration.text = [CommonFunctions stringSecondFromInterval:_duration];
-    }
-    
-    else {
-        RouteDetailCell* detailCell = (RouteDetailCell*) cell;
-        
-        switch (indexPath.row) {
-            case RowType_AvgPace: {
-                detailCell.lbDescription.text = @"Average Pace";
-                detailCell.lbDetail.text = [CommonFunctions paceStrFromSpeed:_averageSpeed];
-                detailCell.imgView.image = [UIImage imageNamed:@"icon_paceAvg.png"];
-                break;
-            }
-            case RowType_MaxPace: {
-                detailCell.lbDescription.text = @"Max. Pace";
-                detailCell.lbDetail.text = [CommonFunctions paceStrFromSpeed:_averageSpeed];
-                detailCell.imgView.image = [UIImage imageNamed:@"icon_paceMax.png"];
-                break;
-            }
-            case RowType_AvgSpeed: {
-                detailCell.lbDescription.text = @"Average Speed";
-                float avgSpeed = [CommonFunctions convertSpeed:_averageSpeed];
-                detailCell.lbDetail.text = [NSString stringWithFormat:@"%.2f", avgSpeed];
-                detailCell.imgView.image = [UIImage imageNamed:@"icon_speedAvg.png"];
-                break;
-            }
-            case RowType_EndTime: {
-                detailCell.lbDescription.text = @"End Time";
-                detailCell.lbDetail.text = [NSDateFormatter localizedStringFromDate:_endTime dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle];
-                detailCell.imgView.image = [UIImage imageNamed:@"icon_timeStop.png"];
-                break;
-            }
-            case RowType_MaxSpeed: {
-                detailCell.lbDescription.text = @"Max. Speed";
-                detailCell.lbDetail.text = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertSpeed:_maxSpeed]];
-                detailCell.imgView.image = [UIImage imageNamed:@"icon_speedMax.png"];
-                break;
-            }
-            case RowType_StartTime: {
-                detailCell.lbDescription.text = @"Start Time";
-                detailCell.lbDetail.text = [NSDateFormatter localizedStringFromDate:_startTime dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle];
-                detailCell.imgView.image = [UIImage imageNamed:@"icon_timeStart.png"];
-                break;
-            }
-            default:
-                break;
+- (void) configureCell: (UITableViewCell*) cell atIndexPath: (NSIndexPath*) indexPath {        switch (indexPath.row) {
+        case RowType_AvgPace: {
+            RouteDetailCell* detailCell = (RouteDetailCell*) cell;
+            detailCell.lbDescription.text = @"Average Pace";
+            detailCell.lbDetail.text = [CommonFunctions paceStrFromSpeed:_averageSpeed];
+            detailCell.imgView.image = [UIImage imageNamed:@"icon_paceAvg.png"];
+            break;
         }
+        case RowType_MaxPace: {
+            RouteDetailCell* detailCell = (RouteDetailCell*) cell;
+            detailCell.lbDescription.text = @"Max. Pace";
+            detailCell.lbDetail.text = [CommonFunctions paceStrFromSpeed:_averageSpeed];
+            detailCell.imgView.image = [UIImage imageNamed:@"icon_paceMax.png"];
+            break;
+        }
+        case RowType_AvgSpeed: {
+            RouteDetailCell* detailCell = (RouteDetailCell*) cell;
+            detailCell.lbDescription.text = @"Average Speed";
+            float avgSpeed = [CommonFunctions convertSpeed:_averageSpeed];
+            detailCell.lbDetail.text = [NSString stringWithFormat:@"%.2f", avgSpeed];
+            detailCell.imgView.image = [UIImage imageNamed:@"icon_speedAvg.png"];
+            break;
+        }
+        case RowType_EndTime: {
+            RouteDetailCell* detailCell = (RouteDetailCell*) cell;
+            detailCell.lbDescription.text = @"End Time";
+            detailCell.lbDetail.text = [NSDateFormatter localizedStringFromDate:_endTime dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle];
+            detailCell.imgView.image = [UIImage imageNamed:@"icon_timeStop.png"];
+            break;
+        }
+        case RowType_MaxSpeed: {
+            RouteDetailCell* detailCell = (RouteDetailCell*) cell;
+            detailCell.lbDescription.text = @"Max. Speed";
+            detailCell.lbDetail.text = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertSpeed:_maxSpeed]];
+            detailCell.imgView.image = [UIImage imageNamed:@"icon_speedMax.png"];
+            break;
+        }
+        case RowType_StartTime: {
+            RouteDetailCell* detailCell = (RouteDetailCell*) cell;
+            detailCell.lbDescription.text = @"Start Time";
+            detailCell.lbDetail.text = [NSDateFormatter localizedStringFromDate:_startTime dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle];
+            detailCell.imgView.image = [UIImage imageNamed:@"icon_timeStart.png"];
+            break;
+        }
+        default:
+            break;
     }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
-        return 64;
+        return 62;
     }
     else
         return 36;
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    if (section == 1) {
-        return 20;
-    }
-    return 0;
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if (section == 0)
+        return 1.0f;
+    return 10.0f;
 }
 
 #pragma mark - mapview delegate
@@ -254,9 +253,9 @@ typedef enum  {
         }
         
         _routeView = [[MKPolylineView alloc] initWithPolyline:_routeLine];
-        _routeView.fillColor = [UIColor colorWithRed:0 green:0.35 blue:1 alpha:0.9];
-        _routeView.strokeColor = [UIColor colorWithRed:0 green:0.35 blue:1 alpha:0.9];
-        _routeView.lineWidth = 5;
+        _routeView.fillColor = [UIColor colorWithRed:0.0 green:122.0/255 blue:1.0f alpha:0.8f];
+        _routeView.strokeColor = [UIColor colorWithRed:0.0 green:122.0/255 blue:1.0f alpha:0.8f];
+        _routeView.lineWidth = 6.5;
         
 		overlayView = _routeView;
 	}
@@ -314,11 +313,10 @@ typedef enum  {
         }
         else {
             if (i == _routePoints.count - 1) {
-                _northEastPoint = loc.coordinate;
-                _southWestPoint = loc.coordinate;
                 RouteAnnotationView* endPoint = [[RouteAnnotationView alloc] initWithCoordinate:loc.coordinate type:AnnotationType_Stop];
                 [_mapView addAnnotation:endPoint];
             }
+            
             if (loc.coordinate.latitude > _northEastPoint.latitude) {
                 _northEastPoint.latitude = loc.coordinate.latitude ;
             }
@@ -340,11 +338,11 @@ typedef enum  {
     _routeLine = [MKPolyline polylineWithPoints:mapPoints count:_routePoints.count];
     [_mapView addOverlay:_routeLine];
     
-    CLLocationDegrees latitudeDelta = _northEastPoint.latitude - _southWestPoint.latitude;
-    CLLocationDegrees longitudeDelta = _northEastPoint.longitude - _southWestPoint.longitude;
+    CLLocationDegrees latitudeDelta = _northEastPoint.latitude - _southWestPoint.latitude+ 0.002;
+    CLLocationDegrees longitudeDelta = _northEastPoint.longitude - _southWestPoint.longitude + 0.002;
     MKCoordinateSpan span;
-    span.latitudeDelta = (latitudeDelta > 0.004) ? latitudeDelta : 0.004;;
-    span.longitudeDelta = (longitudeDelta > 0.004) ? longitudeDelta : 0.004;;
+    span.latitudeDelta = (latitudeDelta > 0.005) ? latitudeDelta : 0.005;;
+    span.longitudeDelta = (longitudeDelta > 0.005) ? longitudeDelta : 0.005;;
     MKCoordinateRegion region;
     region.center.latitude = _southWestPoint.latitude + ((_northEastPoint.latitude - _southWestPoint.latitude) / 2);
     region.center.longitude = _southWestPoint.longitude + ((_northEastPoint.longitude - _southWestPoint.longitude) / 2);
@@ -369,15 +367,15 @@ typedef enum  {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"EditUser" object:self];
     
     [CommonFunctions showStatusBarAlert:@"New route has been added to your history." duration:3.0f backgroundColor: [CommonFunctions greenColor]];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"UserInfoChanged" object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"UserChanged" object:nil];
     TrackingViewController* trackVC = [[TrackingViewController alloc] init];
     [self.navigationController pushViewController:trackVC animated:YES];
 }
 
 - (void) deleteRoute {
-#warning alert
     [CoreDataFuntions deleteRoute:_route];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"HistoryChanged" object:self];
+    [CommonFunctions showStatusBarAlert:@"Activity has been deleted." duration:2.0f backgroundColor:[CommonFunctions yellowColor]];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -400,7 +398,7 @@ typedef enum  {
         [self.navigationItem setTitle:@"New Route"];
     }
     else {
-        [self.navigationItem setTitle:[NSDateFormatter localizedStringFromDate:_startTime dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle]];
+        [self.navigationItem setTitle:[NSDateFormatter localizedStringFromDate:_startTime dateStyle:NSDateFormatterLongStyle timeStyle:NSDateFormatterNoStyle]];
         UIBarButtonItem* deleteBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(deleteRoute)];
         [self.navigationItem setRightBarButtonItem:deleteBtn];
     }

@@ -62,7 +62,7 @@ typedef enum {
     [self.tableView setBounces:NO];
     [self.view setBackgroundColor:[UIColor whiteColor]];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userInfoUpdate) name:@"UserInfoChanged" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userInfoUpdate) name:@"UserChanged" object:nil];
     
 }
 

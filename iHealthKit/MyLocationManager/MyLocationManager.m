@@ -3,7 +3,7 @@
 //  Distance Tracking
 //
 //  Created by admin on 7/5/14.
-//  Copyright (c) 2014 iOS Fresher. All rights reserved.
+//  Copyright (c) 2014 Duc Pham. All rights reserved.
 //
 
 static const NSUInteger kDistanceFilter = 5;
@@ -36,10 +36,8 @@ static const NSUInteger kGPSRefinementInterval = 15;
 @property (nonatomic) BOOL forceDistanceAndSpeedCalculation;
 @property (nonatomic) NSTimeInterval pauseDelta;
 @property (nonatomic) NSTimeInterval pauseDeltaStart;
-@property (nonatomic) BOOL readyToExposeDistanceAndSpeed;
 @property (nonatomic) BOOL checkingSignalStrength;
 @property (nonatomic) BOOL allowMaximumAcceptableAccuracy;
-@property (nonatomic) CLLocation* oldLocation;
 @property (nonatomic) BOOL needUpdateSignalStrength;
 
 - (void)checkSustainedSignalStrength;
@@ -149,8 +147,7 @@ static const NSUInteger kGPSRefinementInterval = 15;
         [_locationHistory removeAllObjects];
         [_speedHistory removeAllObjects];
         _lastDistanceAndSpeedCalculation = 0;
-        _currentSpeed = -1.0;
-        _readyToExposeDistanceAndSpeed = NO;
+        _currentSpeed = -1;
         _allowMaximumAcceptableAccuracy = NO;
         _needUpdateSignalStrength = YES;
         
@@ -158,7 +155,6 @@ static const NSUInteger kGPSRefinementInterval = 15;
         [_locationManager startUpdatingLocation];
         [_locationManager startUpdatingHeading];
         
-        _readyToExposeDistanceAndSpeed = YES;
         
         [_locationManager startUpdatingLocation];
         [_locationManager startUpdatingHeading];
@@ -168,7 +164,6 @@ static const NSUInteger kGPSRefinementInterval = 15;
             _pauseDeltaStart = 0;
         }
         _startTimestamp = nil;
-        _oldLocation = nil;
         _lastRecordedLocation = nil;
         
         return YES;
@@ -193,7 +188,6 @@ static const NSUInteger kGPSRefinementInterval = 15;
     [_locationManager stopUpdatingHeading];
     _pauseDeltaStart = [NSDate timeIntervalSinceReferenceDate];
     _lastRecordedLocation = nil;
-    _oldLocation = nil;
     _isStarted = NO;
 }
 
@@ -203,21 +197,19 @@ static const NSUInteger kGPSRefinementInterval = 15;
     _forceDistanceAndSpeedCalculation = NO;
     _pauseDelta = 0;
     _pauseDeltaStart = 0;
-    _oldLocation = nil;
 }
 
 #pragma mark CLLocationManagerDelegate
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     
-    CLLocation* newLocation = [locations lastObject];
-    
+    CLLocation* curLocation = [locations lastObject];
     
     [_locationPingTimer invalidate];
     
-    if (newLocation.horizontalAccuracy <= kRequiredHorizontalAccuracy) {
+    if (curLocation.horizontalAccuracy <= kRequiredHorizontalAccuracy) {
         [self setSignalStrength:strong];
-    } else if (newLocation.horizontalAccuracy <= kMediumHorizontalAccuracy){
+    } else if (curLocation.horizontalAccuracy <= kMediumHorizontalAccuracy){
         [self setSignalStrength:medium];
     } else {
         [self setSignalStrength:weak];
@@ -239,10 +231,9 @@ static const NSUInteger kGPSRefinementInterval = 15;
         horizontalAccuracy = kRequiredHorizontalAccuracy;
     }
     
-    if (_oldLocation == nil) {
+    if (_lastRecordedLocation == nil) {
         //CLLocation* curLocation = [locations lastObject];
-        if (newLocation.horizontalAccuracy > 0 && newLocation.horizontalAccuracy < horizontalAccuracy) {
-            _oldLocation = [locations lastObject];
+        if (curLocation.horizontalAccuracy > 0 && curLocation.horizontalAccuracy < horizontalAccuracy) {
             _lastRecordedLocation = [locations lastObject];
             _startTimestamp = _lastRecordedLocation.timestamp;
             if ([_delegate respondsToSelector:@selector(locationManager:startTimeStamp:)]) {
@@ -252,52 +243,41 @@ static const NSUInteger kGPSRefinementInterval = 15;
         return;
     }
     
-    BOOL isStaleLocation = ([_oldLocation.timestamp compare:_startTimestamp] == NSOrderedAscending);
-    
-    if (!isStaleLocation && newLocation.horizontalAccuracy >= 0 && newLocation.horizontalAccuracy <= horizontalAccuracy) {
+    if (curLocation.horizontalAccuracy >= 0 && curLocation.horizontalAccuracy <= horizontalAccuracy) {
         
-        [_locationHistory addObject:newLocation];
+        [_locationHistory addObject:curLocation];
         if ([_locationHistory count] > kNumLocationHistoriesToKeep) {
             [_locationHistory removeObjectAtIndex:0];
         }
         
         BOOL canUpdateDistanceAndSpeed = NO;
         if ([_locationHistory count] >= kMinLocationsNeededToUpdateDistanceAndSpeed) {
-            canUpdateDistanceAndSpeed = YES && _readyToExposeDistanceAndSpeed;
+            canUpdateDistanceAndSpeed = YES;
         }
         
         if (_forceDistanceAndSpeedCalculation || [NSDate timeIntervalSinceReferenceDate] - _lastDistanceAndSpeedCalculation > kDistanceAndSpeedCalculationInterval) {
             _forceDistanceAndSpeedCalculation = NO;
             _lastDistanceAndSpeedCalculation = [NSDate timeIntervalSinceReferenceDate];
             
-            CLLocation* lastLocation = _lastRecordedLocation;
-            /*if (_lastRecordedLocation == nil) {
-                lastLocation = _oldLocation;
-                _startTimestamp = lastLocation.timestamp;
-                if ([_delegate respondsToSelector:@selector(locationManager:startTimeStamp:)]) {
-                    [_delegate locationManager:self startTimeStamp:_startTimestamp];
-                }
-            } else {
-                lastLocation = _lastRecordedLocation;
-            }*/
+            //CLLocation* lastLocation = _lastRecordedLocation;
             
             CLLocation *bestLocation = nil;
             CGFloat bestAccuracy = kRequiredHorizontalAccuracy;
             for (CLLocation *location in _locationHistory) {
                 if ([NSDate timeIntervalSinceReferenceDate] - [location.timestamp timeIntervalSinceReferenceDate] <= kValidLocationHistoryDeltaInterval) {
-                    if (location.horizontalAccuracy <= bestAccuracy && location != lastLocation) {
+                    if (location.horizontalAccuracy <= bestAccuracy && location != _lastRecordedLocation) {
                         bestAccuracy = location.horizontalAccuracy;
                         bestLocation = location;
                     }
                 }
             }
-            if (bestLocation == nil) bestLocation = newLocation;
+            if (bestLocation == nil)
+                bestLocation = curLocation;
             
-            CLLocationDistance distance = [bestLocation distanceFromLocation:lastLocation];
+            CLLocationDistance distance = [bestLocation distanceFromLocation:_lastRecordedLocation];
             if (canUpdateDistanceAndSpeed) _totalDistance += distance;
-            _lastRecordedLocation = bestLocation;
             
-            NSTimeInterval timeSinceLastLocation = [bestLocation.timestamp timeIntervalSinceDate:lastLocation.timestamp];
+            NSTimeInterval timeSinceLastLocation = [bestLocation.timestamp timeIntervalSinceDate:_lastRecordedLocation.timestamp];
             if (timeSinceLastLocation > 0) {
                 CGFloat speed = distance / timeSinceLastLocation;
                 if (speed <= 0 && [_speedHistory count] == 0) {
@@ -322,10 +302,10 @@ static const NSUInteger kGPSRefinementInterval = 15;
             if ([_delegate respondsToSelector:@selector(locationManager:routePoint:calculatedSpeed:)]) {
                 [_delegate locationManager:self routePoint:_lastRecordedLocation calculatedSpeed:_currentSpeed];
             }
+            
+            _lastRecordedLocation = bestLocation;
         }
     }
-    
-    _oldLocation = newLocation;
     
     // this will be invalidated above if a new location is received before it fires
     _locationPingTimer = [NSTimer timerWithTimeInterval:kMinimumLocationUpdateInterval target:self selector:@selector(requestNewLocation) userInfo:nil repeats:NO];
@@ -333,7 +313,7 @@ static const NSUInteger kGPSRefinementInterval = 15;
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading {
-    // we don't really care about the new heading.  all we care about is calculating the current distance from the previous distance early if the user changed directions
+    //force to calculate distance
     _forceDistanceAndSpeedCalculation = YES;
 }
 

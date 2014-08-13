@@ -14,6 +14,8 @@
 
 #define VOICE_PITCH 1.49881518
 #define VOICE_RATE 0.168246448
+#define NOTIFY_DURATION_INTERVAL 300 //sec
+#define NOTIFY_DISTANCE_INTERVAL 0.5
 
 typedef enum {
     InfoType_Duration,
@@ -68,7 +70,6 @@ typedef enum {
 @property (nonatomic) float calories;
 @property (nonatomic) float distance;
 @property (nonatomic) float curSpeed;
-@property (nonatomic) float averageSpeed;
 @property (nonatomic) float maxSpeed;
 @property NSInteger trainingType;
 
@@ -77,7 +78,7 @@ typedef enum {
 @property (nonatomic) NSDate* startTime;
 @property (nonatomic) NSDate* endTime;
 
-@property (nonatomic, readonly) NSMutableDictionary* MET_VALUE;
+@property (nonatomic, readonly) NSDictionary* MET_VALUE;
 
 @property (nonatomic, strong) CLLocationManager* locationManager;
 
@@ -89,8 +90,8 @@ typedef enum {
 @property NSInteger selectedIndex;
 @property UILabel* selectedLabel;
 
-@property UILabel* durationLabel;
-@property UILabel* clockLabel;
+@property NSMutableArray* durationLabel;
+@property NSMutableArray* clockLabel;
 @property NSTimer* clockTimer;
 
 @property NSTimer* durationTimer;
@@ -125,20 +126,23 @@ typedef enum {
     
     [self setupBarButton];
     
-    [self setMetValueData];
+    //[self setMetValueData];
+    _MET_VALUE = [[NSDictionary alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"MetValue" ofType:@"plist"]];
+    //[[NSBundle mainBundle] pathForResource:@"myPlist" ofType:@"plist"]] retain]
     
     [MyLocationManager shareLocationManager].delegate = self;
     [_mapView setDelegate:self];
     _mapView.showsUserLocation = YES;
     
-    [[MyLocationManager shareLocationManager] prepLocationUpdates];
+    if (![[MyLocationManager shareLocationManager] prepLocationUpdates]) {
+        [self locationManagerSignalInvalid:[MyLocationManager shareLocationManager]];
+    }
     
     _needUserLocation = YES;
     _locationDatatoStore = [[NSMutableArray alloc] init];
     
-    
-    _durationLabel = nil;
-    _clockLabel = nil;
+    _durationLabel = [NSMutableArray new];
+    _clockLabel = [NSMutableArray new];
     
     _listInfoView = [[NSMutableArray alloc] init];
     [_listInfoView addObject:[NSNumber numberWithInt:InfoType_Duration]];
@@ -184,28 +188,34 @@ typedef enum {
 }
 
 - (void) updateValue {
-    
     for (int i = 0; i < 3; i++) {
         NSInteger type = [[_listInfoView objectAtIndex:i] integerValue];
         UILabel* label = [_arrayLbValue objectAtIndex:i];
         NSString* valueStr = nil;
         switch (type) {
             case InfoType_Duration:
-                if (_durationLabel == nil) {
-                    _durationLabel = label;
+                if (![_durationLabel containsObject:label]) {
+                    [_durationLabel addObject:label];
                 }
+                /*if (_durationLabel == nil || label != _durationLabel) {
+                    _durationLabel = label;
+                }*/
                 break;
             case InfoType_Clock:
-                if (_clockLabel == nil) {
-                    _clockLabel = label;
+                if (![_clockLabel containsObject:label]) {
+                    [_clockLabel addObject:label];
                 }
+                
+                /*if (_clockLabel == nil || label != _clockLabel) {
+                    _clockLabel = label;
+                }*/
                 break;
             case InfoType_AvgPace: {
-                valueStr = [CommonFunctions paceStrFromSpeed:_averageSpeed];
+                valueStr = [CommonFunctions paceStrFromSpeed:[self getAvgSpeed]];
                 break;
             }
             case InfoType_AvgSpeed: {
-                valueStr = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertSpeed:_averageSpeed]];
+                valueStr = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertSpeed:[self getAvgSpeed]]];
                 break;
             }
             case InfoType_Calories: {
@@ -241,7 +251,9 @@ typedef enum {
         }
         
     }
+
 }
+
 
 - (void) updateDescription {
     for ( int i = 0; i < 3; i++) {
@@ -271,6 +283,7 @@ typedef enum {
     
     _selectedLabel = (UILabel*)[(UIGestureRecognizer*)sender view];
     _selectedIndex = [self getSelectedIndex:_selectedLabel];
+    [_listInfoTableView reloadData];
     [self blinkAnimation:_selectedLabel];
     
     _isTableShowed = YES;
@@ -437,18 +450,18 @@ typedef enum {
 }
 
 - (void) startTracking {
-    [CommonFunctions showStatusBarAlert:@"Activity will start immediately after GPS signal is strong" duration:2.0f backgroundColor:[CommonFunctions yellowColor]];
-    [self resetData];
-    [[MyLocationManager shareLocationManager] startLocationUpdates];
-    
-    UILongPressGestureRecognizer* holdGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(maximizeMapView)];
-    [_mapView addGestureRecognizer:holdGesture];
-    
-    [_btnStartStop setTitle:@"Stop" forState:UIControlStateNormal];
-    [_btnStartStop setBackgroundColor:[CommonFunctions redColor]];
-    [CommonFunctions setTrackingStatus:YES];
-    
-
+    if ([[MyLocationManager shareLocationManager] startLocationUpdates]) {
+        [CommonFunctions showStatusBarAlert:@"Activity will start immediately after GPS signal is strong" duration:2.0f backgroundColor:[CommonFunctions yellowColor]];
+        [self resetData];
+        
+        
+        UILongPressGestureRecognizer* holdGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(maximizeMapView)];
+        [_mapView addGestureRecognizer:holdGesture];
+        
+        [_btnStartStop setTitle:@"Stop" forState:UIControlStateNormal];
+        [_btnStartStop setBackgroundColor:[CommonFunctions redColor]];
+        [CommonFunctions setTrackingStatus:YES];
+    }
 }
 
 - (void) stopTracking {
@@ -471,7 +484,7 @@ typedef enum {
         [_mapView removeGestureRecognizer:gesture];
     }
     
-    RouteViewController* routeVC = [[RouteViewController alloc] initNewRoute:_startTime endtime:_endTime distance:_distance maxSpeed:_maxSpeed averageSpeed:_averageSpeed trainingType:_trainingType calories:_calories locationData:_locationDatatoStore routePoints:_routePoints];
+    RouteViewController* routeVC = [[RouteViewController alloc] initNewRoute:_startTime endtime:_endTime distance:_distance maxSpeed:_maxSpeed averageSpeed:[self getAvgSpeed] trainingType:_trainingType calories:_calories locationData:_locationDatatoStore routePoints:_routePoints];
     
     [self.navigationController pushViewController:routeVC animated:YES];
     
@@ -485,12 +498,13 @@ typedef enum {
     _distance = 0.0f;
     _maxSpeed = 0.0f;
     _curSpeed = 0.0f;
-    _averageSpeed = 0.0f;
     _trainingType = 0;
     _calories = 0.0f;
     
     [_clockTimer invalidate];
+    _clockTimer = nil;
     [_durationTimer invalidate];
+    _durationTimer = nil;
     
     _needUserLocation = YES;
     [_locationDatatoStore removeAllObjects];
@@ -585,7 +599,7 @@ typedef enum {
 #pragma mark - MyLocationManager delegate
 - (void)locationManager:(MyLocationManager *)locationManager routePoint:(CLLocation *)routePoint calculatedSpeed:(double)calculatedSpeed {
     _distance = [MyLocationManager shareLocationManager].totalDistance;
-    _curSpeed = calculatedSpeed;
+    _curSpeed = (calculatedSpeed >= 0) ? calculatedSpeed : 0;
     if (calculatedSpeed > _maxSpeed) {
         _maxSpeed = calculatedSpeed;
     }
@@ -602,8 +616,6 @@ typedef enum {
     
     _endTime = routePoint.timestamp;
     
-    _averageSpeed = _distance / [CommonFunctions getDuration:_startTime endTime:_endTime];
-    
     [self updateValue];
     
     if (_isVoiceTurnOn) {
@@ -612,12 +624,16 @@ typedef enum {
     
 }
 
+- (float) getAvgSpeed {
+    return _distance / _distance / [CommonFunctions getDuration:_startTime endTime:_endTime];
+}
+
 - (void)locationManager:(MyLocationManager *)locationManager locationUpdate:(CLLocation *)location {
     if (!_needUserLocation) {
         return;
     }
-    MKCoordinateSpan span;
     
+    MKCoordinateSpan span;
     span.latitudeDelta = 0.005;
     span.longitudeDelta = 0.005;
     MKCoordinateRegion region;
@@ -631,9 +647,13 @@ typedef enum {
     _startTime = startTimeStamp;
     if (_isVoiceTurnOn) {
         [self speak:@"Activity started"];
-        _durationTimer = [NSTimer scheduledTimerWithTimeInterval:30.0 target:self selector:@selector(durationNotify) userInfo:nil repeats:YES];
+        // add delay 0.5 sec before start the timer
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC);
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            _durationTimer = [NSTimer scheduledTimerWithTimeInterval:NOTIFY_DURATION_INTERVAL target:self selector:@selector(durationNotify) userInfo:nil repeats:YES];
+        });
     }
-    if (_clockLabel != nil || _durationLabel != nil) {
+    if ([_clockLabel count] > 0  || [_durationLabel count] > 0) {
         _clockTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(updateClock) userInfo:nil repeats:YES];
     }
 }
@@ -692,8 +712,8 @@ typedef enum {
     }
     
     cell.lbUnitType.text = [self lbDescriptionStr:indexPath.row];
-    
-    if (indexPath.row == [[_listInfoView objectAtIndex:_selectedIndex] integerValue]) {
+    int selectedRow = [[_listInfoView objectAtIndex:_selectedIndex] integerValue];
+    if (indexPath.row == selectedRow) {
         [cell.imgCheck setImage:[UIImage imageNamed:@"check_icon.png"]];
         //[self.listInfoTableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionTop];
     }
@@ -707,13 +727,16 @@ typedef enum {
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if ([[_listInfoView objectAtIndex:_selectedIndex] integerValue] == InfoType_Clock) {
-        _clockLabel = nil;
+        [_clockLabel removeObject:_selectedLabel];
     }
+    
     if ([[_listInfoView objectAtIndex:_selectedIndex] integerValue] == InfoType_Duration) {
-        _durationLabel = nil;
+        [_durationLabel removeObject:_selectedLabel];
     }
-    if (_durationLabel == nil || _clockLabel == nil) {
+    
+    if ([_durationLabel count] == 0 && [_clockLabel count] == 0) {
         [_clockTimer invalidate];
+        _clockTimer = nil;
     }
     
     [_listInfoView replaceObjectAtIndex:_selectedIndex withObject:[NSNumber numberWithInt:indexPath.row]];
@@ -722,22 +745,56 @@ typedef enum {
     [self updateDescription];
     [self updateValue];
     
+    if (([_durationLabel count] > 0 || [_clockLabel count] > 0) && _clockTimer == nil && [CommonFunctions getTrackingStatus]) {
+        _clockTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(updateClock) userInfo:nil repeats:YES];
+        [_clockTimer fire];
+    }
+    /*
     if (indexPath.row == InfoType_Duration) {
-        _durationLabel = _selectedLabel;
         _clockTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(updateClock) userInfo:nil repeats:YES];
         [_clockTimer fire];
         
     }
     if (indexPath.row == InfoType_Clock) {
-        _clockLabel = _selectedLabel;
         _clockTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(updateClock) userInfo:nil repeats:YES];
         [_clockTimer fire];
         
-    }
+    }*/
 }
 
 - (void) updateClock {
-    if (_clockLabel) {
+    for (UILabel* label in _clockLabel) {
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        if (label == _lbValue0) {
+            [dateFormatter setDateFormat:@"HH:mm:ss"];
+        }
+        else {
+            [dateFormatter setDateFormat:@"HH:mm"];
+        }
+        label.text = [dateFormatter stringFromDate:[NSDate date]];
+    }
+    
+    for (UILabel* label in _durationLabel) {
+        if (_startTime) {
+            if (label == _lbValue0) {
+                label.text = [CommonFunctions stringSecondFromInterval:[CommonFunctions getDuration:_startTime endTime:[NSDate date]]];
+                
+            }
+            else {
+                label.text = [CommonFunctions stringMinuteFromInterval:[CommonFunctions getDuration:_startTime endTime:[NSDate date]]];
+            }
+        }
+        else {
+            if (label == _lbValue0) {
+                label.text = @"00:00:00";
+                
+            }
+            else {
+                label.text = @"00:00";
+            }
+        }
+    }
+    /*if (_clockLabel) {
         
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         if (_clockLabel == _lbValue0) {
@@ -768,7 +825,7 @@ typedef enum {
                 _durationLabel.text = @"00:00";
             }
         }
-    }
+    }*/
 }
 
 - (NSString*) lbDescriptionStr: (NSInteger) type {
@@ -824,11 +881,11 @@ typedef enum {
     NSString* valueStr = @"";
     switch (type) {
         case InfoType_AvgPace: {
-            valueStr = [CommonFunctions paceStrFromSpeed:_averageSpeed];
+            valueStr = [CommonFunctions paceStrFromSpeed:[self getAvgSpeed]];
             break;
         }
         case InfoType_AvgSpeed: {
-            valueStr = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertSpeed:_averageSpeed]];
+            valueStr = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertSpeed:[self getAvgSpeed]]];
             break;
         }
         case InfoType_Calories: {
@@ -925,12 +982,12 @@ typedef enum {
     if (distanceType == 1) {
         if ([CommonFunctions convertDistanceToMile:_distance] >= _notifyNextDistance) {
             [self speak:[NSString stringWithFormat:@"Distance %1f miles", _notifyNextDistance]];
-            _notifyNextDistance += 0.5;
+            _notifyNextDistance += NOTIFY_DISTANCE_INTERVAL;
         }
     } else {
         if ([CommonFunctions convertDistanceToKm:_distance] >= _notifyNextDistance) {
         [self speak:[NSString stringWithFormat:@"Distance %.1f kilometers", _notifyNextDistance]];
-        _notifyNextDistance += 0.5;
+        _notifyNextDistance += NOTIFY_DISTANCE_INTERVAL;
         }
     }
 }
@@ -941,7 +998,7 @@ typedef enum {
     float convertedDistance = (_distanceType == 1) ? [CommonFunctions convertDistanceToMile:_distance] : [CommonFunctions convertDistanceToKm:_distance];
     
     do {
-        _notifyNextDistance += 0.5;
+        _notifyNextDistance += NOTIFY_DISTANCE_INTERVAL;
     } while (_notifyNextDistance < convertedDistance);
 }
 

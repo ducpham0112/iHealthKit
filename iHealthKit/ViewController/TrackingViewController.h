@@ -11,6 +11,6 @@
 #import "MyLocationManager.h"
 #import <AVFoundation/AVFoundation.h>
 
-@interface TrackingViewController : UIViewController <MyLocationManagerDelegate, MKMapViewDelegate, NSFetchedResultsControllerDelegate, CLLocationManagerDelegate, UIAlertViewDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface TrackingViewController : UIViewController <MyLocationManagerDelegate, MKMapViewDelegate, NSFetchedResultsControllerDelegate, UIAlertViewDelegate, UITableViewDataSource, UITableViewDelegate>
 
 @end

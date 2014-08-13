@@ -109,6 +109,7 @@
 		843C22E81984018300197D31 /* LeftMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 843C22E61984018300197D31 /* LeftMenuCell.m */; };
 		843C22E91984018300197D31 /* LeftMenuCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 843C22E71984018300197D31 /* LeftMenuCell.xib */; };
 		8457FCD119824437005EC2C7 /* MyNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8457FCD019824437005EC2C7 /* MyNavigationViewController.m */; };
+		84DC67B31998F38200E6EB3D /* MetValue.plist in Resources */ = {isa = PBXBuildFile; fileRef = 84DC67B21998F38100E6EB3D /* MetValue.plist */; };
 		84E6A8E4199252CF001A982D /* HistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E6A8E2199252CF001A982D /* HistoryViewController.m */; };
 		84E6A8E5199252CF001A982D /* HistoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84E6A8E3199252CF001A982D /* HistoryViewController.xib */; };
 		84ED9EDE19932C72007D5E13 /* RouteAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84ED9EDD19932C72007D5E13 /* RouteAnnotationView.m */; };
@@ -265,6 +266,7 @@
 		843C22E71984018300197D31 /* LeftMenuCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LeftMenuCell.xib; sourceTree = "<group>"; };
 		8457FCCF19824437005EC2C7 /* MyNavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyNavigationViewController.h; sourceTree = "<group>"; };
 		8457FCD019824437005EC2C7 /* MyNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyNavigationViewController.m; sourceTree = "<group>"; };
+		84DC67B21998F38100E6EB3D /* MetValue.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MetValue.plist; sourceTree = "<group>"; };
 		84E6A8E1199252CF001A982D /* HistoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryViewController.h; sourceTree = "<group>"; };
 		84E6A8E2199252CF001A982D /* HistoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryViewController.m; sourceTree = "<group>"; };
 		84E6A8E3199252CF001A982D /* HistoryViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HistoryViewController.xib; sourceTree = "<group>"; };
@@ -416,6 +418,7 @@
 		8417C184197AA32300007269 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				84DC67B21998F38100E6EB3D /* MetValue.plist */,
 				8417C185197AA32300007269 /* iHealthKit-Info.plist */,
 				8417C186197AA32300007269 /* InfoPlist.strings */,
 				8417C189197AA32300007269 /* main.m */,
@@ -734,6 +737,7 @@
 				8421E5DA199682AA00EC18E8 /* icon-120.png in Resources */,
 				8421E5DF199682AA00EC18E8 /* icon.png in Resources */,
 				8421E5DC199682AA00EC18E8 /* icon-72.png in Resources */,
+				84DC67B31998F38200E6EB3D /* MetValue.plist in Resources */,
 				8418A1121994BC2500742EEB /* icon_paceAvg.png in Resources */,
 				8418A10D1994BC2500742EEB /* icon_Activity2.png in Resources */,
 				8418A1161994BC2500742EEB /* icon_timeStart.png in Resources */,

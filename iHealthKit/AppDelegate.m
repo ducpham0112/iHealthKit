@@ -9,7 +9,7 @@
 #import "AppDelegate.h"
 #import "TrackingViewController.h"
 #import "MyVisualStateManager.h"
-#import "ViewController/UserViewController.h"
+#import "ViewController/SettingsViewController.h"
 #import "ViewController/MyNavigationViewController.h"
 
 @implementation AppDelegate
@@ -42,8 +42,8 @@
 }
 
 - (void) firstTimeSetup {
-    UserViewController* addUserVC = [[UserViewController alloc] initAdd];
-    MyNavigationViewController * navigationController = [[MyNavigationViewController alloc] initWithBarColor:[CommonFunctions navigationBarColor] textColor:[UIColor whiteColor] statusBarStyle:UIStatusBarStyleLightContent rootViewController:addUserVC];
+    SettingsViewController* settingsVC = [[SettingsViewController alloc] initNormal];
+    MyNavigationViewController * navigationController = [[MyNavigationViewController alloc] initWithBarColor:[CommonFunctions navigationBarColor] textColor:[UIColor whiteColor] statusBarStyle:UIStatusBarStyleLightContent rootViewController:settingsVC];
     [self.window setRootViewController:navigationController];
     //[_drawerController.centerViewController.navigationItem setHidesBackButton:YES];
 }

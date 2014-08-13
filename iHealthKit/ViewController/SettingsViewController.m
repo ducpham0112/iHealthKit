@@ -11,6 +11,7 @@
 #import "DistanceTypeChooserViewController.h"
 //#import "Settings_VoiceCoaching_OnOffCell.h"
 //#import "View/DistanceTypeCell.h"
+#import "UserViewController.h"
 #import "View/Settings_DistanceTypeCell.h"
 #import "View/Settings_SegmentCell.h"
 //#import "CellWithSegmentControl.h"
@@ -106,9 +107,8 @@ typedef enum {
 }
 
 - (void) firstTimeSetup {
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"FirstLaunchComplete"];
-    
-    [CommonFunctions setupDrawer];
+    UserViewController* userVC = [[UserViewController alloc] initAdd];
+    [self.navigationController pushViewController:userVC animated:YES];
 }
 
 - (void) loadPreference {
@@ -359,8 +359,8 @@ typedef enum {
     
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"FirstLaunchComplete"]) {
         [self saveSettings];
-        UIBarButtonItem* rightBarBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(firstTimeSetup)];
-        
+       
+        UIBarButtonItem* rightBarBtn = [[UIBarButtonItem alloc] initWithTitle:@"Next" style:UIBarButtonItemStyleDone target:self action:@selector(firstTimeSetup)];
         [self.navigationItem setRightBarButtonItem:rightBarBtn animated:YES];
     }
     else {

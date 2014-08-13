@@ -45,7 +45,7 @@
     [self setupBarButton];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(listUserChanged) name:@"ListUserChanged" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(listUserChanged) name:@"UserInfoChanged" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(listUserChanged) name:@"UserChanged" object:nil];
 }
 
 - (void)didReceiveMemoryWarning

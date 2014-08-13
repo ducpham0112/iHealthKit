@@ -13,7 +13,10 @@
 #import "MyVisualStateManager.h"
 #import "SettingsViewController.h"
 
-
+#define SECONDS_PER_MINUTE (60)
+#define MINUTES_PER_HOUR (60)
+#define SECONDS_PER_HOUR (SECONDS_PER_MINUTE * MINUTES_PER_HOUR)
+#define HOURS_PER_DAY (24)
 
 @implementation CommonFunctions
 
@@ -63,48 +66,35 @@
 
 + (NSString*)stringSecondFromInterval: (NSTimeInterval) timeInterval
 {
-#define SECONDS_PER_MINUTE (60)
-#define MINUTES_PER_HOUR (60)
-#define SECONDS_PER_HOUR (SECONDS_PER_MINUTE * MINUTES_PER_HOUR)
-#define HOURS_PER_DAY (24)
-    
+  
     // convert the time to an integer, as we don't need double precision, and we do need to use the modulous operator
     int ti = (int)timeInterval;
     
-    return [NSString stringWithFormat:@"%.2d:%.2d:%.2d", (ti / SECONDS_PER_HOUR) % HOURS_PER_DAY, (ti / SECONDS_PER_MINUTE) % MINUTES_PER_HOUR, ti % SECONDS_PER_MINUTE];
-    
-#undef SECONDS_PER_MINUTE
-#undef MINUTES_PER_HOUR
-#undef SECONDS_PER_HOUR
-#undef HOURS_PER_DAY
-}
+    return [NSString stringWithFormat:@"%.2d:%.2d:%.2d", ti / SECONDS_PER_HOUR, (ti / SECONDS_PER_MINUTE) % MINUTES_PER_HOUR, ti % SECONDS_PER_MINUTE];
+    }
 
 + (NSString*) stringMinuteFromInterval: (NSTimeInterval) time {
-#define SECONDS_PER_MINUTE (60)
-#define MINUTES_PER_HOUR (60)
-#define SECONDS_PER_HOUR (SECONDS_PER_MINUTE * MINUTES_PER_HOUR)
-#define HOURS_PER_DAY (24)
-    
+
     // convert the time to an integer, as we don't need double precision, and we do need to use the modulous operator
     int ti = (int)time;
     
-    return [NSString stringWithFormat:@"%.2d:%.2d", (ti / MINUTES_PER_HOUR),  (ti / SECONDS_PER_MINUTE) % MINUTES_PER_HOUR];
-    
-#undef SECONDS_PER_MINUTE
-#undef MINUTES_PER_HOUR
-#undef SECONDS_PER_HOUR
-#undef HOURS_PER_DAY
+    return [NSString stringWithFormat:@"%.2d:%.2d", (ti / SECONDS_PER_HOUR),  (ti / SECONDS_PER_MINUTE) % MINUTES_PER_HOUR];
+
+}
+
++ (NSString*) paceStr: (NSTimeInterval) time {
+#define SECONDS_PER_MINUTE (60)
+    int ti = (int) time;
+    return [NSString stringWithFormat:@"%.2d:%.2d", (ti/SECONDS_PER_MINUTE), (ti % SECONDS_PER_MINUTE)];
 }
 
 + (int) timePart: (NSTimeInterval) time withPart:(DatePartType) part {
-#define SECONDS_PER_MINUTE (60)
-#define MINUTES_PER_HOUR (60)
-#define SECONDS_PER_HOUR (SECONDS_PER_MINUTE * MINUTES_PER_HOUR)
-#define HOURS_PER_DAY (24)
+
+
     int ti = (int) time;
     switch (part) {
         case DatePartType_hour:
-            return ti / MINUTES_PER_HOUR;
+            return ti / SECONDS_PER_HOUR;
             break;
         case DatePartType_minute:
             return  (ti / SECONDS_PER_MINUTE) % MINUTES_PER_HOUR;
@@ -115,12 +105,7 @@
         default:
             return 0;
             break;
-    }
-#undef SECONDS_PER_MINUTE
-#undef MINUTES_PER_HOUR
-#undef SECONDS_PER_HOUR
-#undef HOURS_PER_DAY
-}
+    }}
 
 + (NSTimeInterval)getDuration:(NSDate *)startTime endTime:(NSDate *)endTime {
     NSTimeInterval totalTime = ([endTime timeIntervalSinceDate:startTime]);
@@ -334,18 +319,19 @@
 
 + (NSString*) paceStrFromSpeed:(float)speedInMeterPerSec{
     int distanceType = [[NSUserDefaults standardUserDefaults] integerForKey:@"DistanceType"];
+    
     NSString* paceStr;
     float pace;
     switch (distanceType) {
         case 0:
             //metric min/km
-            pace = speedInMeterPerSec * 1000 / 60;
-            paceStr = [self stringMinuteFromInterval:pace];
+            pace = 1 / [self convertDistanceToKm:speedInMeterPerSec];
+            paceStr = [self paceStr:pace];
             break;
         case 1:
             //us system min/mile
-            pace = speedInMeterPerSec / 0.000621371 / 60;
-            paceStr = [self stringMinuteFromInterval:pace];
+            pace = 1 / [self convertDistanceToMile:speedInMeterPerSec];
+            paceStr = [self paceStr:pace];
         default:
             break;
     }
@@ -418,10 +404,10 @@
     NSString* paceStr = @"";
     switch ([[NSUserDefaults standardUserDefaults] integerForKey:@"DistanceType"])  {
         case 0:
-            paceStr =  @"min/km";
+            paceStr =  @"sec/km";
             break;
         case 1:
-            paceStr = @"min/mile";
+            paceStr = @"sec/mile";
         default:
             break;
     }
