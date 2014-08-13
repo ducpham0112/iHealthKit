@@ -18,7 +18,6 @@ typedef enum {
     DatePartType_second
 } DatePartType;
 
-
 @interface CommonFunctions : NSObject
 + (void) setupDrawer ;
 

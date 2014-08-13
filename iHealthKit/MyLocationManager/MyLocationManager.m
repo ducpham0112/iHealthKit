@@ -40,6 +40,9 @@ static const NSUInteger kGPSRefinementInterval = 15;
 @property (nonatomic) BOOL allowMaximumAcceptableAccuracy;
 @property (nonatomic) BOOL needUpdateSignalStrength;
 
+
+@property (nonatomic) BOOL isStarted;
+
 - (void)checkSustainedSignalStrength;
 - (void)requestNewLocation;
 
@@ -104,10 +107,6 @@ static const NSUInteger kGPSRefinementInterval = 15;
 }
 
 
-- (NSTimeInterval)totalSeconds {
-    return ([_startTimestamp timeIntervalSinceNow] * -1) - _pauseDelta;
-}
-
 - (void)checkSustainedSignalStrength {
     
     if (_signalStrength == invalid) {
@@ -115,7 +114,7 @@ static const NSUInteger kGPSRefinementInterval = 15;
             [_delegate locationManagerSignalInvalid:self];
         }
     }
-
+    
     if (!_isStarted) {
         return;
     }
@@ -126,7 +125,7 @@ static const NSUInteger kGPSRefinementInterval = 15;
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
             _checkingSignalStrength = NO;
-            if (_signalStrength == weak || _signalStrength == medium) {
+            if (_signalStrength == weak) {
                 _allowMaximumAcceptableAccuracy = YES;
                 if ([_delegate respondsToSelector:@selector(locationManagerSignalConsistentlyWeak:)]) {
                     [_delegate locationManagerSignalConsistentlyWeak:self];
@@ -259,8 +258,6 @@ static const NSUInteger kGPSRefinementInterval = 15;
             _forceDistanceAndSpeedCalculation = NO;
             _lastDistanceAndSpeedCalculation = [NSDate timeIntervalSinceReferenceDate];
             
-            //CLLocation* lastLocation = _lastRecordedLocation;
-            
             CLLocation *bestLocation = nil;
             CGFloat bestAccuracy = kRequiredHorizontalAccuracy;
             for (CLLocation *location in _locationHistory) {
@@ -271,6 +268,7 @@ static const NSUInteger kGPSRefinementInterval = 15;
                     }
                 }
             }
+            
             if (bestLocation == nil)
                 bestLocation = curLocation;
             
@@ -299,8 +297,8 @@ static const NSUInteger kGPSRefinementInterval = 15;
                 }
             }
             
-            if ([_delegate respondsToSelector:@selector(locationManager:routePoint:calculatedSpeed:)]) {
-                [_delegate locationManager:self routePoint:_lastRecordedLocation calculatedSpeed:_currentSpeed];
+            if ([_delegate respondsToSelector:@selector(locationManager:routePoint:curSpeed:)]) {
+                [_delegate locationManager:self routePoint:_lastRecordedLocation curSpeed:_currentSpeed];
             }
             
             _lastRecordedLocation = bestLocation;

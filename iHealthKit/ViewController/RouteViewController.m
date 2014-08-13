@@ -181,23 +181,22 @@ typedef enum  {
 - (void) configureCell: (UITableViewCell*) cell atIndexPath: (NSIndexPath*) indexPath {        switch (indexPath.row) {
         case RowType_AvgPace: {
             RouteDetailCell* detailCell = (RouteDetailCell*) cell;
-            detailCell.lbDescription.text = @"Average Pace";
+            detailCell.lbDescription.text = [NSString stringWithFormat:@"Avg. Pace (%@)", [CommonFunctions getPaceUnitString]];
             detailCell.lbDetail.text = [CommonFunctions paceStrFromSpeed:_averageSpeed];
             detailCell.imgView.image = [UIImage imageNamed:@"icon_paceAvg.png"];
             break;
         }
         case RowType_MaxPace: {
             RouteDetailCell* detailCell = (RouteDetailCell*) cell;
-            detailCell.lbDescription.text = @"Max. Pace";
-            detailCell.lbDetail.text = [CommonFunctions paceStrFromSpeed:_averageSpeed];
+            detailCell.lbDescription.text = [NSString stringWithFormat:@"Max. Pace (%@)", [CommonFunctions getPaceUnitString]];
+            detailCell.lbDetail.text = [CommonFunctions paceStrFromSpeed:_maxSpeed];
             detailCell.imgView.image = [UIImage imageNamed:@"icon_paceMax.png"];
             break;
         }
         case RowType_AvgSpeed: {
             RouteDetailCell* detailCell = (RouteDetailCell*) cell;
-            detailCell.lbDescription.text = @"Average Speed";
-            float avgSpeed = [CommonFunctions convertSpeed:_averageSpeed];
-            detailCell.lbDetail.text = [NSString stringWithFormat:@"%.2f", avgSpeed];
+            detailCell.lbDescription.text = [NSString stringWithFormat:@"Avg. Speed (%@)", [CommonFunctions getVelocityUnitString]];
+            detailCell.lbDetail.text = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertSpeed:_averageSpeed]];
             detailCell.imgView.image = [UIImage imageNamed:@"icon_speedAvg.png"];
             break;
         }
@@ -210,7 +209,7 @@ typedef enum  {
         }
         case RowType_MaxSpeed: {
             RouteDetailCell* detailCell = (RouteDetailCell*) cell;
-            detailCell.lbDescription.text = @"Max. Speed";
+            detailCell.lbDescription.text = [NSString stringWithFormat:@"Max. Speed (%@)", [CommonFunctions getVelocityUnitString]];
             detailCell.lbDetail.text = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertSpeed:_maxSpeed]];
             detailCell.imgView.image = [UIImage imageNamed:@"icon_speedMax.png"];
             break;
@@ -239,7 +238,7 @@ typedef enum  {
 {
     if (section == 0)
         return 1.0f;
-    return 10.0f;
+    return 5.0f;
 }
 
 #pragma mark - mapview delegate
@@ -411,9 +410,8 @@ typedef enum  {
                      animations:^{
                          _mapView.frame = self.view.frame;
                          _btnClose.hidden = NO;
-                     }completion:^(BOOL finished) {
-                         _tableView.hidden = YES;
-                     }];
+                         _tableView.layer.opacity = 0.0f;
+                     }completion:nil];
 }
 
 - (IBAction)minimizeMapView:(id)sender {
@@ -421,9 +419,9 @@ typedef enum  {
                           delay:0.0f
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
-                         _mapView.frame = CGRectMake(0, 66, 320, 210);
+                         _mapView.frame = CGRectMake(0, 66, 320, 215);
                          _btnClose.hidden = YES;
-                         _tableView.hidden = NO;
+                         _tableView.layer.opacity = 1.0f;
                      }completion:nil];
 }
 @end

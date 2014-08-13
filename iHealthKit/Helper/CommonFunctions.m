@@ -67,7 +67,6 @@
 
 + (NSString*)stringSecondFromInterval: (NSTimeInterval) timeInterval
 {
-  
     // convert the time to an integer, as we don't need double precision, and we do need to use the modulous operator
     int ti = (int)timeInterval;
     

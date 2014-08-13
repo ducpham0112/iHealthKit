@@ -87,13 +87,13 @@ typedef enum {
 @property (strong, nonatomic) NSMutableArray* listInfoView;
 
 @property BOOL isTableShowed;
-@property NSInteger selectedIndex;
+@property NSInteger selectedLabelIndex;
 @property UILabel* selectedLabel;
 
 @property NSMutableArray* durationLabel;
 @property NSMutableArray* clockLabel;
-@property NSTimer* clockTimer;
 
+@property NSTimer* clockTimer;
 @property NSTimer* durationTimer;
 
 @property BOOL isVoiceTurnOn;
@@ -171,8 +171,6 @@ typedef enum {
     _arrayLbValue = [NSArray arrayWithObjects:_lbValue0, _lbValue1, _lbValue2, nil];
     
     [self updateView];
-    
-    
 }
 
 - (void) updateView {
@@ -213,11 +211,11 @@ typedef enum {
                 }*/
                 break;
             case InfoType_AvgPace: {
-                valueStr = [CommonFunctions paceStrFromSpeed:[self getAvgSpeed]];
+                valueStr = [CommonFunctions paceStrFromSpeed:[self averageSpeed]];
                 break;
             }
             case InfoType_AvgSpeed: {
-                valueStr = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertSpeed:[self getAvgSpeed]]];
+                valueStr = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertSpeed:[self averageSpeed]]];
                 break;
             }
             case InfoType_Calories: {
@@ -251,9 +249,7 @@ typedef enum {
         if (valueStr) {
             label.text = valueStr;
         }
-        
     }
-
 }
 
 
@@ -284,7 +280,7 @@ typedef enum {
                      }completion:nil];
     
     _selectedLabel = (UILabel*)[(UIGestureRecognizer*)sender view];
-    _selectedIndex = [self getSelectedIndex:_selectedLabel];
+    _selectedLabelIndex = [self selectedLabelIndex:_selectedLabel];
     [_listInfoTableView reloadData];
     [self blinkAnimation:_selectedLabel];
     
@@ -298,12 +294,12 @@ typedef enum {
     
     [[_selectedLabel layer] removeAnimationForKey:@"opacity"];
     _selectedLabel = (UILabel*)[(UIGestureRecognizer*) sender view];
-    _selectedIndex = [self getSelectedIndex:_selectedLabel];
+    _selectedLabelIndex = [self selectedLabelIndex:_selectedLabel];
     [self blinkAnimation:_selectedLabel];
     [_listInfoTableView reloadData];
 }
 
-- (NSInteger) getSelectedIndex: (UILabel*) label {
+- (NSInteger) selectedLabelIndex: (UILabel*) label {
     if (label == _lbValue0) {
         return 0;
     }
@@ -324,18 +320,16 @@ typedef enum {
                         options:UIViewAnimationOptionShowHideTransitionViews
                      animations:^{
                          _listInfoTableView.frame = [self tableHiddenFrame];
+                         _listInfoTableView.layer.opacity = 0.0f;
                          [[_btnStartStop layer] setOpacity:1.0f];
                          [[_mapView layer] setOpacity:1.0f];
                          [[_btnShowLocation layer] setOpacity:1.0f];
                          [[_btnDone layer] setOpacity:0.0f];
                          [[_selectedLabel layer] removeAnimationForKey:@"opacity"];
-                     }completion:^(BOOL finished){
-                         _listInfoTableView.hidden = YES;
-                         
-                     }];
+                     }completion:nil];
     _isTableShowed = NO;
     _selectedLabel = nil;
-    _selectedIndex = -1;
+    _selectedLabelIndex = -1;
 }
 
 - (void) blinkAnimation: (UIView*) view {
@@ -365,19 +359,29 @@ typedef enum {
 
 - (void) maximizeMapView {
     CGRect mapViewFrame = self.view.frame;
+    CGRect navigationBarFrame = self.navigationController.navigationBar.frame;
+    mapViewFrame.origin.y += navigationBarFrame.size.height + 20;
+    mapViewFrame.size.height -= navigationBarFrame.size.height + _btnStartStop.frame.size.height + 20;
     
     [UIView animateWithDuration:2.0f
                           delay:0.0f
                         options:UIViewAnimationOptionShowHideTransitionViews
                      animations:^{
-                         _btnClose.hidden = NO;
-                         _lbDescription0.hidden = YES;
-                         _lbDescription1.hidden = YES;
-                         _lbDescription2.hidden = YES;
-                         _lbValue0.hidden = YES;
-                         _lbValue1.hidden = YES;
-                         _lbValue2.hidden = YES;
                          _mapView.frame = mapViewFrame;
+                         // _btnClose.hidden = NO;
+                         _btnClose.layer.opacity = 1.0f;
+                         //_lbDescription0.hidden = YES;
+                         _lbDescription0.layer.opacity = 0.0f;
+                         //_lbDescription1.hidden = YES;
+                         _lbDescription1.layer.opacity = 0.0f;
+                         //_lbDescription2.hidden = YES;
+                         _lbDescription2.layer.opacity = 0.0f;
+                         //_lbValue0.hidden = YES;
+                         _lbValue0.layer.opacity = 0.0f;
+                         //_lbValue1.hidden = YES;
+                         _lbValue1.layer.opacity = 0.0f;
+                         //_lbValue2.hidden = YES;
+                         _lbValue2.layer.opacity = 0.0f;
                      } completion:nil];
 }
 
@@ -388,20 +392,21 @@ typedef enum {
                         options:UIViewAnimationOptionShowHideTransitionViews
                      animations:^{
                          _mapView.frame = mapViewFrame;
-                     } completion:^(BOOL finished){
-                         [UIView animateWithDuration:0.5f
-                                               delay:0.0f
-                                             options:UIViewAnimationOptionShowHideTransitionViews
-                                          animations:^{
-                                              _btnClose.hidden = YES;
-                                              _lbDescription0.hidden = NO;
-                                              _lbDescription1.hidden = NO;
-                                              _lbDescription2.hidden = NO;
-                                              _lbValue0.hidden = NO;
-                                              _lbValue1.hidden = NO;
-                                              _lbValue2.hidden = NO;
-                                          }completion:nil];
-                     }];
+                         //_btnClose.hidden = YES;
+                         _btnClose.layer.opacity = 0.0f;
+                         //_lbDescription0.hidden = NO;
+                         _lbDescription0.layer.opacity = 1.0f;
+                         //_lbDescription1.hidden = NO;
+                         _lbDescription1.layer.opacity = 1.0f;
+                         //_lbDescription2.hidden = NO;
+                         _lbDescription2.layer.opacity = 1.0f;
+                         //_lbValue0.hidden = NO;
+                         _lbValue0.layer.opacity = 1.0f;
+                         //_lbValue1.hidden = NO;
+                         _lbValue1.layer.opacity = 1.0f;
+                         //_lbValue2.hidden = NO;
+                         _lbValue2.layer.opacity = 1.0f;
+                     } completion:nil];
 }
 
 -(void)setupBarButton{
@@ -487,7 +492,7 @@ typedef enum {
         [[MyLocationManager shareLocationManager] stopLocationUpdates];
         [[MyLocationManager shareLocationManager] resetLocationUpdates];
         
-        RouteViewController* routeVC = [[RouteViewController alloc] initNewRoute:_startTime endtime:_endTime distance:_distance maxSpeed:_maxSpeed averageSpeed:[self getAvgSpeed] trainingType:_trainingType calories:_calories locationData:_locationDatatoStore routePoints:_routePoints];
+        RouteViewController* routeVC = [[RouteViewController alloc] initNewRoute:_startTime endtime:_endTime distance:_distance maxSpeed:_maxSpeed averageSpeed:[self averageSpeed] trainingType:_trainingType calories:_calories locationData:_locationDatatoStore routePoints:_routePoints];
         
         [self.navigationController pushViewController:routeVC animated:YES];
     }
@@ -496,6 +501,7 @@ typedef enum {
         if (_isVoiceTurnOn) {
             [self speak:@"Activity have not started yet."];
         }
+        [self minimizeMapView:nil];
     }
     [self resetData];
 }
@@ -605,14 +611,14 @@ typedef enum {
 }
 
 #pragma mark - MyLocationManager delegate
-- (void)locationManager:(MyLocationManager *)locationManager routePoint:(CLLocation *)routePoint calculatedSpeed:(double)calculatedSpeed {
+- (void)locationManager:(MyLocationManager *)locationManager routePoint:(CLLocation *)routePoint curSpeed:(double)curSpeed {
     _distance = [MyLocationManager shareLocationManager].totalDistance;
-    _curSpeed = (calculatedSpeed >= 0) ? calculatedSpeed : 0;
-    if (calculatedSpeed > _maxSpeed) {
-        _maxSpeed = calculatedSpeed;
+    _curSpeed = (curSpeed >= 0) ? curSpeed : 0;
+    if (_curSpeed > _maxSpeed) {
+        _maxSpeed = _curSpeed;
     }
     
-    [self calculateCalories:routePoint withSpeed:calculatedSpeed];
+    [self calculateCalories:routePoint withSpeed:_curSpeed];
     //[self drawRoute];
     
     _lastLocation = [_routePoints lastObject];
@@ -620,7 +626,7 @@ typedef enum {
         [self drawRouteLine:_lastLocation.coordinate toCurrentLocation:routePoint.coordinate];
     }
     [_routePoints addObject:routePoint];
-    [_locationDatatoStore addObject:[self locationToDictionary:routePoint withSpeed:[NSNumber numberWithDouble:calculatedSpeed]]];
+    [_locationDatatoStore addObject:[self locationToDictionary:routePoint withSpeed:[NSNumber numberWithDouble:_curSpeed]]];
     
     _endTime = routePoint.timestamp;
     
@@ -632,7 +638,7 @@ typedef enum {
     
 }
 
-- (float) getAvgSpeed {
+- (float) averageSpeed {
     return _distance / [CommonFunctions getDuration:_startTime endTime:_endTime];
 }
 
@@ -720,7 +726,7 @@ typedef enum {
     }
     
     cell.lbUnitType.text = [self lbDescriptionStr:indexPath.row];
-    int selectedRow = [[_listInfoView objectAtIndex:_selectedIndex] integerValue];
+    int selectedRow = [[_listInfoView objectAtIndex:_selectedLabelIndex] integerValue];
     if (indexPath.row == selectedRow) {
         [cell.imgCheck setImage:[UIImage imageNamed:@"check_icon.png"]];
         //[self.listInfoTableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionTop];
@@ -734,11 +740,11 @@ typedef enum {
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    if ([[_listInfoView objectAtIndex:_selectedIndex] integerValue] == InfoType_Clock) {
+    if ([[_listInfoView objectAtIndex:_selectedLabelIndex] integerValue] == InfoType_Clock) {
         [_clockLabel removeObject:_selectedLabel];
     }
     
-    if ([[_listInfoView objectAtIndex:_selectedIndex] integerValue] == InfoType_Duration) {
+    if ([[_listInfoView objectAtIndex:_selectedLabelIndex] integerValue] == InfoType_Duration) {
         [_durationLabel removeObject:_selectedLabel];
     }
     
@@ -747,7 +753,7 @@ typedef enum {
         _clockTimer = nil;
     }
     
-    [_listInfoView replaceObjectAtIndex:_selectedIndex withObject:[NSNumber numberWithInt:indexPath.row]];
+    [_listInfoView replaceObjectAtIndex:_selectedLabelIndex withObject:[NSNumber numberWithInt:indexPath.row]];
     [_listInfoTableView reloadData];
     
     [self updateDescription];
@@ -889,11 +895,11 @@ typedef enum {
     NSString* valueStr = @"";
     switch (type) {
         case InfoType_AvgPace: {
-            valueStr = [CommonFunctions paceStrFromSpeed:[self getAvgSpeed]];
+            valueStr = [CommonFunctions paceStrFromSpeed:[self averageSpeed]];
             break;
         }
         case InfoType_AvgSpeed: {
-            valueStr = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertSpeed:[self getAvgSpeed]]];
+            valueStr = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertSpeed:[self averageSpeed]]];
             break;
         }
         case InfoType_Calories: {
