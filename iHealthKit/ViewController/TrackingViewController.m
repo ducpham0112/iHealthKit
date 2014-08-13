@@ -122,7 +122,9 @@ typedef enum {
     
     [self setTitle:@"Activity"];
     
-    _curUser_Weight = [[[CoreDataFuntions getCurUser] weight] floatValue];
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    
+    _curUser_Weight = [[[CoreDataFuntions curUser] weight] floatValue];
     
     [self setupBarButton];
     
@@ -356,7 +358,7 @@ typedef enum {
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-    if ([CommonFunctions getTrackingStatus]) {
+    if ([CommonFunctions trackingStatus]) {
         [self stopTracking];
     }
 }
@@ -403,13 +405,14 @@ typedef enum {
 }
 
 -(void)setupBarButton{
+    self.navigationItem.hidesBackButton = YES;
     MMDrawerBarButtonItem * leftDrawerButton = [[MMDrawerBarButtonItem alloc] initWithTarget:self action:@selector(leftDrawerButtonPress:)];
     [self.navigationItem setLeftBarButtonItem:leftDrawerButton animated:NO];
     
-    MMDrawerBarButtonItem* rightDrawerButton = [[MMDrawerBarButtonItem alloc] initWithTarget:self action:@selector(rightDrawerButtonPress:)];
+    UIBarButtonItem* rightDrawerButton = [[MMDrawerBarButtonItem alloc] initWithTarget:self action:@selector(rightDrawerButtonPress:)];
     [self.navigationItem setRightBarButtonItem:rightDrawerButton animated:NO];
     
-    self.navigationItem.hidesBackButton = YES;
+    
 }
 
 -(void)leftDrawerButtonPress:(id)sender{
@@ -431,7 +434,6 @@ typedef enum {
         //stop
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Warining!" message:@"Do you want to stop tracking this activity?" delegate:self cancelButtonTitle:@"Yes" otherButtonTitles:@"No", nil];
         [alert show];
-        //[self stopTracking];
     }
     else {
         //start
@@ -454,7 +456,6 @@ typedef enum {
         [CommonFunctions showStatusBarAlert:@"Activity will start immediately after GPS signal is strong" duration:2.0f backgroundColor:[CommonFunctions yellowColor]];
         [self resetData];
         
-        
         UILongPressGestureRecognizer* holdGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(maximizeMapView)];
         [_mapView addGestureRecognizer:holdGesture];
         
@@ -465,12 +466,6 @@ typedef enum {
 }
 
 - (void) stopTracking {
-    if (_isVoiceTurnOn) {
-        [self speak:@"Activity stopped"];
-    }
-    [[MyLocationManager shareLocationManager] stopLocationUpdates];
-    [[MyLocationManager shareLocationManager] resetLocationUpdates];
-    
     [_btnStartStop setTitle:@"Start" forState:UIControlStateNormal];
     [_btnStartStop setBackgroundColor:[CommonFunctions greenColor]];
     
@@ -484,12 +479,25 @@ typedef enum {
         [_mapView removeGestureRecognizer:gesture];
     }
     
-    RouteViewController* routeVC = [[RouteViewController alloc] initNewRoute:_startTime endtime:_endTime distance:_distance maxSpeed:_maxSpeed averageSpeed:[self getAvgSpeed] trainingType:_trainingType calories:_calories locationData:_locationDatatoStore routePoints:_routePoints];
+    if (_startTime && _endTime) {
+        if (_isVoiceTurnOn) {
+            [self speak:@"Activity stopped"];
+        }
+        
+        [[MyLocationManager shareLocationManager] stopLocationUpdates];
+        [[MyLocationManager shareLocationManager] resetLocationUpdates];
+        
+        RouteViewController* routeVC = [[RouteViewController alloc] initNewRoute:_startTime endtime:_endTime distance:_distance maxSpeed:_maxSpeed averageSpeed:[self getAvgSpeed] trainingType:_trainingType calories:_calories locationData:_locationDatatoStore routePoints:_routePoints];
+        
+        [self.navigationController pushViewController:routeVC animated:YES];
+    }
     
-    [self.navigationController pushViewController:routeVC animated:YES];
-    
+    else {
+        if (_isVoiceTurnOn) {
+            [self speak:@"Activity have not started yet."];
+        }
+    }
     [self resetData];
-    
 }
 
 - (void) resetData {
@@ -625,7 +633,7 @@ typedef enum {
 }
 
 - (float) getAvgSpeed {
-    return _distance / _distance / [CommonFunctions getDuration:_startTime endTime:_endTime];
+    return _distance / [CommonFunctions getDuration:_startTime endTime:_endTime];
 }
 
 - (void)locationManager:(MyLocationManager *)locationManager locationUpdate:(CLLocation *)location {
@@ -745,7 +753,7 @@ typedef enum {
     [self updateDescription];
     [self updateValue];
     
-    if (([_durationLabel count] > 0 || [_clockLabel count] > 0) && _clockTimer == nil && [CommonFunctions getTrackingStatus]) {
+    if (([_durationLabel count] > 0 || [_clockLabel count] > 0) && _clockTimer == nil && [CommonFunctions trackingStatus]) {
         _clockTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(updateClock) userInfo:nil repeats:YES];
         [_clockTimer fire];
     }

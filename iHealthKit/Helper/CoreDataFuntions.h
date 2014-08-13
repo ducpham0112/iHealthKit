@@ -11,11 +11,9 @@
 #import "MyUser.h"
 
 @interface CoreDataFuntions : NSObject
-+ (MyUser*) getCurUser;
++ (MyUser*) curUser;
 
-+ (MyUser*) getUserAtIndex: (int) index;
-
-+ (NSArray*) getListUser;
++ (NSArray*) listUser;
 + (BOOL) switchUser: (MyUser*) newUser;
 
 + (BOOL) saveNewUser:(NSString *)firstName lastName:(NSString *)lastName height:(NSNumber*)height weight:(NSNumber*)weight birthDate:(NSDate *)birthDate email:(NSString *)email gender:(NSNumber*)isMale avatar:(NSData*) avatar;
@@ -26,9 +24,8 @@
 
 + (BOOL) deleteRoute: (MyRoute*) deleteRoute;
 
-+ (NSString*) getFullnameUser: (MyUser*) user;
++ (NSString*) fullName: (MyUser*) user;
 
 + (BOOL) saveContent;
-
 
 @end

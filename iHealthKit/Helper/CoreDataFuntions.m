@@ -10,7 +10,7 @@
 
 @implementation CoreDataFuntions
 
-+ (MyUser*) getCurUser {
++ (MyUser*) curUser {
     AppDelegate* delegate = [[UIApplication sharedApplication] delegate];
     for (MyUser* user in delegate.fetchedResultsController.fetchedObjects) {
         if ([user.isCurrentUser boolValue]) {
@@ -21,12 +21,12 @@
 }
 
 + (BOOL) switchUser: (MyUser*) newUser{
-    if (newUser == [self getCurUser]) {
+    if (newUser == [self curUser]) {
         return YES;
     }
     
     while (YES){
-        MyUser* curUser = [CoreDataFuntions getCurUser];
+        MyUser* curUser = [CoreDataFuntions curUser];
         if (curUser != nil) {
             curUser.isCurrentUser = [NSNumber numberWithBool:NO];
         }
@@ -39,22 +39,15 @@
     return [self saveContent];
 }
 
-+ (MyUser*) getUserAtIndex: (int) index {
-    AppDelegate* delegate = [[UIApplication sharedApplication] delegate];
-    if (index < [delegate.fetchedResultsController.fetchedObjects count]) {
-        return [delegate.fetchedResultsController.fetchedObjects objectAtIndex:index];
-    }
-    return nil;
-}
 
-+ (NSArray*) getListUser {
++ (NSArray*) listUser {
     AppDelegate* delegate = [[UIApplication sharedApplication] delegate];
     return delegate.fetchedResultsController.fetchedObjects;
 }
 
 + (BOOL) saveNewUser:(NSString *)firstName lastName:(NSString *)lastName height:(NSNumber*)height weight:(NSNumber*)weight birthDate:(NSDate *)birthDate email:(NSString *)email gender:(NSNumber*)isMale avatar:(NSData *)avatar{
     while (YES){
-        MyUser* curUser = [CoreDataFuntions getCurUser];
+        MyUser* curUser = [CoreDataFuntions curUser];
         if (curUser != nil) {
             curUser.isCurrentUser = [NSNumber numberWithBool:NO];
         }
@@ -108,7 +101,7 @@
     newRoute.routePoints = locations;
     newRoute.mood = [NSNumber numberWithInt:mood];
     
-    MyUser* curUser = [self getCurUser];
+    MyUser* curUser = [self curUser];
     newRoute.user = curUser;
     [curUser addRouteHistoryObject:newRoute];
     
@@ -124,7 +117,7 @@
     return [self saveContent];
 }
 
-+ (NSString *)getFullnameUser:(MyUser *)user {
++ (NSString *)fullName:(MyUser *)user {
     return [NSString stringWithFormat:@"%@ %@", user.firstName, user.lastName];
 }
 

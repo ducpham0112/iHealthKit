@@ -63,6 +63,7 @@ typedef enum {
     [self.view setBackgroundColor:[UIColor whiteColor]];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userInfoUpdate) name:@"UserChanged" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userInfoUpdate) name:@"HistoryChanged" object:nil];
     
 }
 
@@ -74,7 +75,7 @@ typedef enum {
 }
 
 - (void) userInfoUpdate {
-    [self.tableView reloadData];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void)didReceiveMemoryWarning
@@ -112,8 +113,6 @@ typedef enum {
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    
     switch (indexPath.section) {
         case 0: {
             static NSString* CellIdentifier = @"leftMenuHeaderCell";
@@ -121,8 +120,8 @@ typedef enum {
             if (cell == nil) {
                 cell = [[LeftMenuHeaderCell alloc] init];
             }
-            MyUser* curUser = [CoreDataFuntions getCurUser];
-            cell.lbName.text = [CoreDataFuntions getFullnameUser:curUser];
+            MyUser* curUser = [CoreDataFuntions curUser];
+            cell.lbName.text = [CoreDataFuntions fullName:curUser];
             
             cell.lbAge.text = [NSString stringWithFormat:@"Age: %d", [CommonFunctions datePart:[NSDate date] withPart:DatePartType_year] - [CommonFunctions datePart:curUser.birthday withPart:DatePartType_year]];
             
@@ -201,7 +200,7 @@ typedef enum {
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     _selectedRow = indexPath;
-    if ([CommonFunctions getTrackingStatus]) {
+    if ([CommonFunctions trackingStatus]) {
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Warning!" message:@"Do you want to discard this tracking" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"Cancel", nil];
         [alert show];
     }
@@ -228,7 +227,7 @@ typedef enum {
 - (void) setCenterViewController: (NSIndexPath*) indexPath{
     switch (indexPath.section) {
         case 0: {
-            UserViewController* userInfoVC = [[UserViewController alloc] initEdit:[CoreDataFuntions getCurUser]];
+            UserViewController* userInfoVC = [[UserViewController alloc] initEdit:[CoreDataFuntions curUser]];
             MyNavigationViewController * navigationController = [[MyNavigationViewController alloc] initWithBarColor:[CommonFunctions navigationBarColor] textColor:[UIColor whiteColor] statusBarStyle:UIStatusBarStyleLightContent rootViewController:userInfoVC];
             [self.mm_drawerController setCenterViewController:navigationController withCloseAnimation:YES completion:nil];
             [self.mm_drawerController setRightDrawerViewController:nil];

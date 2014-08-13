@@ -259,6 +259,8 @@ typedef enum {
                 [cell.tfFirstName addTarget:self action:@selector(updateFirstName:) forControlEvents:UIControlEventEditingDidEnd];
                 [cell.tfLastName addTarget:self action:@selector(updateLastName:) forControlEvents:UIControlEventEditingDidEnd];
                 UITapGestureRecognizer* tapAvatarGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(updateAvatar:)];
+                tapAvatarGesture.numberOfTapsRequired = 1;
+                tapAvatarGesture.numberOfTouchesRequired = 1;
                 [cell.imgAvatar addGestureRecognizer:tapAvatarGesture];
             }
             
@@ -714,16 +716,20 @@ typedef enum {
 }
 
 - (void) updateAvatar: (id) sender {
-    UIImagePickerController* picker = [[UIImagePickerController alloc] init];
-    picker.delegate = self;
-    picker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
-    [self presentViewController:picker animated:YES completion:nil];
+    UIImagePickerController* imagePicker = [[UIImagePickerController alloc] init];
+    imagePicker.delegate = self;
+    imagePicker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+    imagePicker.navigationBar.tintColor = [CommonFunctions navigationBarColor];
+    
+    //[self.navigationController pushViewController:imagePicker animated:YES];
+    [self presentViewController:imagePicker animated:YES completion:nil];
 }
 
 -(void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     _avatar = [info objectForKey:UIImagePickerControllerOriginalImage];
     [self setRightBarButton];
     [self.tableView reloadData];
+    //[self.navigationController popViewControllerAnimated:YES];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -1005,7 +1011,7 @@ typedef enum {
     
     [CommonFunctions showStatusBarAlert:@"User Infomation has been updated." duration:2.0f backgroundColor:[CommonFunctions greenColor]];
     
-    self.title = [CoreDataFuntions getFullnameUser:_curUser];
+    self.title = [CoreDataFuntions fullName:_curUser];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"UserChanged" object:self];
     [self.navigationItem setRightBarButtonItem:nil];
@@ -1041,13 +1047,13 @@ typedef enum {
 - (void) setupBarButton {
     
     if (_viewMode == ViewMode_ViewInfo) {
-        [self setTitle:[NSString stringWithFormat:@"%@", [CoreDataFuntions getFullnameUser:_curUser]]];
+        [self setTitle:[NSString stringWithFormat:@"%@", [CoreDataFuntions fullName:_curUser]]];
         
         MMDrawerBarButtonItem * leftDrawerButton = [[MMDrawerBarButtonItem alloc] initWithTarget:self action:@selector(leftDrawerButtonPress:)];
         [self.navigationItem setLeftBarButtonItem:leftDrawerButton animated:YES];
     }
     else if (_viewMode == ViewMode_LogIn) {
-        [self setTitle:[NSString stringWithFormat:@"%@", [CoreDataFuntions getFullnameUser:_curUser]]];
+        [self setTitle:[NSString stringWithFormat:@"%@", [CoreDataFuntions fullName:_curUser]]];
         
         UIBarButtonItem* loginBtn = [[UIBarButtonItem alloc] initWithTitle:@"Login" style:UIBarButtonItemStylePlain target:self action:@selector(login)];
         UIBarButtonItem* deleteBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(deleteUser)];

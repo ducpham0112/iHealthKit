@@ -10,8 +10,8 @@
 
 @interface UserViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
--(id)initEdit: (MyUser*) user ;
--(id)initAdd;
--(id)initLogIn: (MyUser*) user;
+- (id) initEdit: (MyUser*) user ;
+- (id) initAdd;
+- (id) initLogIn: (MyUser*) user;
 
 @end

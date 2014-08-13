@@ -24,15 +24,13 @@ typedef enum {
 
 + (void) showStatusBarAlert: (NSString*) message duration: (float) duration backgroundColor: (UIColor*) bgColor;
 
-+ (NSString*)stringSecondFromInterval: (NSTimeInterval) timeInterval;
++ (NSString*) stringSecondFromInterval: (NSTimeInterval) timeInterval;
 + (NSString*) stringMinuteFromInterval: (double) time ;
 + (int) timePart: (NSTimeInterval) time withPart:(DatePartType) part;
 + (NSTimeInterval) getDuration: (NSDate*) startTime endTime: (NSDate*) endTime;
 
 + (UIColor*) leftMenuBackgroundColor;
-
 + (UIColor*) navigationBarColor;
-
 + (UIColor*) grayColor;
 + (UIColor*) lightGrayColor;
 + (UIColor*) greenColor;
@@ -43,7 +41,7 @@ typedef enum {
 + (int)datePart:(NSDate *)date withPart:(DatePartType) part;
 
 + (void) setTrackingStatus:(BOOL)status;
-+ (BOOL) getTrackingStatus;
++ (BOOL) trackingStatus;
 
 + (NSString*) getPaceUnitString ;
 + (NSString*) getDistanceUnitString;
@@ -67,6 +65,4 @@ typedef enum {
 + (float) convertDistanceToKm: (float) distanceInMeter;
 + (float) convertDistanceToMile: (float) distanceInMeter;
 
-+ (float) convertTimeToMinute: (NSTimeInterval) timeInSecond;
-+ (float) convertTimeToHour: (NSTimeInterval) timeInSecond;
 @end

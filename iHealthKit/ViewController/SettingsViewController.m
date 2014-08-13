@@ -221,7 +221,7 @@ typedef enum {
             }
             
             [cell.segmentControl addTarget:self action:@selector(voiceCoachingChanged:) forControlEvents:UIControlEventValueChanged];
-            cell.lbDescription.text = @"Turn on Voice";
+            cell.lbDescription.text = @"Voice";
             [cell.segmentControl setTitle:@"Off" forSegmentAtIndex:0];
             [cell.segmentControl setTitle:@"On" forSegmentAtIndex:1];
             

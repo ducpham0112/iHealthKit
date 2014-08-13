@@ -196,8 +196,8 @@
 		8417C1E6197AA43200007269 /* TrackingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackingViewController.h; sourceTree = "<group>"; };
 		8417C1E7197AA43200007269 /* TrackingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrackingViewController.m; sourceTree = "<group>"; };
 		8417C1E8197AA43200007269 /* TrackingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TrackingViewController.xib; sourceTree = "<group>"; };
-		8417C1ED197AA43200007269 /* MyVisualStateManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyVisualStateManager.h; sourceTree = "<group>"; };
-		8417C1EE197AA43200007269 /* MyVisualStateManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyVisualStateManager.m; sourceTree = "<group>"; };
+		8417C1ED197AA43200007269 /* MyVisualStateManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyVisualStateManager.h; path = ../../iHealthKit/VisuaStateManager/MyVisualStateManager.h; sourceTree = "<group>"; };
+		8417C1EE197AA43200007269 /* MyVisualStateManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MyVisualStateManager.m; path = ../../iHealthKit/VisuaStateManager/MyVisualStateManager.m; sourceTree = "<group>"; };
 		8417C219197AACD500007269 /* RouteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RouteViewController.h; sourceTree = "<group>"; };
 		8417C21A197AACD500007269 /* RouteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RouteViewController.m; sourceTree = "<group>"; };
 		8417C21B197AACD500007269 /* RouteViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RouteViewController.xib; sourceTree = "<group>"; };
@@ -405,7 +405,6 @@
 				8417C1B5197AA43200007269 /* Helper */,
 				840F345119836F1500839995 /* View */,
 				8417C1CF197AA43200007269 /* ViewController */,
-				8417C1EC197AA43200007269 /* VisuaStateManager */,
 				8417C18C197AA32300007269 /* AppDelegate.h */,
 				8417C18D197AA32300007269 /* AppDelegate.m */,
 				8417C18F197AA32300007269 /* iHealthKit.xcdatamodeld */,
@@ -502,15 +501,6 @@
 				84215AF81984C13D0016EF80 /* DistanceTypeChooserViewController.m */,
 			);
 			path = ViewController;
-			sourceTree = "<group>";
-		};
-		8417C1EC197AA43200007269 /* VisuaStateManager */ = {
-			isa = PBXGroup;
-			children = (
-				8417C1ED197AA43200007269 /* MyVisualStateManager.h */,
-				8417C1EE197AA43200007269 /* MyVisualStateManager.m */,
-			);
-			path = VisuaStateManager;
 			sourceTree = "<group>";
 		};
 		8418A0E01994BC2500742EEB /* Images */ = {
@@ -636,6 +626,8 @@
 				841CCE3C19852F0200DD6631 /* MMDrawerController.m */,
 				841CCE3D19852F0200DD6631 /* MMDrawerVisualState.h */,
 				841CCE3E19852F0200DD6631 /* MMDrawerVisualState.m */,
+				8417C1ED197AA43200007269 /* MyVisualStateManager.h */,
+				8417C1EE197AA43200007269 /* MyVisualStateManager.m */,
 				841CCE3F19852F0200DD6631 /* UIViewController+MMDrawerController.h */,
 				841CCE4019852F0200DD6631 /* UIViewController+MMDrawerController.m */,
 			);

@@ -63,7 +63,7 @@
 
 #pragma mark - load history data
 - (void) loadData {
-    _listRoute = [[[CoreDataFuntions getCurUser] routeHistory] allObjects];
+    _listRoute = [[[CoreDataFuntions curUser] routeHistory] allObjects];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"startTime" ascending:NO];
     _listRoute = [_listRoute sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
     _totalCalories = 0.0;

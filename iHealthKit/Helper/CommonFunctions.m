@@ -38,7 +38,8 @@
     MyNavigationViewController * rightNavigationController = [[MyNavigationViewController alloc] initWithBarColor:[CommonFunctions navigationBarColor] textColor:[UIColor whiteColor] statusBarStyle:UIStatusBarStyleLightContent rootViewController:settingVC];
 
     delegate.drawerController = [[MMDrawerController alloc] initWithCenterViewController:navigationController leftDrawerViewController:leftSideDrawerViewController rightDrawerViewController:rightNavigationController];
-    [delegate.drawerController setMaximumLeftDrawerWidth:240.0];
+    [delegate.drawerController setMaximumLeftDrawerWidth:220.0];
+     [delegate.drawerController setMaximumRightDrawerWidth:240.0];
     [delegate.drawerController setShowsShadow:NO];
     
     [delegate.drawerController setRestorationIdentifier:@"MMDrawer"];
@@ -125,7 +126,7 @@
 }
 
 + (UIColor *)lightGrayColor {
-    return [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.2f];
+    return [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.15f];
 }
 
 + (UIColor *)redColor {
@@ -343,7 +344,7 @@
     delegate.isTracking = status;
 }
 
-+ (BOOL) getTrackingStatus {
++ (BOOL) trackingStatus {
     AppDelegate* delegate = [[UIApplication sharedApplication] delegate];
     return delegate.isTracking;
 }
@@ -355,15 +356,6 @@
 + (float)convertDistanceToMile:(float)distanceInMeter {
     return distanceInMeter/1609.34;
 }
-
-+ (float) convertTimeToMinute: (NSTimeInterval) timeInSecond {
-    return timeInSecond / 60;
-}
-
-+ (float) convertTimeToHour: (NSTimeInterval) timeInSecond {
-    return timeInSecond / 3600;
-}
-
 
 + (NSString*) getDistanceUnitString {
     NSString* distanceUnit = @"";

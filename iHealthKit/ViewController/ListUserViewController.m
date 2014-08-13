@@ -55,7 +55,7 @@
 }
 
 - (void) loadData {
-    _listUser = [NSMutableArray arrayWithArray:[CoreDataFuntions getListUser]];
+    _listUser = [NSMutableArray arrayWithArray:[CoreDataFuntions listUser]];
     for (MyUser* user in _listUser) {
         if ([user.isCurrentUser boolValue]) {
             [_listUser removeObject:user];
@@ -118,7 +118,7 @@
 - (void) configureCell: (UITableViewCell*) cell atIndexPath: (NSIndexPath*) indexPath {
     ListUserCell* userCell = (ListUserCell*) cell;
     MyUser* user = [_listUser objectAtIndex:indexPath.row];
-    userCell.lbName.text = [CoreDataFuntions getFullnameUser:user];
+    userCell.lbName.text = [CoreDataFuntions fullName:user];
     
     userCell.lbBirthDay.text = [NSDateFormatter localizedStringFromDate:user.birthday dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterNoStyle];
     userCell.lbActivity.text = [NSString stringWithFormat:@"Activities: %d",[[user.routeHistory allObjects] count]];

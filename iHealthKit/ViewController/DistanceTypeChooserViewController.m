@@ -38,13 +38,11 @@
     if (
         [NSNumber numberWithInteger:[[NSUserDefaults standardUserDefaults] integerForKey: @"DistanceType"]] != nil) {
          _distanceType = [[NSUserDefaults standardUserDefaults] integerForKey:@"DistanceType"];
-    } else {
-        _distanceType = 0;
     }
     
     [self.tableView registerNib:[UINib nibWithNibName:@"RightImageCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"rightImageCell"];
     
-    [self setTitle:@"Distance Type"];
+    [self setTitle:@"Unit System"];
 }
 
 - (void)didReceiveMemoryWarning
