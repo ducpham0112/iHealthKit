@@ -26,7 +26,7 @@ typedef enum {
 + (NSString*) stringSecondFromInterval: (NSTimeInterval) timeInterval;
 + (NSString*) stringMinuteFromInterval: (double) time ;
 + (int) timePart: (NSTimeInterval) time withPart:(DatePartType) part;
-+ (NSTimeInterval) getDuration: (NSDate*) startTime endTime: (NSDate*) endTime;
++ (NSTimeInterval) durationFrom: (NSDate*) startTime To: (NSDate*) endTime;
 
 + (UIColor*) leftMenuBackgroundColor;
 + (UIColor*) navigationBarColor;
@@ -42,9 +42,9 @@ typedef enum {
 + (void) setTrackingStatus:(BOOL)status;
 + (BOOL) trackingStatus;
 
-+ (NSString*) getPaceUnitString ;
-+ (NSString*) getDistanceUnitString;
-+ (NSString*) getVelocityUnitString;
++ (NSString*) paceUnitStr ;
++ (NSString*) distanceUnitStr;
++ (NSString*) speedUnitStr;
 
 + (float) convertMPStoMiPH: (float) speedInMetersPerSec;
 + (float) convertMiPHtoMPS: (float) speedInMilePerHour;

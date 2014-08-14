@@ -71,6 +71,7 @@ typedef enum {
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    
     _tableView = [[UITableView alloc] initWithFrame:self.view.frame style:UITableViewStyleGrouped];
     [_tableView setDelegate:self];
     [_tableView setDataSource:self];
@@ -102,7 +103,7 @@ typedef enum {
     
     [preference setInteger:_voiceCoaching forKey:@"VoiceCoaching"];
     [preference setInteger:_distanceUnit forKey:@"DistanceUnit"];
-    [preference setInteger:_distanceUnit forKey:@"WeightUnit"];
+    [preference setInteger:_weightUnit forKey:@"WeightUnit"];
     [preference setInteger:_veclocityUnit forKey:@"VelocityUnit"];
 }
 
@@ -132,7 +133,7 @@ typedef enum {
         _veclocityUnit = 0;
     }
     if ([NSNumber numberWithInteger:[preference integerForKey:@"WeightUnit"]] != nil) {
-        _weightUnit = [preference integerForKey:@"VelocityUnit"];
+        _weightUnit = [preference integerForKey:@"WeightUnit"];
     }else {
         _weightUnit = 0;
     }

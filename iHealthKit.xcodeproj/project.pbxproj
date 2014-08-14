@@ -24,10 +24,10 @@
 		840472D91997A06700E54933 /* MyUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 840472D81997A06700E54933 /* MyUser.m */; };
 		8407D5A4197D040400177962 /* ListUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8407D5A3197D040400177962 /* ListUserViewController.m */; };
 		840F347119836F1500839995 /* MyPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 840F345E19836F1500839995 /* MyPickerView.m */; };
-		840F347219836F1500839995 /* RouteDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 840F346019836F1500839995 /* RouteDetailCell.m */; };
-		840F347319836F1500839995 /* RouteDetailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 840F346119836F1500839995 /* RouteDetailCell.xib */; };
-		840F347419836F1500839995 /* RouteOverviewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 840F346319836F1500839995 /* RouteOverviewCell.m */; };
-		840F347519836F1500839995 /* RouteOverviewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 840F346419836F1500839995 /* RouteOverviewCell.xib */; };
+		840F347219836F1500839995 /* Route_DetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 840F346019836F1500839995 /* Route_DetailCell.m */; };
+		840F347319836F1500839995 /* Route_DetailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 840F346119836F1500839995 /* Route_DetailCell.xib */; };
+		840F347419836F1500839995 /* Route_OverviewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 840F346319836F1500839995 /* Route_OverviewCell.m */; };
+		840F347519836F1500839995 /* Route_OverviewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 840F346419836F1500839995 /* Route_OverviewCell.xib */; };
 		840F347619836F1500839995 /* HistoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 840F346619836F1500839995 /* HistoryCell.m */; };
 		840F347719836F1500839995 /* HistoryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 840F346719836F1500839995 /* HistoryCell.xib */; };
 		840F347819836F1500839995 /* ListUserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 840F346919836F1500839995 /* ListUserCell.m */; };
@@ -156,12 +156,12 @@
 		8407D5A3197D040400177962 /* ListUserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListUserViewController.m; sourceTree = "<group>"; };
 		840F345D19836F1500839995 /* MyPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyPickerView.h; sourceTree = "<group>"; };
 		840F345E19836F1500839995 /* MyPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyPickerView.m; sourceTree = "<group>"; };
-		840F345F19836F1500839995 /* RouteDetailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RouteDetailCell.h; sourceTree = "<group>"; };
-		840F346019836F1500839995 /* RouteDetailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RouteDetailCell.m; sourceTree = "<group>"; };
-		840F346119836F1500839995 /* RouteDetailCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RouteDetailCell.xib; sourceTree = "<group>"; };
-		840F346219836F1500839995 /* RouteOverviewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RouteOverviewCell.h; sourceTree = "<group>"; };
-		840F346319836F1500839995 /* RouteOverviewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RouteOverviewCell.m; sourceTree = "<group>"; };
-		840F346419836F1500839995 /* RouteOverviewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RouteOverviewCell.xib; sourceTree = "<group>"; };
+		840F345F19836F1500839995 /* Route_DetailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Route_DetailCell.h; sourceTree = "<group>"; };
+		840F346019836F1500839995 /* Route_DetailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Route_DetailCell.m; sourceTree = "<group>"; };
+		840F346119836F1500839995 /* Route_DetailCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Route_DetailCell.xib; sourceTree = "<group>"; };
+		840F346219836F1500839995 /* Route_OverviewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Route_OverviewCell.h; sourceTree = "<group>"; };
+		840F346319836F1500839995 /* Route_OverviewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Route_OverviewCell.m; sourceTree = "<group>"; };
+		840F346419836F1500839995 /* Route_OverviewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Route_OverviewCell.xib; sourceTree = "<group>"; };
 		840F346519836F1500839995 /* HistoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryCell.h; sourceTree = "<group>"; };
 		840F346619836F1500839995 /* HistoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HistoryCell.m; sourceTree = "<group>"; };
 		840F346719836F1500839995 /* HistoryCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HistoryCell.xib; sourceTree = "<group>"; };
@@ -314,12 +314,12 @@
 			children = (
 				840F345D19836F1500839995 /* MyPickerView.h */,
 				840F345E19836F1500839995 /* MyPickerView.m */,
-				840F345F19836F1500839995 /* RouteDetailCell.h */,
-				840F346019836F1500839995 /* RouteDetailCell.m */,
-				840F346119836F1500839995 /* RouteDetailCell.xib */,
-				840F346219836F1500839995 /* RouteOverviewCell.h */,
-				840F346319836F1500839995 /* RouteOverviewCell.m */,
-				840F346419836F1500839995 /* RouteOverviewCell.xib */,
+				840F345F19836F1500839995 /* Route_DetailCell.h */,
+				840F346019836F1500839995 /* Route_DetailCell.m */,
+				840F346119836F1500839995 /* Route_DetailCell.xib */,
+				840F346219836F1500839995 /* Route_OverviewCell.h */,
+				840F346319836F1500839995 /* Route_OverviewCell.m */,
+				840F346419836F1500839995 /* Route_OverviewCell.xib */,
 				840F346519836F1500839995 /* HistoryCell.h */,
 				840F346619836F1500839995 /* HistoryCell.m */,
 				840F346719836F1500839995 /* HistoryCell.xib */,
@@ -735,7 +735,7 @@
 				8418A1161994BC2500742EEB /* icon_timeStart.png in Resources */,
 				8418A1211994BC2500742EEB /* icon_moon.png in Resources */,
 				840472BF1997790800E54933 /* RightImageCell.xib in Resources */,
-				840F347519836F1500839995 /* RouteOverviewCell.xib in Resources */,
+				840F347519836F1500839995 /* Route_OverviewCell.xib in Resources */,
 				843C22E91984018300197D31 /* LeftMenuCell.xib in Resources */,
 				8418A1171994BC2500742EEB /* icon_timeStop.png in Resources */,
 				8418A1191994BC2500742EEB /* icon_signal_invalid.png in Resources */,
@@ -758,7 +758,7 @@
 				8418A1201994BC2500742EEB /* avatar_male.jpg in Resources */,
 				8421E5DB199682AA00EC18E8 /* icon-58.png in Resources */,
 				8421E5DD199682AA00EC18E8 /* icon-72@2x.png in Resources */,
-				840F347319836F1500839995 /* RouteDetailCell.xib in Resources */,
+				840F347319836F1500839995 /* Route_DetailCell.xib in Resources */,
 				8418A1141994BC2500742EEB /* icon_speedAvg.png in Resources */,
 				840472BA199777A500E54933 /* Settings_DistanceTypeCell.xib in Resources */,
 				8418A1131994BC2500742EEB /* icon_paceMax.png in Resources */,
@@ -818,7 +818,7 @@
 				841CCE4219852F0200DD6631 /* MMDrawerBarButtonItem.m in Sources */,
 				840472AF1997730700E54933 /* Settings_SegmentCell.m in Sources */,
 				841CCE4419852F0200DD6631 /* MMDrawerVisualState.m in Sources */,
-				840F347419836F1500839995 /* RouteOverviewCell.m in Sources */,
+				840F347419836F1500839995 /* Route_OverviewCell.m in Sources */,
 				840F347619836F1500839995 /* HistoryCell.m in Sources */,
 				8417C226197ABE1F00007269 /* CommonFunctions.m in Sources */,
 				84132A2D197D50EF0077B926 /* CoreDataFuntions.m in Sources */,
@@ -830,7 +830,7 @@
 				84E6A8E4199252CF001A982D /* HistoryViewController.m in Sources */,
 				8417C1FF197AA43200007269 /* LeftMenuViewController.m in Sources */,
 				841CCE4319852F0200DD6631 /* MMDrawerController.m in Sources */,
-				840F347219836F1500839995 /* RouteDetailCell.m in Sources */,
+				840F347219836F1500839995 /* Route_DetailCell.m in Sources */,
 				8417C21C197AACD500007269 /* RouteViewController.m in Sources */,
 				8417C18A197AA32300007269 /* main.m in Sources */,
 				8457FCD119824437005EC2C7 /* MyNavigationViewController.m in Sources */,

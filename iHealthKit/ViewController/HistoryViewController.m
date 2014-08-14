@@ -57,11 +57,10 @@
     _pageControl.numberOfPages = PAGE_NUMBER;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(historyChanged) name:@"HistoryChanged" object:nil];
-    
-    
 }
 
 #pragma mark - load history data
+//load route history + calculate statistics
 - (void) loadData {
     _listRoute = [[[CoreDataFuntions curUser] routeHistory] allObjects];
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"startTime" ascending:NO];
@@ -71,7 +70,7 @@
     _totalTime = 0.0;
     
     for (MyRoute* route in _listRoute) {
-        _totalTime += [CommonFunctions getDuration:route.startTime endTime:route.endTime];
+        _totalTime += [CommonFunctions durationFrom:route.startTime To:route.endTime];
         _totalDistance += [route.distance floatValue];
         _totalCalories += [route.calories floatValue];
     }
@@ -129,14 +128,14 @@
     
     routeCell.lbDateTime.text = [NSDateFormatter localizedStringFromDate:route.startTime dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
     
-    routeCell.lbAvgSpeedDescription.text = [NSString stringWithFormat:@"Avg.Speed (%@)", [CommonFunctions getVelocityUnitString]];
+    routeCell.lbAvgSpeedDescription.text = [NSString stringWithFormat:@"Avg.Speed (%@)", [CommonFunctions speedUnitStr]];
     routeCell.lbAvgSpeedValue.text = [NSString stringWithFormat:@"%.2f", [route.avgSpeed floatValue]];
     
-    routeCell.lbDistanceDescription.text = [NSString stringWithFormat:@"Distance (%@)", [CommonFunctions getDistanceUnitString]];
+    routeCell.lbDistanceDescription.text = [NSString stringWithFormat:@"Distance (%@)", [CommonFunctions distanceUnitStr]];
     routeCell.lbDistanceValue.text = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertDistance:[route.distance floatValue]]];
     
     //routeCell.lbDurationDescription.text = @"Duration";
-    routeCell.lbDurationValue.text = [CommonFunctions stringSecondFromInterval:[CommonFunctions getDuration:route.startTime endTime:route.endTime]];
+    routeCell.lbDurationValue.text = [CommonFunctions stringSecondFromInterval:[CommonFunctions durationFrom:route.startTime To:route.endTime]];
     
     int hour = [CommonFunctions datePart:route.startTime withPart:DatePartType_hour];
     if (hour > 6 && hour < 18) {
@@ -186,7 +185,7 @@
         
         switch (i) {
             case 1: {
-                lbDescription.text = [NSString stringWithFormat:@"Total Distance (%@)", [CommonFunctions getDistanceUnitString]];
+                lbDescription.text = [NSString stringWithFormat:@"Total Distance (%@)", [CommonFunctions distanceUnitStr]];
                 lbValue.text = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertDistance:_totalDistance]];
                 break;
             }
@@ -207,7 +206,6 @@
             default:
                 break;
         }
-        
         [_scrollView addSubview:page];
     }
     

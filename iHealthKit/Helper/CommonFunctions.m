@@ -107,7 +107,7 @@
             break;
     }}
 
-+ (NSTimeInterval)getDuration:(NSDate *)startTime endTime:(NSDate *)endTime {
++ (NSTimeInterval)durationFrom:(NSDate *)startTime To:(NSDate *)endTime {
     NSTimeInterval totalTime = ([endTime timeIntervalSinceDate:startTime]);
     return totalTime;
 }
@@ -356,7 +356,7 @@
     return distanceInMeter/1609.34;
 }
 
-+ (NSString*) getDistanceUnitString {
++ (NSString*) distanceUnitStr {
     NSString* distanceUnit = @"";
     
     switch ([[NSUserDefaults standardUserDefaults] integerForKey:@"DistanceType"]) {
@@ -391,7 +391,7 @@
     return distanceUnit;
 }
 
-+ (NSString*) getPaceUnitString {
++ (NSString*) paceUnitStr {
     NSString* paceStr = @"";
     switch ([[NSUserDefaults standardUserDefaults] integerForKey:@"DistanceType"])  {
         case 0:
@@ -405,7 +405,7 @@
     return paceStr;
 }
 
-+ (NSString*) getVelocityUnitString {
++ (NSString*) speedUnitStr {
     NSString* velocityUnit = @"";
     
     switch ([[NSUserDefaults standardUserDefaults] integerForKey:@"DistanceType"]) {

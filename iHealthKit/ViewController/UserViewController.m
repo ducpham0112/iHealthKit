@@ -146,8 +146,7 @@ typedef enum {
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-    
-    _isFirstLaunch = ([[NSUserDefaults standardUserDefaults] boolForKey:@"FirstLaunchComplete"]) ? NO : YES ;
+    _isFirstLaunch = ([[NSUserDefaults standardUserDefaults] boolForKey:@"FirstLaunchComplete"]) ? NO : YES;
     
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.view.frame.size.width, self.view.frame.size.height) style:UITableViewStyleGrouped];
     self.tableView.delegate = self;
@@ -182,7 +181,6 @@ typedef enum {
     [[NSNotificationCenter defaultCenter]  postNotificationName:@"UserChanged" object:self];
 }
 
-
 #pragma mark - setup bar button
 -(void)leftDrawerButtonPress:(id)sender{
     [self.mm_drawerController toggleDrawerSide:MMDrawerSideLeft animated:YES completion:nil];
@@ -198,7 +196,6 @@ typedef enum {
 }
 
 #pragma mark - Table view data source
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
@@ -327,6 +324,7 @@ typedef enum {
                     return cell;
                     break;
                 }
+                    
                 case RowInSectionInfo_height: {
                     UserInfo_PickerCell* cell = [tableView dequeueReusableCellWithIdentifier:@"pickerCell"];
                     
@@ -904,7 +902,7 @@ typedef enum {
     if ([CoreDataFuntions deleteUser:_curUser]) {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"ListUserChanged" object:self];
         [self.navigationController popViewControllerAnimated:YES];
-    };
+    }
 }
 
 - (void) addNewUser {
@@ -1045,7 +1043,6 @@ typedef enum {
 }
 
 - (void) setupBarButton {
-    
     if (_viewMode == ViewMode_ViewInfo) {
         [self setTitle:[NSString stringWithFormat:@"%@", [CoreDataFuntions fullName:_curUser]]];
         
@@ -1068,7 +1065,6 @@ typedef enum {
         
         [self.navigationItem setRightBarButtonItem:rightBarBtn];
     }
-    
 }
 
 @end

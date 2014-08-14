@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface RouteOverviewCell : UITableViewCell
+@interface Route_OverviewCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *lbDistance;
 @property (weak, nonatomic) IBOutlet UILabel *lbDistanceUnit;
 @property (weak, nonatomic) IBOutlet UILabel *lbDuration;

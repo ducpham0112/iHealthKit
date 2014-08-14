@@ -54,6 +54,7 @@ typedef enum {
     
     [self.tableView setAutoresizingMask:UIViewAutoresizingFlexibleHeight];
     
+    
     [self.tableView registerNib:[UINib nibWithNibName:@"LeftMenuCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"leftMenuCell"];
     [self.tableView registerNib:[UINib nibWithNibName:@"LeftMenuHeaderCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"leftMenuHeaderCell"];
     
@@ -64,7 +65,6 @@ typedef enum {
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userInfoUpdate) name:@"UserChanged" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userInfoUpdate) name:@"HistoryChanged" object:nil];
-    
 }
 
 - (void) viewWillAppear:(BOOL)animated  {

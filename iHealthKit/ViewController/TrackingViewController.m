@@ -197,12 +197,20 @@ typedef enum {
                 if (![_durationLabel containsObject:label]) {
                     [_durationLabel addObject:label];
                 }
+                else if (_durationLabel == nil) {
+                    _durationLabel = [[NSMutableArray alloc] init];
+                    [_durationLabel addObject:label];
+                }
                 /*if (_durationLabel == nil || label != _durationLabel) {
                     _durationLabel = label;
                 }*/
                 break;
             case InfoType_Clock:
                 if (![_clockLabel containsObject:label]) {
+                    [_clockLabel addObject:label];
+                }
+                else if (_clockLabel == nil) {
+                    _clockLabel = [[NSMutableArray alloc] init];
                     [_clockLabel addObject:label];
                 }
                 
@@ -520,6 +528,9 @@ typedef enum {
     [_durationTimer invalidate];
     _durationTimer = nil;
     
+    _clockLabel = nil;
+    _durationLabel = nil;
+    
     _needUserLocation = YES;
     [_locationDatatoStore removeAllObjects];
     if (_routePoints == nil) {
@@ -639,7 +650,7 @@ typedef enum {
 }
 
 - (float) averageSpeed {
-    return _distance / [CommonFunctions getDuration:_startTime endTime:_endTime];
+    return _distance / [CommonFunctions durationFrom:_startTime To:_endTime];
 }
 
 - (void)locationManager:(MyLocationManager *)locationManager locationUpdate:(CLLocation *)location {
@@ -791,11 +802,11 @@ typedef enum {
     for (UILabel* label in _durationLabel) {
         if (_startTime) {
             if (label == _lbValue0) {
-                label.text = [CommonFunctions stringSecondFromInterval:[CommonFunctions getDuration:_startTime endTime:[NSDate date]]];
+                label.text = [CommonFunctions stringSecondFromInterval:[CommonFunctions durationFrom:_startTime To:[NSDate date]]];
                 
             }
             else {
-                label.text = [CommonFunctions stringMinuteFromInterval:[CommonFunctions getDuration:_startTime endTime:[NSDate date]]];
+                label.text = [CommonFunctions stringMinuteFromInterval:[CommonFunctions durationFrom:_startTime To:[NSDate date]]];
             }
         }
         else {
@@ -846,11 +857,11 @@ typedef enum {
     NSString* descriptionStr = @"";
     switch (type) {
         case InfoType_AvgPace: {
-            descriptionStr = [NSString stringWithFormat:@"Average Pace (%@)", [CommonFunctions getPaceUnitString]];
+            descriptionStr = [NSString stringWithFormat:@"Average Pace (%@)", [CommonFunctions paceUnitStr]];
             break;
         }
         case InfoType_AvgSpeed: {
-           descriptionStr = [NSString stringWithFormat:@"Average Speed (%@)", [CommonFunctions getVelocityUnitString]];
+           descriptionStr = [NSString stringWithFormat:@"Average Speed (%@)", [CommonFunctions speedUnitStr]];
             break;
         }
         case InfoType_Calories: {
@@ -862,15 +873,15 @@ typedef enum {
             break;
         }
         case InfoType_CurPace: {
-          descriptionStr = [NSString stringWithFormat:@"Current Pace (%@)", [CommonFunctions getPaceUnitString]];
+          descriptionStr = [NSString stringWithFormat:@"Current Pace (%@)", [CommonFunctions paceUnitStr]];
             break;
         }
         case InfoType_CurSpeed: {
-         descriptionStr =  [NSString stringWithFormat:@"Current Speed (%@)", [CommonFunctions getVelocityUnitString]];
+         descriptionStr =  [NSString stringWithFormat:@"Current Speed (%@)", [CommonFunctions speedUnitStr]];
             break;
         }
         case InfoType_Distance: {
-          descriptionStr = [NSString stringWithFormat:@"Distance (%@)", [CommonFunctions getDistanceUnitString]];
+          descriptionStr = [NSString stringWithFormat:@"Distance (%@)", [CommonFunctions distanceUnitStr]];
             break;
         }
         case InfoType_Duration: {
@@ -878,11 +889,11 @@ typedef enum {
             break;
         }
         case InfoType_MaxSpeed: {
-          descriptionStr = [NSString stringWithFormat:@"Maximum Speed (%@)", [CommonFunctions getVelocityUnitString]];
+          descriptionStr = [NSString stringWithFormat:@"Maximum Speed (%@)", [CommonFunctions speedUnitStr]];
             break;
         }
         case InfoType_MaxPace: {
-       descriptionStr = [NSString stringWithFormat:@"Maximum Pace (%@)", [CommonFunctions getPaceUnitString]];
+       descriptionStr = [NSString stringWithFormat:@"Maximum Pace (%@)", [CommonFunctions paceUnitStr]];
             break;
         }
         default:
@@ -985,7 +996,7 @@ typedef enum {
 }
 
 - (void) durationNotify {
-    NSTimeInterval duration = [CommonFunctions getDuration:_startTime endTime:[NSDate date]];
+    NSTimeInterval duration = [CommonFunctions durationFrom:_startTime To:[NSDate date]];
     NSString* durationString = [NSString stringWithFormat:@"Duration %d hours and %d minutes", [CommonFunctions timePart:duration withPart:DatePartType_hour], [CommonFunctions timePart:duration withPart:DatePartType_minute]];
     [self speak:durationString];
 }

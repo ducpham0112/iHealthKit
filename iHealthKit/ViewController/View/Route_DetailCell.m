@@ -1,14 +1,14 @@
 //
-//  RouteHeaderTableViewCell.m
+//  RouteDetailTableViewCell.m
 //  iHealthKit
 //
 //  Created by admin on 7/26/14.
 //  Copyright (c) 2014 Duc Pham. All rights reserved.
 //
 
-#import "RouteOverviewCell.h"
+#import "Route_DetailCell.h"
 
-@implementation RouteOverviewCell
+@implementation Route_DetailCell
 
 - (void)awakeFromNib
 {
