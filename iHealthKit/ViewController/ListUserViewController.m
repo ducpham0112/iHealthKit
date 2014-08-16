@@ -27,6 +27,10 @@
     return self;
 }
 
+- (void) viewDidAppear:(BOOL)animated {
+    self.mm_drawerController.openDrawerGestureModeMask = MMOpenDrawerGestureModeAll;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -121,10 +125,10 @@
     MyUser* user = [_listUser objectAtIndex:indexPath.row];
     userCell.lbName.text = [CoreDataFuntions fullName:user];
     
-    userCell.lbBirthDay.text = [NSDateFormatter localizedStringFromDate:user.birthday dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterNoStyle];
+    userCell.lbBirthDay.text = [NSDateFormatter localizedStringFromDate:user.birthday dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterNoStyle];
     userCell.lbActivity.text = [NSString stringWithFormat:@"Activities: %d",[[user.routeHistory allObjects] count]];
     
-    if (user.avatar != nil) {
+    /*if (user.avatar != nil) {
         userCell.imgAvatar.image = [[UIImage alloc] initWithData:user.avatar];
     } else {
         if ([user.isMale integerValue] == 0) {
@@ -132,7 +136,27 @@
         } else {
             userCell.imgAvatar.image = [UIImage imageNamed:@"avatar_female.jpg"];
         }
-    }
+    }*/
+    
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+    dispatch_async(queue, ^{
+        UIImage* avatar;
+        if (user.avatar) {
+            avatar = [[UIImage alloc] initWithData:user.avatar];
+        }
+        else {
+            if ([user.isMale integerValue] == 0) {
+                avatar = [UIImage imageNamed:@"avatar_male.jpg"];
+            }
+            else {
+                avatar = [UIImage imageNamed:@"avatar_female.jpg"];
+            }
+        }
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            userCell.imgAvatar.image = avatar;
+            [cell setNeedsLayout];
+        });
+    });
 }
 
 - (float) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

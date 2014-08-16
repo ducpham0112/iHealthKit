@@ -656,8 +656,8 @@
 			buildConfigurationList = 8417C1AA197AA32400007269 /* Build configuration list for PBXNativeTarget "iHealthKit" */;
 			buildPhases = (
 				8417C174197AA32300007269 /* Sources */,
-				8417C176197AA32300007269 /* Resources */,
 				8417C175197AA32300007269 /* Frameworks */,
+				8417C176197AA32300007269 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -960,6 +960,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iHealthKit/iHealthKit-Prefix.pch";
 				INFOPLIST_FILE = "iHealthKit/iHealthKit-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
@@ -976,6 +977,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iHealthKit/iHealthKit-Prefix.pch";
 				INFOPLIST_FILE = "iHealthKit/iHealthKit-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;

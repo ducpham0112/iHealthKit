@@ -7,9 +7,9 @@
 //
 
 #import "TrackingViewController.h"
-#import "MyVisualStateManager.h"
+//#import "MyVisualStateManager.h"
 #import "RouteViewController.h"
-#import <QuartzCore/QuartzCore.h>
+#import "UIViewController+MMDrawerController.h"
 #import "View/RightImageCell.h"
 
 #define VOICE_PITCH 1.49881518
@@ -68,7 +68,7 @@ typedef enum {
 @property (nonatomic, strong) CLLocation* lastLocation;
 
 @property (nonatomic) float calories;
-@property (nonatomic) float distance;
+@property (nonatomic) float distance;	
 @property (nonatomic) float curSpeed;
 @property (nonatomic) float maxSpeed;
 @property NSInteger trainingType;
@@ -140,18 +140,13 @@ typedef enum {
         [self locationManagerSignalInvalid:[MyLocationManager shareLocationManager]];
     }
     
-    _needUserLocation = YES;
-    _locationDatatoStore = [[NSMutableArray alloc] init];
-    
-    _durationLabel = [NSMutableArray new];
-    _clockLabel = [NSMutableArray new];
-    
     _listInfoView = [[NSMutableArray alloc] init];
     [_listInfoView addObject:[NSNumber numberWithInt:InfoType_Duration]];
     [_listInfoView addObject:[NSNumber numberWithInt:InfoType_Distance]];
     [_listInfoView addObject:[NSNumber numberWithInt:InfoType_Calories]];
     
     _listInfoTableView.frame = [self tableHiddenFrame];
+    _listInfoTableView.layer.opacity = 0.0f;
     _listInfoTableView.delegate = self;
     _listInfoTableView.dataSource = self;
     [_listInfoTableView registerNib:[UINib nibWithNibName:@"RightImageCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"rightImageCell"];
@@ -170,7 +165,41 @@ typedef enum {
     _arrayLbDescription = [NSArray arrayWithObjects:_lbDescription0, _lbDescription1, _lbDescription2, nil];
     _arrayLbValue = [NSArray arrayWithObjects:_lbValue0, _lbValue1, _lbValue2, nil];
     
+    for (UILabel* label in _arrayLbValue) {
+        [self addHoldGesture:label];
+        [self addTapGesture:label];
+    }
+    
+    [self resetData];
+    
     [self updateView];
+}
+
+- (void) viewDidAppear:(BOOL)animated {
+    self.mm_drawerController.openDrawerGestureModeMask = MMOpenDrawerGestureModeAll;
+}
+
+- (void) resetData {
+    _startTime = nil;
+    _endTime = nil;
+    _distance = 0.0f;
+    _maxSpeed = 0.0f;
+    _curSpeed = 0.0f;
+    _trainingType = 0;
+    _calories = 0.0f;
+    
+    [_clockTimer invalidate];
+    _clockTimer = nil;
+    [_durationTimer invalidate];
+    _durationTimer = nil;
+    
+    _clockLabel = [[NSMutableArray alloc] init];
+    _durationLabel = [[NSMutableArray alloc] init];
+    
+    _needUserLocation = YES;
+    
+    _locationDatatoStore = [[NSMutableArray alloc] init];
+    _routePoints = [[NSMutableArray alloc] init];
 }
 
 - (void) updateView {
@@ -223,7 +252,7 @@ typedef enum {
                 break;
             }
             case InfoType_AvgSpeed: {
-                valueStr = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertSpeed:[self averageSpeed]]];
+                valueStr = [CommonFunctions speedStr:[self averageSpeed]];
                 break;
             }
             case InfoType_Calories: {
@@ -235,15 +264,15 @@ typedef enum {
                 break;
             }
             case InfoType_CurSpeed: {
-                valueStr =  [NSString stringWithFormat:@"%.2f", [CommonFunctions convertSpeed:_curSpeed]];
+                valueStr =  [CommonFunctions speedStr:_curSpeed];
                 break;
             }
             case InfoType_Distance: {
-                valueStr = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertDistance:_distance]];
+                valueStr = [CommonFunctions distanceStr:_distance];
                 break;
             }
             case InfoType_MaxSpeed: {
-                valueStr = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertSpeed:_maxSpeed]];
+                valueStr = [CommonFunctions speedStr:_maxSpeed];
                 break;
             }
             case InfoType_MaxPace: {
@@ -273,26 +302,29 @@ typedef enum {
     if (_isTableShowed) {
         return;
     }
+    _selectedLabel = (UILabel*)[(UIGestureRecognizer*)sender view];
+    _selectedLabelIndex = [self selectedLabelIndex:_selectedLabel];
+    [_listInfoTableView reloadData];
+    [self blinkAnimation:_selectedLabel];
+    [self.mm_drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeNone];
+    [self.navigationItem setRightBarButtonItem:nil animated:YES];
+    [self.navigationItem setLeftBarButtonItem:nil animated:YES];
+    _isTableShowed = YES;
+    
     _listInfoTableView.frame = [self tableHiddenFrame];
-    _listInfoTableView.hidden = NO;
-
+    int selectedRow = [[_listInfoView objectAtIndex:_selectedLabelIndex] integerValue];
+    [_listInfoTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:selectedRow inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
     [UIView animateWithDuration:1.5f
                           delay:0.0f
                         options:UIViewAnimationOptionShowHideTransitionViews
                      animations:^{
                          _listInfoTableView.frame = [self tableFrame];
+                         _listInfoTableView.layer.opacity = 1.0f;
                          [[_btnStartStop layer] setOpacity:0.0f];
                          [[_mapView layer] setOpacity:0.0f];
                          [[_btnShowLocation layer] setOpacity:0.0f];
                          [[_btnDone layer] setOpacity:1.0f];
                      }completion:nil];
-    
-    _selectedLabel = (UILabel*)[(UIGestureRecognizer*)sender view];
-    _selectedLabelIndex = [self selectedLabelIndex:_selectedLabel];
-    [_listInfoTableView reloadData];
-    [self blinkAnimation:_selectedLabel];
-    
-    _isTableShowed = YES;
 }
 
 - (void) changeSelectedView: (id) sender {
@@ -305,6 +337,8 @@ typedef enum {
     _selectedLabelIndex = [self selectedLabelIndex:_selectedLabel];
     [self blinkAnimation:_selectedLabel];
     [_listInfoTableView reloadData];
+    int selectedRow = [[_listInfoView objectAtIndex:_selectedLabelIndex] integerValue];
+    [_listInfoTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:selectedRow inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
 }
 
 - (NSInteger) selectedLabelIndex: (UILabel*) label {
@@ -321,8 +355,10 @@ typedef enum {
 }
 
 - (IBAction)dismissTableView:(id)sender {
-    //[[_btnStartStop layer] setOpacity:0.0f];
-
+    if (_isTableShowed == NO) {
+        return;
+    }
+    
     [UIView animateWithDuration:1.5f
                           delay:0.0f
                         options:UIViewAnimationOptionShowHideTransitionViews
@@ -335,6 +371,9 @@ typedef enum {
                          [[_btnDone layer] setOpacity:0.0f];
                          [[_selectedLabel layer] removeAnimationForKey:@"opacity"];
                      }completion:nil];
+    
+    self.mm_drawerController.openDrawerGestureModeMask = MMOpenDrawerGestureModeAll;
+    [self setupBarButton];
     _isTableShowed = NO;
     _selectedLabel = nil;
     _selectedLabelIndex = -1;
@@ -371,48 +410,36 @@ typedef enum {
     mapViewFrame.origin.y += navigationBarFrame.size.height + 20;
     mapViewFrame.size.height -= navigationBarFrame.size.height + _btnStartStop.frame.size.height + 20;
     
-    [UIView animateWithDuration:2.0f
+    [UIView animateWithDuration:1.5f
                           delay:0.0f
                         options:UIViewAnimationOptionShowHideTransitionViews
                      animations:^{
                          _mapView.frame = mapViewFrame;
-                         // _btnClose.hidden = NO;
+                         _btnShowLocation.frame = CGRectMake(281, 70, 33, 33);
                          _btnClose.layer.opacity = 1.0f;
-                         //_lbDescription0.hidden = YES;
                          _lbDescription0.layer.opacity = 0.0f;
-                         //_lbDescription1.hidden = YES;
                          _lbDescription1.layer.opacity = 0.0f;
-                         //_lbDescription2.hidden = YES;
                          _lbDescription2.layer.opacity = 0.0f;
-                         //_lbValue0.hidden = YES;
                          _lbValue0.layer.opacity = 0.0f;
-                         //_lbValue1.hidden = YES;
                          _lbValue1.layer.opacity = 0.0f;
-                         //_lbValue2.hidden = YES;
                          _lbValue2.layer.opacity = 0.0f;
                      } completion:nil];
 }
 
 - (IBAction)minimizeMapView:(id)sender {
     CGRect mapViewFrame = [self tableFrame];
-    [UIView animateWithDuration:2.0f
+    [UIView animateWithDuration:1.5f
                           delay:0.0f
                         options:UIViewAnimationOptionShowHideTransitionViews
                      animations:^{
                          _mapView.frame = mapViewFrame;
-                         //_btnClose.hidden = YES;
+                         _btnShowLocation.frame = CGRectMake(281, 315, 33, 33);
                          _btnClose.layer.opacity = 0.0f;
-                         //_lbDescription0.hidden = NO;
                          _lbDescription0.layer.opacity = 1.0f;
-                         //_lbDescription1.hidden = NO;
                          _lbDescription1.layer.opacity = 1.0f;
-                         //_lbDescription2.hidden = NO;
                          _lbDescription2.layer.opacity = 1.0f;
-                         //_lbValue0.hidden = NO;
                          _lbValue0.layer.opacity = 1.0f;
-                         //_lbValue1.hidden = NO;
                          _lbValue1.layer.opacity = 1.0f;
-                         //_lbValue2.hidden = NO;
                          _lbValue2.layer.opacity = 1.0f;
                      } completion:nil];
 }
@@ -420,11 +447,10 @@ typedef enum {
 -(void)setupBarButton{
     self.navigationItem.hidesBackButton = YES;
     MMDrawerBarButtonItem * leftDrawerButton = [[MMDrawerBarButtonItem alloc] initWithTarget:self action:@selector(leftDrawerButtonPress:)];
-    [self.navigationItem setLeftBarButtonItem:leftDrawerButton animated:NO];
+    [self.navigationItem setLeftBarButtonItem:leftDrawerButton animated:YES];
     
     UIBarButtonItem* rightDrawerButton = [[MMDrawerBarButtonItem alloc] initWithTarget:self action:@selector(rightDrawerButtonPress:)];
-    [self.navigationItem setRightBarButtonItem:rightDrawerButton animated:NO];
-    
+    [self.navigationItem setRightBarButtonItem:rightDrawerButton animated:YES];
     
 }
 
@@ -467,7 +493,6 @@ typedef enum {
 - (void) startTracking {
     if ([[MyLocationManager shareLocationManager] startLocationUpdates]) {
         [CommonFunctions showStatusBarAlert:@"Activity will start immediately after GPS signal is strong" duration:2.0f backgroundColor:[CommonFunctions yellowColor]];
-        [self resetData];
         
         UILongPressGestureRecognizer* holdGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(maximizeMapView)];
         [_mapView addGestureRecognizer:holdGesture];
@@ -475,6 +500,7 @@ typedef enum {
         [_btnStartStop setTitle:@"Stop" forState:UIControlStateNormal];
         [_btnStartStop setBackgroundColor:[CommonFunctions redColor]];
         [CommonFunctions setTrackingStatus:YES];
+        
     }
 }
 
@@ -491,6 +517,7 @@ typedef enum {
     for (UIGestureRecognizer* gesture in listGesture) {
         [_mapView removeGestureRecognizer:gesture];
     }
+    
     
     if (_startTime && _endTime) {
         if (_isVoiceTurnOn) {
@@ -514,33 +541,6 @@ typedef enum {
     [self resetData];
 }
 
-- (void) resetData {
-    _startTime = nil;
-    _endTime = nil;
-    _distance = 0.0f;
-    _maxSpeed = 0.0f;
-    _curSpeed = 0.0f;
-    _trainingType = 0;
-    _calories = 0.0f;
-    
-    [_clockTimer invalidate];
-    _clockTimer = nil;
-    [_durationTimer invalidate];
-    _durationTimer = nil;
-    
-    _clockLabel = nil;
-    _durationLabel = nil;
-    
-    _needUserLocation = YES;
-    [_locationDatatoStore removeAllObjects];
-    if (_routePoints == nil) {
-        _routePoints = [[NSMutableArray alloc] init];
-    } else {
-        [_routePoints removeAllObjects];
-    }
-    
-}
-
 - (NSMutableDictionary*) locationToDictionary: (CLLocation*) location withSpeed: (NSNumber*) speed {
     NSMutableDictionary* dictionary = [[NSMutableDictionary alloc] init];
     [dictionary setValue:[NSNumber numberWithFloat:location.coordinate.latitude] forKey:@"latitude"];
@@ -551,7 +551,7 @@ typedef enum {
     
     return dictionary;
 }
-
+	
 - (void) drawRouteLine: (CLLocationCoordinate2D) lastLocationCoordinate toCurrentLocation: (CLLocationCoordinate2D) curLocationCoordinate {
     
     MKMapPoint* mapPoints = malloc(sizeof(CLLocationCoordinate2D) * 2);
@@ -650,6 +650,9 @@ typedef enum {
 }
 
 - (float) averageSpeed {
+    if (_startTime == nil || _endTime == nil) {
+        return 0.0;
+    }
     return _distance / [CommonFunctions durationFrom:_startTime To:_endTime];
 }
 
@@ -678,6 +681,7 @@ typedef enum {
             _durationTimer = [NSTimer scheduledTimerWithTimeInterval:NOTIFY_DURATION_INTERVAL target:self selector:@selector(durationNotify) userInfo:nil repeats:YES];
         });
     }
+    
     if ([_clockLabel count] > 0  || [_durationLabel count] > 0) {
         _clockTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(updateClock) userInfo:nil repeats:YES];
     }
@@ -745,7 +749,6 @@ typedef enum {
     else {
         [cell.imgCheck setImage:[UIImage imageNamed:@"uncheck_icon.png"]];
     }
-    
     return  cell;
 }
 
@@ -910,7 +913,7 @@ typedef enum {
             break;
         }
         case InfoType_AvgSpeed: {
-            valueStr = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertSpeed:[self averageSpeed]]];
+            valueStr = [CommonFunctions speedStr:[self averageSpeed]];
             break;
         }
         case InfoType_Calories: {
@@ -926,11 +929,11 @@ typedef enum {
             break;
         }
         case InfoType_CurSpeed: {
-            valueStr =  [NSString stringWithFormat:@"%.2f", [CommonFunctions convertSpeed:_curSpeed]];
+            valueStr =  [CommonFunctions speedStr:_curSpeed];
             break;
         }
         case InfoType_Distance: {
-            valueStr = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertDistance:_distance]];
+            valueStr = [CommonFunctions distanceStr:_distance];
             break;
         }
         case InfoType_Duration: {
@@ -938,7 +941,7 @@ typedef enum {
             break;
         }
         case InfoType_MaxSpeed: {
-            valueStr = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertSpeed:_maxSpeed]];
+            valueStr = [CommonFunctions speedStr:_maxSpeed];
             break;
         }
         case InfoType_MaxPace: {
@@ -951,7 +954,7 @@ typedef enum {
     return valueStr;
 }
 
-- (void) setMetValueData {
+/*- (void) setMetValueData {
     _MET_VALUE = [[NSMutableDictionary alloc] init];
     [_MET_VALUE setValue:[NSNumber numberWithFloat:4.0f] forKey:@"Walk"];
     [_MET_VALUE setValue:[NSNumber numberWithFloat:6.0f] forKey:@"Run4mph"];
@@ -966,16 +969,13 @@ typedef enum {
     [_MET_VALUE setValue:[NSNumber numberWithFloat:19.8f] forKey:@"Run13mph"];
     [_MET_VALUE setValue:[NSNumber numberWithFloat:23.0f] forKey:@"Run14mph"];
     
-}
+}*/
 
 - (void) addGestures {
-    [self addHoldGesture:_lbValue0];
-    [self addHoldGesture:_lbValue1];
-    [self addHoldGesture:_lbValue2];
-    
-    [self addTapGesture:_lbValue0];
-    [self addTapGesture:_lbValue1];
-    [self addTapGesture:_lbValue2];
+    for (UILabel* label in _arrayLbValue) {
+        [self addHoldGesture:label];
+        [self addTapGesture:label];
+    }
 }
 
 - (void) addHoldGesture: (UIView*) view {
@@ -1006,7 +1006,7 @@ typedef enum {
     
     if (distanceType == 1) {
         if ([CommonFunctions convertDistanceToMile:_distance] >= _notifyNextDistance) {
-            [self speak:[NSString stringWithFormat:@"Distance %1f miles", _notifyNextDistance]];
+            [self speak:[NSString stringWithFormat:@"Distance %.1f miles", _notifyNextDistance]];
             _notifyNextDistance += NOTIFY_DISTANCE_INTERVAL;
         }
     } else {

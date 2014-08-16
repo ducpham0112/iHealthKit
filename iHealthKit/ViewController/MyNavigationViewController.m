@@ -20,6 +20,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        
     }
     return self;
 }
@@ -31,7 +32,9 @@
     UIColor * titleColor = textColor;
     navBarTitleDict = @{NSForegroundColorAttributeName:titleColor};
     [myNav.navigationBar setTitleTextAttributes:navBarTitleDict];
+    //myNav.navigationBar.translucent = NO;
     myNav.statusBarStyle = statusBarStyle;
+    
     return myNav;
 }
 

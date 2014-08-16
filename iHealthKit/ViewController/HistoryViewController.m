@@ -59,6 +59,10 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(historyChanged) name:@"HistoryChanged" object:nil];
 }
 
+- (void) viewDidAppear:(BOOL)animated {
+    self.mm_drawerController.openDrawerGestureModeMask = MMOpenDrawerGestureModeAll;
+}
+
 #pragma mark - load history data
 //load route history + calculate statistics
 - (void) loadData {
@@ -92,7 +96,6 @@
 -(void)setupBarButton{
     MMDrawerBarButtonItem * leftDrawerButton = [[MMDrawerBarButtonItem alloc] initWithTarget:self action:@selector(leftDrawerButtonPress:)];
     [self.navigationItem setLeftBarButtonItem:leftDrawerButton animated:YES];
-    
     self.navigationItem.hidesBackButton = YES;
 }
 
@@ -132,7 +135,7 @@
     routeCell.lbAvgSpeedValue.text = [NSString stringWithFormat:@"%.2f", [route.avgSpeed floatValue]];
     
     routeCell.lbDistanceDescription.text = [NSString stringWithFormat:@"Distance (%@)", [CommonFunctions distanceUnitStr]];
-    routeCell.lbDistanceValue.text = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertDistance:[route.distance floatValue]]];
+    routeCell.lbDistanceValue.text = [CommonFunctions distanceStr:[route.distance floatValue]];
     
     //routeCell.lbDurationDescription.text = @"Duration";
     routeCell.lbDurationValue.text = [CommonFunctions stringSecondFromInterval:[CommonFunctions durationFrom:route.startTime To:route.endTime]];
@@ -186,7 +189,7 @@
         switch (i) {
             case 1: {
                 lbDescription.text = [NSString stringWithFormat:@"Total Distance (%@)", [CommonFunctions distanceUnitStr]];
-                lbValue.text = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertDistance:_totalDistance]];
+                lbValue.text = [CommonFunctions distanceStr:_totalDistance];
                 break;
             }
             case 2: {

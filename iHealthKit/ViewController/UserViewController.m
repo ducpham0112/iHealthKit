@@ -168,6 +168,19 @@ typedef enum {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
+- (void) viewDidAppear:(BOOL)animated {
+    switch (_viewMode) {
+        case ViewMode_AddUser:
+        case ViewMode_LogIn:
+            self.mm_drawerController.openDrawerGestureModeMask = MMOpenDrawerGestureModeNone;
+            break;
+        case ViewMode_ViewInfo:
+            self.mm_drawerController.openDrawerGestureModeMask = MMOpenDrawerGestureModeAll;
+        default:
+            break;
+    }
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -238,7 +251,8 @@ typedef enum {
             }
             cell.tfFirstName.text = _firstName;
             cell.tfLastName.text = _lastName;
-            
+            cell.tfFirstName.delegate = self;
+            cell.tfLastName.delegate = self;
             
             if (_avatar == nil) {
                 if ([_curUser.isMale integerValue] == 0) {
@@ -291,6 +305,7 @@ typedef enum {
                     }
                     
                     cell.tfValue.text = _email;
+                    cell.tfValue.delegate = self;
                     if (_viewMode != ViewMode_LogIn) {
                         cell.tfValue.enabled = YES;
                         [cell.tfValue addTarget:self action:@selector(updateEmail:) forControlEvents:UIControlEventEditingDidEnd];
@@ -463,13 +478,13 @@ typedef enum {
                              view.hidden = NO;
                              view.frame = _pickerFrame;
                              self.tableView.frame = tableFrame;
-                             [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+                             [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
                          } completion:nil];
     }
     else {
         view.hidden = NO;
         view.frame = _pickerFrame;
-        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
     }
 }
 
@@ -679,6 +694,7 @@ typedef enum {
 - (void) updateBirthDate: (id) sender{
     _birthDate = [_birthDatePicker date];
     [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:RowInSectionInfo_birthDate inSection:AddUserVCSections_Info]] withRowAnimation:UITableViewRowAnimationFade];
+    [self setRightBarButton];
 }
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
@@ -886,7 +902,7 @@ typedef enum {
     NSIndexPath* activeCellIndexPath = [[self.tableView indexPathsForSelectedRows] lastObject];
     if(activeCellIndexPath)
     {
-        [self.tableView scrollToRowAtIndexPath:activeCellIndexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+        [self.tableView scrollToRowAtIndexPath:activeCellIndexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
         //[self.tableView selectRowAtIndexPath:activeCellIndexPath animated:NO scrollPosition:UITableViewScrollPositionTop];
     }
 }
@@ -1048,6 +1064,7 @@ typedef enum {
         
         MMDrawerBarButtonItem * leftDrawerButton = [[MMDrawerBarButtonItem alloc] initWithTarget:self action:@selector(leftDrawerButtonPress:)];
         [self.navigationItem setLeftBarButtonItem:leftDrawerButton animated:YES];
+        
     }
     else if (_viewMode == ViewMode_LogIn) {
         [self setTitle:[NSString stringWithFormat:@"%@", [CoreDataFuntions fullName:_curUser]]];
@@ -1062,9 +1079,14 @@ typedef enum {
         UIBarButtonItem* rightBarBtn;
         
         rightBarBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(addNewUser)];
-        
         [self.navigationItem setRightBarButtonItem:rightBarBtn];
     }
+}
+
+#pragma mark - textfield delegate
+- (BOOL) textFieldShouldReturn:(UITextField *)textField {
+    [_tableView endEditing:YES];
+    return YES;
 }
 
 @end

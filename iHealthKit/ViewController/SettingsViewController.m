@@ -26,7 +26,7 @@ typedef enum {
 typedef enum {
     RowInUnitSection_distanceType = 0,
     RowInUnitSection_distanceUnit,
-    RowInUnitSection_velocityUnit
+    RowInUnitSection_speedUnit
 } RowInUnitSection;
 
 @interface SettingsViewController ()
@@ -34,7 +34,7 @@ typedef enum {
 @property NSInteger voiceCoaching;
 @property NSInteger distanceUnit;
 @property NSInteger weightUnit;
-@property NSInteger veclocityUnit;
+@property NSInteger speedUnit;
 @property NSInteger distanceType;
 @property BOOL isRightDrawer;
 @end
@@ -65,6 +65,10 @@ typedef enum {
 
 - (void)viewWillDisappear:(BOOL)animated {
     [self saveSettings];
+}
+
+- (void) viewDidAppear:(BOOL)animated {
+    self.mm_drawerController.openDrawerGestureModeMask = MMOpenDrawerGestureModeAll;
 }
 
 - (void)viewDidLoad
@@ -104,7 +108,7 @@ typedef enum {
     [preference setInteger:_voiceCoaching forKey:@"VoiceCoaching"];
     [preference setInteger:_distanceUnit forKey:@"DistanceUnit"];
     [preference setInteger:_weightUnit forKey:@"WeightUnit"];
-    [preference setInteger:_veclocityUnit forKey:@"VelocityUnit"];
+    [preference setInteger:_speedUnit forKey:@"SpeedUnit"];
 }
 
 - (void) firstTimeSetup {
@@ -127,10 +131,10 @@ typedef enum {
         _distanceType = 0;
     }
     
-    if ([NSNumber numberWithInteger:[preference integerForKey:@"VelocityUnit"]] != nil) {
-        _veclocityUnit = [preference integerForKey:@"VelocityUnit"];
+    if ([NSNumber numberWithInteger:[preference integerForKey:@"SpeedUnit"]] != nil) {
+        _speedUnit = [preference integerForKey:@"SpeedUnit"];
     } else {
-        _veclocityUnit = 0;
+        _speedUnit = 0;
     }
     if ([NSNumber numberWithInteger:[preference integerForKey:@"WeightUnit"]] != nil) {
         _weightUnit = [preference integerForKey:@"WeightUnit"];
@@ -179,13 +183,12 @@ typedef enum {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SettingChanged" object:nil];
 }
 
-- (void)velocityUnitChanged:(id) sender {
-    UISegmentedControl* velocity = (UISegmentedControl*) sender;
-    _veclocityUnit = velocity.selectedSegmentIndex;
-    [[NSUserDefaults standardUserDefaults] setInteger:_veclocityUnit forKey:@"VelocityUnit"];
+- (void)speedUnitChanged:(id) sender {
+    UISegmentedControl* speed = (UISegmentedControl*) sender;
+    _speedUnit = speed.selectedSegmentIndex;
+    [[NSUserDefaults standardUserDefaults] setInteger:_speedUnit forKey:@"SpeedUnit"];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SettingChanged" object:nil];
 }
-
 
 #pragma mark - table view datasource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -288,14 +291,14 @@ typedef enum {
                 }
                     
                     
-                case RowInUnitSection_velocityUnit:{
+                case RowInUnitSection_speedUnit:{
                     Settings_SegmentCell* cell = [self.tableView dequeueReusableCellWithIdentifier:@"SegmentedCell"];
                     if (cell == nil) {
                         cell = [[Settings_SegmentCell alloc] init];
                     }
                     
-                    [cell.segmentControl addTarget:self action:@selector(velocityUnitChanged:) forControlEvents:UIControlEventValueChanged];
-                    cell.lbDescription.text = @"Velocity";
+                    [cell.segmentControl addTarget:self action:@selector(speedUnitChanged:) forControlEvents:UIControlEventValueChanged];
+                    cell.lbDescription.text = @"Speed";
                     
                     if (_distanceType == 0) {
                         [cell.segmentControl setTitle:@"km/h" forSegmentAtIndex:0];
@@ -306,7 +309,7 @@ typedef enum {
                         [cell.segmentControl setTitle:@"fps" forSegmentAtIndex:1];
                     }
                     
-                    cell.segmentControl.selectedSegmentIndex = _veclocityUnit;
+                    cell.segmentControl.selectedSegmentIndex = _speedUnit;
                     
                     return  cell;
                     break;
@@ -367,7 +370,6 @@ typedef enum {
     else {
         self.navigationItem.hidesBackButton = YES;
     }
-
 }
 
 -(void)leftDrawerButtonPress:(id)sender{

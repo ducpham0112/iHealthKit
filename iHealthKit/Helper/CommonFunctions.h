@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "CWStatusBarNotification.h"
 
+#define COORDINATE_DEFAULT_DELTA 0.005
+
 typedef enum {
     DatePartType_year,
     DatePartType_month,
@@ -60,6 +62,9 @@ typedef enum {
 + (float) convertSpeed: (float) speedInMeterPerSec;
 + (float) convertHeight: (float) heightInCm;
 + (NSString*) paceStrFromSpeed: (float) speedInMeterPerSec;
+
++ (NSString*) distanceStr: (float) distanceInMeter;
++ (NSString*) speedStr: (float) speedInMeterPerSec;
 
 + (float) convertDistanceToKm: (float) distanceInMeter;
 + (float) convertDistanceToMile: (float) distanceInMeter;

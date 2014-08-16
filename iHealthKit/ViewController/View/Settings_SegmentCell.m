@@ -14,6 +14,11 @@
 {
     // Initialization code
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    UIFont *font = [UIFont fontWithName:@"Bradley Hand" size:13.0];
+    NSDictionary *attributes = [NSDictionary dictionaryWithObject:font
+                                                           forKey:NSFontAttributeName];
+    [_segmentControl setTitleTextAttributes:attributes
+                                   forState:UIControlStateNormal];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -22,11 +27,6 @@
 
     // Configure the view for the selected state
     
-    /*UIFont *font = [UIFont fontWithName:@"Bradley Hand" size:14.0];
-    NSDictionary *attributes = [NSDictionary dictionaryWithObject:font
-                                                           forKey:NSFontAttributeName];
-    [_segmentControl setTitleTextAttributes:attributes
-                                    forState:UIControlStateNormal];*/
 }
 
 @end

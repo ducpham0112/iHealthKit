@@ -67,13 +67,6 @@ typedef enum {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userInfoUpdate) name:@"HistoryChanged" object:nil];
 }
 
-- (void) viewWillAppear:(BOOL)animated  {
-   /* if (_selectedRow) {
-        LeftMenuCell* selectedCell = (LeftMenuCell*)[self.tableView cellForRowAtIndexPath:_selectedRow];
-        selectedCell.backgroundColor = [CommonFunctions lightGrayColor];
-    }*/
-}
-
 - (void) userInfoUpdate {
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
 }
@@ -127,6 +120,26 @@ typedef enum {
             
             cell.lbActivity.text = [NSString stringWithFormat:@"Activities: %d", [[curUser.routeHistory allObjects] count]];
             
+            dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+            dispatch_async(queue, ^{
+                UIImage* avatar;
+                if (curUser.avatar) {
+                    avatar = [[UIImage alloc] initWithData:curUser.avatar];
+                }
+                else {
+                    if ([curUser.isMale integerValue] == 0) {
+                        avatar = [UIImage imageNamed:@"avatar_male.jpg"];
+                    }
+                    else {
+                        avatar = [UIImage imageNamed:@"avatar_female.jpg"];
+                    }
+                }
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    cell.imgAvatar.image = avatar;
+                    [cell setNeedsLayout];
+                });
+            });
+            /*
             if (curUser.avatar != nil) {
                 cell.imgAvatar.image = [[UIImage alloc] initWithData:curUser.avatar];
             } else {
@@ -135,7 +148,7 @@ typedef enum {
                 } else {
                     cell.imgAvatar.image = [UIImage imageNamed:@"avatar_female.jpg"];
                 }
-            }
+            }*/
             return cell;
             break;
         }
@@ -147,11 +160,6 @@ typedef enum {
                 cell = [[LeftMenuCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
             }
             switch (indexPath.row) {
-                /*case MenuRows_UserInfo:
-                    cell.lbDescription.text = @"User Information";
-                    [cell.imgView setImage:[UIImage imageNamed:@"icon_UserInfo.png"]];
-                    [cell.imgView setBackgroundColor:[CommonFunctions greenColor]];
-                    break;*/
                 case MenuRows_Activity:
                     cell.lbDescription.text = @"Activity";
                     [cell.imgView setImage:[UIImage imageNamed:@"icon_Activity.png"]];
@@ -175,6 +183,47 @@ typedef enum {
                 default:
                     break;
             }
+            /*
+            dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+            dispatch_async(queue, ^{
+                UIImage* image;
+                UIColor* backgroundColor;
+                NSString* description;
+                switch (indexPath.row) {
+                    case MenuRows_Activity: {
+                        description = @"Actitvity";
+                        image = [UIImage imageNamed:@"icon_Activity.png"];
+                        backgroundColor = [CommonFunctions navigationBarColor];
+                        break;
+                    }
+                    case MenuRows_History: {
+                        description = @"History";
+                        image = [UIImage imageNamed:@"icon_History.png"];
+                        backgroundColor = [CommonFunctions greenColor];
+                        break;
+                    }
+                    case MenuRows_Settings: {
+                        description = @"Settings";
+                        image = [UIImage imageNamed:@"icon_Settings.png"];
+                        backgroundColor = [CommonFunctions yellowColor];
+                        break;
+                    }
+                    case MenuRows_ChangeUser: {
+                        description = @"Switch User";
+                        image = [UIImage imageNamed:@"icon_SwitchUser.png"];
+                        backgroundColor = [CommonFunctions redColor];
+                        break;
+                    }
+                    default:
+                        break;
+                }
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    cell.lbDescription.text = description;
+                    cell.imgView.image = image;
+                    cell.imgView.backgroundColor = backgroundColor;
+                });
+            });
+            */
             return cell;
             break;
         }

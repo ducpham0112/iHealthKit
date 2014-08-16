@@ -130,6 +130,8 @@
         return YES;
     }
     else {
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error!" message:@"Unable to save content to database." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        [alert show];
         NSLog(@"Fail to save content! Error: %@", [error userInfo]);
         return NO;
     }

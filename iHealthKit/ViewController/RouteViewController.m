@@ -77,7 +77,11 @@ typedef enum  {
     newRouteVC.averageSpeed = [route.avgSpeed floatValue];
     NSError* error = nil;
     NSArray* readLocations = [NSJSONSerialization JSONObjectWithData:route.routePoints options:NSJSONReadingAllowFragments error:&error];
-    
+    if (error != nil) {
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error!" message:@"Unable to read route from database." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        [alert show];
+        readLocations = nil;
+    }
     for (int i = 0; i < readLocations.count; ++i) {
         NSDictionary* loc = [readLocations objectAtIndex:i];
         CLLocation* newLoc = [[CLLocation alloc] initWithLatitude:[loc[@"latitude"] floatValue] longitude:[loc[@"longitude"] floatValue]];
@@ -122,12 +126,14 @@ typedef enum  {
     [_mapView setDelegate:self];
     [_mapView showsUserLocation];
     
+    
     _btnClose.hidden = YES;
-    
-    UILongPressGestureRecognizer* holdGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(maximizeMapView)];
-    [_mapView addGestureRecognizer:holdGesture];
-    
+
     [self drawRoute];
+}
+
+- (void) viewDidAppear:(BOOL)animated {
+    self.mm_drawerController.openDrawerGestureModeMask = MMOpenDrawerGestureModeNone;
 }
 
 - (void)didReceiveMemoryWarning
@@ -158,10 +164,9 @@ typedef enum  {
         }
         Route_OverviewCell* overviewCell = (Route_OverviewCell*) cell;
         overviewCell.lbCalories.text = [NSString stringWithFormat:@"%.0f", _calories];
-        overviewCell.lbDistance.text = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertDistance:_distance]];
+        overviewCell.lbDistance.text = [CommonFunctions distanceStr:_distance];
         
         overviewCell.lbDistanceUnit.text = [NSString stringWithFormat:@"Distance (%@)", [CommonFunctions distanceUnitStr]];
-        overviewCell.lbDistance.text = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertDistance:_distance]];
         overviewCell.lbDuration.text = [CommonFunctions stringSecondFromInterval:_duration];
     }
     
@@ -194,7 +199,7 @@ typedef enum  {
         case RowType_AvgSpeed: {
             Route_DetailCell* detailCell = (Route_DetailCell*) cell;
             detailCell.lbDescription.text = [NSString stringWithFormat:@"Avg. Speed (%@)", [CommonFunctions speedUnitStr]];
-            detailCell.lbDetail.text = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertSpeed:_averageSpeed]];
+            detailCell.lbDetail.text = [CommonFunctions speedStr:_averageSpeed];
             detailCell.imgView.image = [UIImage imageNamed:@"icon_speedAvg.png"];
             break;
         }
@@ -208,7 +213,7 @@ typedef enum  {
         case RowType_MaxSpeed: {
             Route_DetailCell* detailCell = (Route_DetailCell*) cell;
             detailCell.lbDescription.text = [NSString stringWithFormat:@"Max. Speed (%@)", [CommonFunctions speedUnitStr]];
-            detailCell.lbDetail.text = [NSString stringWithFormat:@"%.2f", [CommonFunctions convertSpeed:_maxSpeed]];
+            detailCell.lbDetail.text = [CommonFunctions speedStr:_maxSpeed];
             detailCell.imgView.image = [UIImage imageNamed:@"icon_speedMax.png"];
             break;
         }
@@ -335,8 +340,8 @@ typedef enum  {
     _routeLine = [MKPolyline polylineWithPoints:mapPoints count:_routePoints.count];
     [_mapView addOverlay:_routeLine];
     
-    CLLocationDegrees latitudeDelta = _northEastPoint.latitude - _southWestPoint.latitude+ 0.002;
-    CLLocationDegrees longitudeDelta = _northEastPoint.longitude - _southWestPoint.longitude + 0.002;
+    CLLocationDegrees latitudeDelta = (_northEastPoint.latitude - _southWestPoint.latitude) * 1.2;
+    CLLocationDegrees longitudeDelta = (_northEastPoint.longitude - _southWestPoint.longitude) * 1.2;
     MKCoordinateSpan span;
     span.latitudeDelta = (latitudeDelta > 0.005) ? latitudeDelta : 0.005;;
     span.longitudeDelta = (longitudeDelta > 0.005) ? longitudeDelta : 0.005;;
@@ -352,10 +357,9 @@ typedef enum  {
 - (void) saveRoutetoCoreData {
     NSError* error = nil;
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:_locationDatatoStore options:NSJSONWritingPrettyPrinted error:&error];
-    if (error == nil) {
-        NSLog(@"%@", jsonData);
-    }
-    else {
+    if (error != nil) {
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error!" message:@"Unknown Errow" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
         NSLog(@"error: %@", error);
         return;
     }
@@ -367,6 +371,7 @@ typedef enum  {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"HistoryChanged" object:nil];
     TrackingViewController* trackVC = [[TrackingViewController alloc] init];
     [self.navigationController pushViewController:trackVC animated:YES];
+    self.mm_drawerController.openDrawerGestureModeMask = MMOpenDrawerGestureModeAll;
 }
 
 - (void) deleteRoute {
@@ -374,12 +379,15 @@ typedef enum  {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"HistoryChanged" object:self];
     [CommonFunctions showStatusBarAlert:@"Activity has been deleted." duration:2.0f backgroundColor:[CommonFunctions yellowColor]];
     [self.navigationController popViewControllerAnimated:YES];
+    
+    self.mm_drawerController.openDrawerGestureModeMask = MMOpenDrawerGestureModeAll;
 }
 
 - (void) discardRoute {
     [CommonFunctions showStatusBarAlert:@"Route has been discarded." duration:3.0f backgroundColor: [CommonFunctions redColor]];
     TrackingViewController* trackVC = [[TrackingViewController alloc] init];
     [self.navigationController pushViewController:trackVC animated:YES];
+    self.mm_drawerController.openDrawerGestureModeMask = MMOpenDrawerGestureModeAll;
 }
 
 - (void) setupBarButton {
@@ -399,6 +407,7 @@ typedef enum  {
         UIBarButtonItem* deleteBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(deleteRoute)];
         [self.navigationItem setRightBarButtonItem:deleteBtn];
     }
+    
 }
 
 - (void) maximizeMapView {

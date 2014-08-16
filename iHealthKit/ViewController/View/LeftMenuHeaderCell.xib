@@ -13,7 +13,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="240" height="84"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CTJ-Zb-ccu">
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="avatar_male.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="CTJ-Zb-ccu">
                         <rect key="frame" x="7" y="33" width="43" height="43"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     </imageView>
@@ -52,4 +52,7 @@
             </connections>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="avatar_male.jpg" width="204" height="204"/>
+    </resources>
 </document>
