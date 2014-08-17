@@ -83,7 +83,7 @@ typedef enum {
     //[_tableView registerNib:[UINib nibWithNibName:@"DistanceTypeCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"DistanceTypeCell"];
     [_tableView registerNib:[UINib nibWithNibName:@"Settings_DistanceTypeCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"DistanceTypeCell"];
     [_tableView registerNib:[UINib nibWithNibName:@"Settings_SegmentCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"SegmentedCell"];
-    
+    [_tableView setBounces:NO];
     [self.view addSubview:_tableView];
     
     [self loadPreference];
@@ -93,7 +93,6 @@ typedef enum {
     [self setupBarButton];
     
     [self setTitle:@"Settings"];
-    
 }
 
 - (void)didReceiveMemoryWarning
@@ -163,7 +162,14 @@ typedef enum {
 }
 
 - (void) distanceTypeSelected{
-    DistanceTypeChooserViewController* distaceTypeChooserVC = [[DistanceTypeChooserViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    DistanceTypeChooserViewController* distaceTypeChooserVC;
+    if (_isRightDrawer) {
+        distaceTypeChooserVC = [[DistanceTypeChooserViewController alloc] initRightDrawer];
+    }
+    else {
+        distaceTypeChooserVC = [[DistanceTypeChooserViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    }
+    
     [self.navigationController pushViewController:distaceTypeChooserVC animated:YES];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SettingChanged" object:nil];
 }

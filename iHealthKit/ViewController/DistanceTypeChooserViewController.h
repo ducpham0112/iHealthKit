@@ -10,4 +10,6 @@
 
 @interface DistanceTypeChooserViewController : UITableViewController
 
+- (id) initRightDrawer;
+
 @end

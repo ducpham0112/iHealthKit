@@ -12,6 +12,7 @@
 
 @interface DistanceTypeChooserViewController ()
 @property NSInteger distanceType;
+@property BOOL isRightDrawer;
 @end
 
 @implementation DistanceTypeChooserViewController
@@ -24,6 +25,13 @@
     }
     return self;
 }
+
+- (id)initRightDrawer {
+    DistanceTypeChooserViewController* viewcontroller = [[DistanceTypeChooserViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    viewcontroller.isRightDrawer = YES;
+    return viewcontroller;
+}
+    
 
 - (void)viewDidLoad
 {
@@ -44,6 +52,10 @@
     [self.tableView registerNib:[UINib nibWithNibName:@"RightImageCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"rightImageCell"];
     
     [self setTitle:@"Unit System"];
+    if (_isRightDrawer) {
+        self.navigationController.navigationBar.topItem.title = @"";
+    }
+    
 }
 
 - (void)didReceiveMemoryWarning

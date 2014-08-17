@@ -34,7 +34,6 @@
     [myNav.navigationBar setTitleTextAttributes:navBarTitleDict];
     //myNav.navigationBar.translucent = NO;
     myNav.statusBarStyle = statusBarStyle;
-    
     return myNav;
 }
 
