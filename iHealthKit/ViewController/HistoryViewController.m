@@ -89,6 +89,7 @@
 #pragma mark - notification handler
 - (void) historyChanged {
     [self loadData];
+    [self GeneratePages];
     [self.tableView reloadData];
 }
 
@@ -165,7 +166,10 @@
 #pragma mark - scrollview delegate
 - (void) GeneratePages {
     CGSize scrollViewSize = CGSizeMake(_scrollView.frame.size.width * PAGE_NUMBER, _scrollView.frame.size.height);
+    
+    [_scrollView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     [_scrollView setContentSize:scrollViewSize];
+    _pageControl.numberOfPages = PAGE_NUMBER;
     for (int i = 0; i < PAGE_NUMBER; i++) {
         CGRect frame = _scrollView.frame;
         frame.origin.x = frame.size.width * i;
